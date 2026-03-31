@@ -1,362 +1,236 @@
-import { Stack, useLocalSearchParams } from 'expo-router';
+import { Stack, useLocalSearchParams, usePathname } from 'expo-router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { View, Text, Pressable, Switch, ScrollView } from 'react-native';
+import { Pressable, ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { Image, ImageBackground } from 'expo-image';
+import { CountryData } from '@/types';
+import DetailHeader from '@/components/detail/DetailHeader';
+import DaySelector from '@/components/detail/DaySelector';
+import DataSelector from '@/components/detail/DataSelector';
 import {
-  CalendarDaysIcon,
-  CircleStackIcon,
-  QuestionMarkCircleIcon,
-} from '@heroicons/react/24/outline';
-import { formatCurrency } from '@/utils';
-import { InformationCircleIcon } from '@heroicons/react/24/solid';
-import { capitalize } from 'lodash';
-import fakePackData from '@/utils/fakeData/pack.json';
-import { Colors } from '@/constants/theme';
-import { TFunction } from 'i18next';
+  formatCurrency,
+  dataSortFunc,
+  convertDataObjToString,
+  convertDataStringToObj,
+} from '@/utils';
+import { fetchCountryData } from '@/api';
+import { PurchaseActionSheet } from '@/components/detail/PurchaseActionSheet';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { SearchActionSheet } from '@/components/detail/SearchActionSheet';
 
-const DetailScreen = () => {
+export default function DetailScreen() {
   const { i18n, t } = useTranslation();
   const { id: countryId } = useLocalSearchParams<{ id: string }>();
+  const path = usePathname();
 
-  const [data, setData] = useState<any>();
-  const [isTiktokSupported, setTiktokSupported] = useState(false);
-  const [selectedDay, setSelectedDay] = useState<number>(0);
-  const [selectedData, setSelectedData] = useState('');
+  const [data, setData] = useState<CountryData>();
+  const [selection, setSelection] = useState({
+    selectedDay: 0,
+    selectedData: '',
+    isTiktokSupported: false,
+  });
+  const [isPurchaseSheetVisible, setPurchaseSheetVisible] = useState(false);
+  const [isSearchSheetVisible, setSearchSheetVisible] = useState(false);
 
-  const localizedData = useMemo(() => {
-    if (!data) return {};
-    const { region_info: regionInfo, packages } = data;
+  const { selectedDay, selectedData, isTiktokSupported } = useMemo(() => {
+    return {
+      selectedDay: selection.selectedDay,
+      selectedData: selection.selectedData,
+      isTiktokSupported: selection.isTiktokSupported,
+    };
+  }, [selection]);
+
+  const regionInfo = data?.region_info;
+  const packages = useMemo(() => data?.packages || [], [data]);
+
+  const name = useMemo(() => {
+    if (!regionInfo) return '';
     const isEnglish = i18n.language === 'en-US';
-    const name = isEnglish ? regionInfo?.name : regionInfo?.name_vi;
-    const flag = regionInfo?.flag;
-    const banner = regionInfo?.banner;
-    const carriers = regionInfo?.carriers.join(', ');
+    return isEnglish ? regionInfo?.name : regionInfo?.name_vi;
+  }, [regionInfo, i18n.language]);
 
-    const lowestPricePack = packages.reduce((prev: any, curr: any) => {
-      const condition = isEnglish
-        ? prev.selling_price_usd < curr.selling_price_usd
-          ? prev
-          : curr
-        : prev.selling_price < curr.selling_price
-          ? prev
-          : curr;
-      return condition;
-    });
-    const lowestPrice = isEnglish
-      ? lowestPricePack.selling_price_usd
-      : lowestPricePack.selling_price;
-    const formattedLowest = formatCurrency(lowestPrice, i18n.language, isEnglish ? 'USD' : 'VND');
-    const highestPricePack = packages.reduce((prev: any, curr: any) => {
-      const condition = isEnglish
-        ? prev.selling_price_usd > curr.selling_price_usd
-          ? prev
-          : curr
-        : prev.selling_price > curr.selling_price
-          ? prev
-          : curr;
-      return condition;
-    });
-    const highestPrice = isEnglish
-      ? highestPricePack.selling_price_usd
-      : highestPricePack.selling_price;
-    const formattedHighestPrice = formatCurrency(
-      highestPrice,
-      i18n.language,
-      isEnglish ? 'USD' : 'VND'
+  const carriers = regionInfo?.carriers.join(', ') || '';
+
+  const lowestPrice = useMemo(() => {
+    if (packages.length === 0) return '';
+    const isEnglish = i18n.language === 'en-US';
+    const prices = packages.map((p) => (isEnglish ? p.selling_price_usd : p.selling_price));
+    const minPrice = Math.min(...prices);
+    return formatCurrency(minPrice, i18n.language, isEnglish ? 'USD' : 'VND');
+  }, [packages, i18n.language]);
+
+  const highestPrice = useMemo(() => {
+    if (packages.length === 0) return '';
+    const isEnglish = i18n.language === 'en-US';
+    const prices = packages.map((p) => (isEnglish ? p.selling_price_usd : p.selling_price));
+    const maxPrice = Math.max(...prices);
+    return formatCurrency(maxPrice, i18n.language, isEnglish ? 'USD' : 'VND');
+  }, [packages, i18n.language]);
+
+  const dayOptions = useMemo(() => {
+    const days = packages.map((p) => p.validity_days);
+    return [...new Set(days)].sort((a, b) => a - b);
+  }, [packages]);
+
+  const dataOptions = useMemo(() => {
+    const dataStrings = packages.map((p) => convertDataObjToString(p, t));
+    return [...new Set(dataStrings)].sort((a, b) => dataSortFunc(a, b, t));
+  }, [packages, t]);
+
+  const validDayOptions = useMemo(() => {
+    if (!selectedData) return dayOptions;
+
+    const { amount, unit, isDaily } = convertDataStringToObj(selectedData, t);
+    const filteredPackages = packages.filter(
+      (p) =>
+        p.data_amount === amount &&
+        p.data_unit === unit &&
+        (isDaily ? p.type === 'DAILY' : p.type !== 'DAILY') &&
+        (isTiktokSupported ? p.tiktok === 'ENABLE' : true)
     );
 
-    return {
-      name,
-      flag,
-      banner,
-      lowestPrice: formattedLowest,
-      highestPrice: formattedHighestPrice,
-      carriers,
-      coverage: regionInfo.coverage_area,
-    };
-  }, [data, i18n.language]);
+    const days = filteredPackages.map((p) => p.validity_days);
+    return [...new Set(days)];
+  }, [packages, selectedData, dayOptions, isTiktokSupported, t]);
 
-  const listFilterButton = useMemo(() => {
-    if (!data) return {};
-    const { packages } = data;
-    const listDay: number[] = packages.map((item: any) => item.validity_days);
-    const uniqueDay = [...new Set(listDay)].sort((a, b) => a - b);
-    const listData: string[] = packages.map((item: any) => {
-      const isDaily = item.type === 'DAILY';
-      return `${item.data_amount}${item.data_unit}${isDaily ? `/${t('day')}` : ''}`;
-    });
-    const uniqueData = [...new Set(listData)];
-    const sortedData = uniqueData.sort((a, b) => dataSortFunc(a, b, t));
+  const validDataOptions = useMemo(() => {
+    if (!selectedDay) return dataOptions;
 
-    return {
-      day: uniqueDay,
-      data: sortedData,
-    };
-  }, [data, t]);
-
-  const validDayOption = useMemo(() => {
-    if (!data) return [];
-    if (!selectedData) return listFilterButton.day;
-    const { packages } = data;
-    const objSelectedData = convertDataStringToObj(selectedData);
-    const res = packages.filter(
-      (item: any) =>
-        item.data_amount === objSelectedData.amount &&
-        item.data_unit === objSelectedData.unit &&
-        (objSelectedData.isDaily ? item.type === 'DAILY' : item.type !== 'DAILY') && //filter daily package
-        (isTiktokSupported ? item.tiktok === 'ENABLE' : item.tiktok === 'DISABLE') // filter tiktok support
+    const filteredPackages = packages.filter(
+      (p) => p.validity_days === selectedDay && (isTiktokSupported ? p.tiktok === 'ENABLE' : true)
     );
 
-    return res.map((item: any) => item.validity_days);
-  }, [data, isTiktokSupported, listFilterButton.day, selectedData]);
-
-  const validDataOption = useMemo(() => {
-    if (!data) return [];
-    if (!selectedDay) return listFilterButton.data;
-    const { packages } = data;
-    const res = packages.filter(
-      (item: any) =>
-        item.validity_days === selectedDay &&
-        (isTiktokSupported ? item.tiktok === 'ENABLE' : item.tiktok === 'DISABLE') // filter tiktok support
-    );
-
-    return res.map((item: any) => convertDataObjToString(item, t));
-  }, [data, isTiktokSupported, listFilterButton.data, selectedDay, t]);
+    const dataStrings = filteredPackages.map((p) => convertDataObjToString(p, t));
+    return [...new Set(dataStrings)];
+  }, [packages, selectedDay, dataOptions, isTiktokSupported, t]);
 
   const selectedPackage = useMemo(() => {
-    if (!data || !selectedDay || !selectedData) return [];
-    const { packages } = data;
-    const objSelectedData = convertDataStringToObj(selectedData);
-    const selectedPackage = packages.filter(
-      (item: any) =>
-        item.validity_days === selectedDay &&
-        item.data_amount === objSelectedData.amount &&
-        item.data_unit === objSelectedData.unit &&
-        (objSelectedData.isDaily ? item.type === 'DAILY' : item.type !== 'DAILY') && //filter daily package
-        (isTiktokSupported ? item.tiktok === 'ENABLE' : item.tiktok === 'DISABLE') // filter tiktok support
+    if (!selectedDay || !selectedData) return null;
+
+    const { amount, unit, isDaily } = convertDataStringToObj(selectedData, t);
+    const pkg = packages.find(
+      (p) =>
+        p.validity_days === selectedDay &&
+        p.data_amount === amount &&
+        p.data_unit === unit &&
+        (isDaily ? p.type === 'DAILY' : p.type !== 'DAILY') &&
+        (isTiktokSupported ? p.tiktok === 'ENABLE' : true)
     );
-    console.log('selectedPackage', selectedPackage);
-    return selectedPackage;
-  }, [data, isTiktokSupported, selectedData, selectedDay]);
+
+    return pkg;
+  }, [packages, selectedDay, selectedData, isTiktokSupported, t]);
 
   const handleToggle = () => {
-    setTiktokSupported((prev) => !prev);
+    setSelection((prev) => ({ ...prev, isTiktokSupported: !prev.isTiktokSupported }));
   };
 
   const handleSelectDay = useCallback(
     (day: number) => {
-      if (day === selectedDay) {
-        setSelectedDay(0);
-        return;
-      }
-      setSelectedDay(day);
-      if (selectedData && !validDayOption.includes(day)) {
-        setSelectedData('');
-      }
+      setSelection((prev) => ({
+        ...prev,
+        selectedDay: day === prev.selectedDay ? 0 : day,
+        selectedData:
+          day !== prev.selectedDay && prev.selectedData && !validDayOptions.includes(day)
+            ? ''
+            : prev.selectedData,
+      }));
     },
-    [selectedData, selectedDay, validDayOption]
+    [validDayOptions]
   );
 
   const handleSelectData = useCallback(
     (data: string) => {
-      if (data === selectedData) {
-        setSelectedData('');
-        return;
-      }
-      setSelectedData(data);
-      if (selectedDay && !validDataOption.includes(data)) {
-        setSelectedDay(0);
-      }
+      setSelection((prev) => ({
+        ...prev,
+        selectedData: data === prev.selectedData ? '' : data,
+        selectedDay:
+          data !== prev.selectedData && prev.selectedDay && !validDataOptions.includes(data)
+            ? 0
+            : prev.selectedDay,
+      }));
     },
-    [selectedData, selectedDay, validDataOption]
+    [validDataOptions]
   );
 
-  const fetchData = useCallback(async (id: string) => {
-    // await delay(500);
-    const res = { ...fakePackData };
-    setData(res);
-  }, []);
+  useEffect(() => {
+    if (countryId) {
+      fetchCountryData(countryId).then(setData);
+    }
+  }, [countryId]);
 
   useEffect(() => {
-    fetchData(countryId);
-  }, [countryId, fetchData]);
+    if (selectedPackage && !isPurchaseSheetVisible) {
+      setPurchaseSheetVisible(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedPackage]);
+
+  // reopen action sheet when backing from checkout
+  useEffect(() => {
+    if (!isPurchaseSheetVisible && selectedPackage && path === `/detail/${countryId}`) {
+      setPurchaseSheetVisible(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [path]);
+
+  if (!data || !regionInfo) return null;
 
   return (
     <ScrollView contentContainerClassName="flex-1 gap-6 p-4">
-      <Stack.Screen options={{ title: localizedData.name }} />
-
-      <ImageBackground source={localizedData.banner || ''} className="rounded-xl">
-        <View className="gap-6 rounded-xl bg-black/45 p-3">
-          <View className="flex-row items-center justify-between">
-            <View className="h-10 w-10 overflow-hidden rounded-full border-2 border-gray-100">
-              <Image source={localizedData.flag} className="h-full w-full" />
-            </View>
-
-            <Pressable className="flex-row gap-1 rounded-xl bg-white/50 px-2 py-1 backdrop-blur-sm hover:bg-white/70">
-              <Text className="text-xs">{capitalize(t('check_compatibility'))}</Text>
-              <QuestionMarkCircleIcon className="h-4 w-4" />
+      <Stack.Screen
+        options={{
+          title: name,
+          headerRight: () => (
+            <Pressable onPress={() => setSearchSheetVisible(true)}>
+              <MagnifyingGlassIcon className="mr-4 h-6 w-6 text-white" />
             </Pressable>
-          </View>
+          ),
+        }}
+      />
 
-          <Text className="text-[24px] text-white">
-            {localizedData.lowestPrice} - {localizedData.highestPrice}
-          </Text>
+      <DetailHeader
+        banner={regionInfo.banner}
+        flag={regionInfo.flag}
+        lowestPrice={lowestPrice}
+        highestPrice={highestPrice}
+        carriers={carriers}
+        coverage={regionInfo?.coverage_area}
+      />
 
-          <View className="flex-row items-end justify-between gap-2">
-            <View className="flex-col gap-1">
-              {[
-                { key: 'carrier', value: localizedData.carriers },
-                { key: 'coverage', value: localizedData.coverage },
-                { key: 'activation', value: '' },
-              ].map(({ key, value }: { key: string; value: string }) => (
-                <Text key={key} className="text-white">
-                  {capitalize(t(key))}: {value}
-                </Text>
-              ))}
-            </View>
+      <DaySelector
+        dayOptions={dayOptions}
+        selectedDay={selectedDay}
+        validDayOptions={validDayOptions}
+        handleSelectDay={handleSelectDay}
+        isTiktokSupported={isTiktokSupported}
+        packages={packages}
+        selectedData={selectedData}
+      />
 
-            <Pressable>
-              <InformationCircleIcon className="h-7 w-7 text-white hover:text-white/90" />
-            </Pressable>
-          </View>
-        </View>
-      </ImageBackground>
+      <DataSelector
+        dataOptions={dataOptions}
+        selectedData={selectedData}
+        validDataOptions={validDataOptions}
+        handleSelectData={handleSelectData}
+        isTiktokSupported={isTiktokSupported}
+        handleToggle={handleToggle}
+        packages={packages}
+        selectedDay={selectedDay}
+      />
 
-      <View className="gap-4 rounded-lg border-2 border-gray-200 px-6 py-3 drop-shadow-sm">
-        <View className="flex-row items-center gap-2">
-          <CalendarDaysIcon className="h-6 w-6 text-primary" />
-          <Text className="text-lg">{capitalize(t('choose_day'))}</Text>
-        </View>
+      {selectedPackage && (
+        <PurchaseActionSheet
+          selectedPackage={selectedPackage}
+          visible={isPurchaseSheetVisible}
+          onClose={() => setPurchaseSheetVisible(false)}
+        />
+      )}
 
-        <View className="grid grid-cols-4 gap-3 md:grid-cols-6 lg:grid-cols-8">
-          {listFilterButton.day?.map((day: number) => {
-            const isDayValid = selectedData ? validDayOption.includes(day) : true;
-            const supportTiktokCheck = !isTiktokSupported
-              ? true
-              : data.packages.some(
-                  (item: any) => item.validity_days === day && item.tiktok === 'ENABLE'
-                );
-            const isValid = isDayValid && supportTiktokCheck;
-
-            const baseClass = 'rounded-md border border-primary p-2';
-            const selectedStyle = `${selectedDay === day ? 'bg-primary text-white shadow-md' : 'bg-gray-200'}`;
-            const validStyle = `${!isValid ? 'cursor-not-allowed border-gray-300/5 text-gray-400' : ''}`;
-            const hoverStyle = `${selectedDay !== day && isValid ? 'hover:bg-primary/20' : ''}`;
-
-            const className = `${baseClass} ${selectedStyle} ${validStyle} ${hoverStyle}`;
-
-            return (
-              <Pressable key={day} onPress={() => handleSelectDay(day)} className={className}>
-                <Text className="text-center text-inherit">{day}</Text>
-              </Pressable>
-            );
-          })}
-        </View>
-      </View>
-
-      <View className="gap-4 rounded-lg border-2 border-gray-200 px-6 py-3 drop-shadow-sm">
-        <View className="flex-row items-center justify-between">
-          <View className="flex-row items-center gap-2">
-            <CircleStackIcon className="h-6 w-6 text-primary" />
-            <Text className="text-lg">{capitalize(t('choose_data'))}</Text>
-          </View>
-
-          <View className="flex-row items-center gap-2">
-            <Text className="italic text-gray-400">Support: </Text>
-            <Image className="h-5 w-5" source={require('../../../assets/tiktok-logo.png')} />
-
-            <Switch
-              //@ts-expect-error
-              activeThumbColor="white"
-              trackColor={{ false: 'gray', true: Colors.primary }}
-              value={isTiktokSupported}
-              onValueChange={handleToggle}
-            />
-          </View>
-        </View>
-
-        <View className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
-          {listFilterButton.data?.map((amount: string) => {
-            const isDataValid = selectedDay ? validDataOption.includes(amount) : true;
-            const { amount: dataAmount, unit } = convertDataStringToObj(amount);
-            const supportTiktokCheck = !isTiktokSupported
-              ? true
-              : data.packages.some(
-                  (item: any) =>
-                    item.data_amount === dataAmount &&
-                    item.data_unit === unit &&
-                    item.tiktok === 'ENABLE'
-                );
-            const isValid = isDataValid && supportTiktokCheck;
-
-            const baseClass = 'rounded-md border border-primary p-4';
-            const selectedStyle = `${selectedData === amount ? 'bg-primary text-white shadow-md' : 'bg-gray-200'}`;
-            const validStyle = `${!isValid ? 'cursor-not-allowed border-gray-300/5 text-gray-400' : ''}`;
-            const hoverStyle = `${selectedData !== amount && isValid ? 'hover:bg-primary/20' : ''}`;
-
-            const className = `${baseClass} ${selectedStyle} ${validStyle} ${hoverStyle}`;
-
-            return (
-              <Pressable
-                className={className}
-                key={amount}
-                onPress={() => handleSelectData(amount)}>
-                <Text className="text-center text-inherit">
-                  {amount === '0GB' ? capitalize(t('unlimited')) : amount}
-                </Text>
-              </Pressable>
-            );
-          })}
-        </View>
-
-        {selectedPackage.length > 0 && (
-          <View className="gap-4 rounded-lg border-2 border-gray-200 px-6 py-3 drop-shadow-sm">
-            <Text>{JSON.stringify(selectedPackage[0])}</Text>
-          </View>
-        )}
-      </View>
+      {isSearchSheetVisible && (
+        <SearchActionSheet
+          visible={isSearchSheetVisible}
+          onClose={() => setSearchSheetVisible(false)}
+        />
+      )}
     </ScrollView>
   );
-};
-
-export default DetailScreen;
-
-const dataSortFunc = (a: string, b: string, t: TFunction) => {
-  const extractValue = (str: string): number => {
-    const value = parseInt(str);
-    const unit = str.replace(String(value), '').replace(`/${t('day')}`, '');
-    if (unit === 'GB') return value * 1000; // Convert GB to MB for comparison
-    return value; // Assume MB if unit is not GB
-  };
-
-  const aValue = extractValue(a);
-  const bValue = extractValue(b);
-
-  if (aValue === 0 && bValue !== 0) return 1;
-  if (bValue === 0 && aValue !== 0) return -1;
-  if (aValue !== bValue) {
-    return aValue - bValue;
-  }
-  const aIsDaily = a.includes(`/${t('day')}`);
-  const bIsDaily = b.includes(`/${t('day')}`);
-  return aIsDaily && !bIsDaily ? -1 : bIsDaily && !aIsDaily ? 1 : 0;
-};
-
-const convertDataStringToObj = (item: string) => {
-  const isDaily = item.includes('/day');
-  const cleanedItem = item.replace('/day', '');
-  const [amountStr, unit] = cleanedItem.split(/([A-Za-z]+)/).filter(Boolean);
-  const amount = parseFloat(amountStr);
-
-  return {
-    amount,
-    unit,
-    isDaily,
-  };
-};
-
-const convertDataObjToString = (item: any, t: TFunction) => {
-  const isDaily = item.type === 'DAILY';
-  return `${item.data_amount}${item.data_unit}${isDaily ? `/${t('day')}` : ''}`;
-};
+}

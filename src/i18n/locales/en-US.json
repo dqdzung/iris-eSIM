@@ -20,5 +20,20 @@
   "choose_data": "choose data",
   "day": "day",
   "data": "data",
-  "unlimited": "unlimited"
+  "unlimited": "unlimited",
+  "per_day": "/day",
+  "total": "total",
+  "buy_now": "buy now",
+  "support": "support",
+  "checkout_form": {
+    "name": "full name",
+    "phone": "phone",
+    "email": "email",
+    "emailConfirm": "email confirmation"
+  },
+  "error": {
+    "required_field": "this field is required",
+    "invalid_email": "email is invalid",
+    "email_mismatch": "email doesn't not match"
+  }
 }

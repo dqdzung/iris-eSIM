@@ -10,15 +10,22 @@ import {
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Image } from 'expo-image';
-import { debounce, capitalize, orderBy } from 'lodash';
-import { delay, formatCurrency, toLowerCaseNonAccentVietnamese } from '@/utils';
-import { useRouter } from 'expo-router';
-import fakeData from '@/utils/fakeData/data';
+import { debounce, capitalize } from 'lodash';
+import { delay, formatCurrency } from '@/utils';
+import { Stack, useRouter } from 'expo-router';
+import { Country } from '@/types';
+import { filterCountry } from '@/utils/countryHelper';
+import { useGlobalDataContext } from '../_layout';
+import LanguageSelector from '@/components/home/LanguageSelector';
 
-const HomeScreen = () => {
+export default function HomeScreen() {
   const { i18n, t } = useTranslation();
   const router = useRouter();
   const { width } = useWindowDimensions();
+
+  const [isOpen, setOpen] = useState(false);
+
+  const { regions, uniqueCountries } = useGlobalDataContext();
 
   const inputRef = useRef<any>(null);
 
@@ -32,40 +39,6 @@ const HomeScreen = () => {
     if (width > 1024) return 4;
   }, [width]);
 
-  const sortBy = useMemo(() => (i18n.language === 'en-US' ? 'name' : 'name_vi'), [i18n.language]);
-
-  const regions = useMemo(() => {
-    const sorted = orderBy(fakeData.regions, [(region) => region[sortBy].toLowerCase()], ['asc']);
-    return sorted;
-  }, [sortBy]);
-
-  const countries = useMemo(() => regions.map((item) => item.countries).flat(), [regions]);
-
-  const uniqueCountries = useMemo(() => {
-    const res = [...new Map(countries.map((item) => [item.id, item])).values()];
-    const sorted = orderBy(res, [(region) => region[sortBy].toLowerCase()], ['asc']);
-    return sorted;
-  }, [countries, sortBy]);
-
-  const filterResults = useCallback((data: Country[], searchTerm?: string) => {
-    let filtered = [...data];
-    if (searchTerm) {
-      const escapedSearchTerm = toLowerCaseNonAccentVietnamese(searchTerm).replace(
-        SPECIAL_CHAR_REGEX,
-        '\\$&'
-      );
-      const regex = new RegExp(escapedSearchTerm, 'i');
-      const res = data.filter((country) => {
-        const { name, iso_code, code } = country;
-        const viName = toLowerCaseNonAccentVietnamese(country.name_vi);
-        if (!name && !iso_code && !code && !viName) return false;
-        return regex.test(name) || regex.test(iso_code) || regex.test(viName) || regex.test(code);
-      });
-      filtered = [...res];
-    }
-    return filtered;
-  }, []);
-
   const fetchData = useCallback(
     async (searchTerm?: string) => {
       if (searchTerm) {
@@ -73,10 +46,10 @@ const HomeScreen = () => {
         await delay(300);
         setLoading(false);
       }
-      const res = filterResults(filterType === 'country' ? uniqueCountries : regions, searchTerm);
+      const res = filterCountry(filterType === 'country' ? uniqueCountries : regions, searchTerm);
       setListData(res);
     },
-    [filterResults, filterType, regions, uniqueCountries]
+    [filterType, regions, uniqueCountries]
   );
 
   const debouncedSearch = debounce(fetchData, 500);
@@ -116,10 +89,10 @@ const HomeScreen = () => {
           onPress={() => handlePress(item.id)}
           className="h-24 flex-1 flex-row overflow-hidden rounded-lg border-2 border-gray-100 bg-gray-50 p-2 hover:drop-shadow-md">
           <View className="flex-1 justify-between">
-            <Text className="font-bold">{name}</Text>
-            <Text className="font-bold capitalize">
+            <Text className="font-semibold">{name}</Text>
+            <Text className="font-semibold capitalize">
               {`${t('from')}: `}
-              <Text className="text-lg">{formatted}</Text>
+              <Text className="text-lg font-bold">{formatted}</Text>
             </Text>
           </View>
           <View className="absolute -bottom-1.5 -right-1.5 h-12 w-12 overflow-hidden rounded-full border-2 border-gray-100">
@@ -137,6 +110,34 @@ const HomeScreen = () => {
 
   return (
     <View className="flex-1 items-center justify-center gap-2 bg-white px-4">
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          // header: () => (
+          //   <View className="flex-row justify-between bg-white p-4">
+          //     <View className="h-10 w-[90px]">
+          //       <Image
+          //         source={require('../../../assets/iris-logo.png')}
+          //         alt="iris-logo"
+          //         className="h-full w-full object-cover"
+          //       />
+          //     </View>
+
+          //     <Pressable className="cursor-pointer" onPress={() => setOpen(true)}>
+          //       <View className="h-8 w-8 rounded-full">
+          //         <Image
+          //           source={currentLang.flagSrc}
+          //           alt={`${t(currentLang.name)} flag`}
+          //           className="h-full w-full object-cover"
+          //         />
+          //       </View>
+          //     </Pressable>
+
+          //     <LanguageActionSheet visible={isOpen} onClose={() => setOpen(false)} />
+          //   </View>
+          // ),
+        }}
+      />
       <TextInput
         ref={inputRef}
         keyboardType="web-search"
@@ -145,13 +146,15 @@ const HomeScreen = () => {
         onChangeText={handleSearch}
       />
 
+      <LanguageSelector open={isOpen} setOpen={setOpen} />
+
       <View className="w-full flex-row justify-center gap-2">
         {['country', 'region'].map((type) => (
           <Text
             key={type}
             onPress={() => handleChangeFilter(type)}
-            className={`w-[25%] max-w-[100px] rounded-lg border border-gray-200 px-4 py-2 text-center ${filterType === type ? 'bg-primary' : ''} ${filterType === type ? 'text-white' : ''}`}>
-            {capitalize(t(type))}
+            className={`w-[25%] max-w-[100px] rounded-lg border border-gray-200 px-4 py-2 text-center capitalize ${filterType === type ? 'bg-primary' : ''} ${filterType === type ? 'text-white' : ''}`}>
+            {t(type)}
           </Text>
         ))}
       </View>
@@ -179,9 +182,4 @@ const HomeScreen = () => {
       )}
     </View>
   );
-};
-
-export default HomeScreen;
-
-const SPECIAL_CHAR_REGEX = /[.*+?^${}()|[\]\\]/g;
-type Country = any;
+}

@@ -20,5 +20,20 @@
   "choose_data": "chọn data",
   "day": "ngày",
   "data": "dung lượng",
-  "unlimited": "không giới hạn"
+  "unlimited": "không giới hạn",
+  "per_day": "/ngày",
+  "total": "tổng cộng",
+  "buy_now": "mua ngay",
+  "support": "hỗ trợ",
+  "checkout_form": {
+    "name": "họ và tên",
+    "phone": "số điện thoại",
+    "email": "địa chỉ email",
+    "emailConfirm": "nhập lại địa chỉ email"
+  },
+  "error": {
+    "required_field": "đây là trường bắt buộc",
+    "invalid_email": "địa chỉ email không hợp lệ",
+    "email_mismatch": "địa chỉ email không khớp"
+  }
 }

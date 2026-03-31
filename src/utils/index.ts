@@ -1,3 +1,5 @@
+import { TFunction } from 'i18next';
+
 const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
 const formatCurrency = (value: number, locale = 'en-US', currency = 'USD') => {
@@ -45,4 +47,51 @@ const toNonAccentVietnamese = (str: string) => {
   return str;
 };
 
-export { delay, formatCurrency, toLowerCaseNonAccentVietnamese, toNonAccentVietnamese };
+const dataSortFunc = (a: string, b: string, t: TFunction) => {
+  const extractValue = (str: string): number => {
+    const value = parseInt(str);
+    const unit = str.replace(String(value), '').replace(`${t('per_day')}`, '');
+    if (unit === 'GB') return value * 1000; // Convert GB to MB for comparison
+    return value; // Assume MB if unit is not GB
+  };
+
+  const aValue = extractValue(a);
+  const bValue = extractValue(b);
+
+  if (aValue === 0 && bValue !== 0) return 1;
+  if (bValue === 0 && aValue !== 0) return -1;
+  if (aValue !== bValue) {
+    return aValue - bValue;
+  }
+  const aIsDaily = a.includes(`${t('per_day')}`);
+  const bIsDaily = b.includes(`${t('per_day')}`);
+  return aIsDaily && !bIsDaily ? -1 : bIsDaily && !aIsDaily ? 1 : 0;
+};
+
+const convertDataStringToObj = (item: string, t: TFunction) => {
+  const isDaily = item.includes(t('per_day'));
+  const cleanedItem = item.replace(t('per_day'), '');
+  const [amountStr, unit] = cleanedItem.split(/([A-Za-z]+)/).filter(Boolean);
+  const amount = parseFloat(amountStr);
+
+  return {
+    amount,
+    unit,
+    isDaily,
+  };
+};
+
+const convertDataObjToString = (item: any, t: TFunction) => {
+  const isDaily = item.type === 'DAILY';
+  return `${item.data_amount}${item.data_unit}${isDaily ? t('per_day') : ''}`;
+};
+
+export {
+  delay,
+  formatCurrency,
+  toLowerCaseNonAccentVietnamese,
+  toNonAccentVietnamese,
+  dataSortFunc,
+  convertDataStringToObj,
+  convertDataObjToString,
+};
