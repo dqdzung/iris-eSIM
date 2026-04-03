@@ -53,7 +53,13 @@ export const SearchActionSheet = ({
     debouncedSearch(trimmed);
   };
 
-  const handlePress = useCallback((id: string) => router.replace(`/detail/${id}`), [router]);
+  const handlePress = useCallback(
+    (id: string) => {
+      router.push(`/detail/${id}`);
+      onClose();
+    },
+    [onClose, router]
+  );
 
   const renderListItem = useCallback(
     ({ item }: { item: Country }) => {
@@ -90,16 +96,16 @@ export const SearchActionSheet = ({
 
   useEffect(() => {
     if (visible) {
-      // Small delay to trigger animation
-      setTimeout(() => setIsAnimating(true), 10);
+      setTimeout(() => setIsAnimating(true), 10); // Small delay to trigger animation
+      inputRef.current.focus(); // Focus on the input field when the modal opens
     } else {
       setIsAnimating(false);
     }
   }, [visible]);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    visible && fetchData();
+  }, [fetchData, visible]);
 
   if (!visible) return null;
 

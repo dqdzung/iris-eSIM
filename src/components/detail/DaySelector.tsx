@@ -19,10 +19,10 @@ const DaySelector = (props: DaySelectorProps) => {
   const { t } = useTranslation();
 
   return (
-    <View className="gap-4 rounded-lg border-2 border-gray-200 px-6 py-3 drop-shadow-sm">
+    <View className="gap-2 rounded-lg">
       <View className="flex-row items-center gap-2">
-        <CalendarDaysIcon className="h-6 w-6 text-primary" />
-        <Text className="text-lg">{capitalize(t('choose_day'))}</Text>
+        <CalendarDaysIcon className="h-5 w-5 text-primary" />
+        <Text className="font-semibold text-primary">Thời gian</Text>
       </View>
 
       <View className="grid grid-cols-4 gap-3 sm:grid-cols-6 md:grid-cols-8">

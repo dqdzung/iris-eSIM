@@ -26,14 +26,27 @@
   "buy_now": "buy now",
   "support": "support",
   "checkout_form": {
+    "title": "checkout info",
+    "purchase_info": "customer info",
     "name": "full name",
     "phone": "phone",
     "email": "email",
-    "emailConfirm": "email confirmation"
+    "emailConfirm": "email confirmation",
+    "deviceCompatibility": "I confirm that my device supports eSIM",
+    "saveInfo": "Save info for fast checkout",
+    "receipt": "I want to issue VAT receipt",
+    "order_info": "Order info",
+    "pay": "purchase",
+    "payment_method": "payment method",
+    "qr": "QR code",
+    "mobile": "Mobile money",
+    "atm": "ATM card",
+    "wallet": "E-wallet"
   },
   "error": {
     "required_field": "this field is required",
     "invalid_email": "email is invalid",
-    "email_mismatch": "email doesn't not match"
+    "email_mismatch": "email doesn't not match",
+    "invalid_phone": "phone number is invalid"
   }
 }

@@ -26,14 +26,27 @@
   "buy_now": "mua ngay",
   "support": "hỗ trợ",
   "checkout_form": {
+    "title": "thông tin đặt hàng",
+    "purchase_info": "thông tin người mua",
     "name": "họ và tên",
     "phone": "số điện thoại",
     "email": "địa chỉ email",
-    "emailConfirm": "nhập lại địa chỉ email"
+    "emailConfirm": "nhập lại địa chỉ email",
+    "deviceCompatibility": "Tôi xác nhận thiết bị hỗ trợ eSIM",
+    "saveInfo": "Lưu thông tin cho đơn hàng tiếp theo",
+    "receipt": "Tôi muốn xuất hoá đơn VAT",
+    "order_info": "thông tin đơn hàng",
+    "pay": "thanh toán",
+    "payment_method": "hình thức thanh toán",
+    "qr": "Mã QR",
+    "mobile": "Tiền di động",
+    "atm": "Thẻ ATM",
+    "wallet": "Ví điện tử"
   },
   "error": {
     "required_field": "đây là trường bắt buộc",
     "invalid_email": "địa chỉ email không hợp lệ",
-    "email_mismatch": "địa chỉ email không khớp"
+    "email_mismatch": "địa chỉ email không khớp",
+    "invalid_phone": "số điện thoại không hợp lệ"
   }
 }

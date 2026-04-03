@@ -21,6 +21,8 @@ export type Package = {
   selling_price: number;
   selling_price_usd: number;
   tiktok: 'ENABLE' | 'DISABLE';
+  variant_id: number;
+  name_vi: string;
 };
 
 export type CountryData = {

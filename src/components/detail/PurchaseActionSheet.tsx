@@ -81,25 +81,17 @@ export const PurchaseActionSheet = ({
         <TouchableOpacity onPress={onClose} className="w-full flex-1" />
         {/* modal */}
         <View
-          className={`flex w-[90%] max-w-[500px] flex-col gap-4 rounded-t-2xl bg-white p-4 shadow-lg transition-transform duration-300 ease-out ${
+          className={`flex w-full flex-col gap-3 rounded-t-2xl bg-white p-4 shadow-lg transition-transform duration-300 ease-out ${
             isAnimating ? 'translate-y-0' : 'translate-y-full'
           }`}>
           <View className="relative w-full flex-row items-center justify-between">
-            <Text className="text-center text-lg font-semibold capitalize">{`${t('total')}:`}</Text>
-            <Pressable onPress={onClose}>
-              <XMarkIcon className="h-6 w-6" />
-            </Pressable>
-          </View>
+            {/* <Text className="text-center text-lg font-semibold capitalize">{`${t('total')}:`}</Text> */}
 
-          <View className="rounded-xl border border-primary p-6">
-            <Text className="text-center text-xl font-semibold">{formattedTotal}</Text>
-          </View>
-
-          <View className="select-none flex-row justify-between">
+            <Text className="text-center font-semibold text-primary">{'Số lượng:'}</Text>
             <View className="flex-row items-center gap-3">
               <Pressable
                 onPress={handleMinus}
-                className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/50">
+                className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/50">
                 <MinusIcon className="h-5 w-5 text-black" />
               </Pressable>
 
@@ -109,15 +101,23 @@ export const PurchaseActionSheet = ({
 
               <Pressable
                 onPress={handleAdd}
-                className="flex h-8 w-8 items-center justify-center rounded-full bg-primary">
+                className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
                 <PlusIcon className="h-5 w-5 text-white" />
               </Pressable>
             </View>
 
+            {/* <Pressable onPress={onClose}>
+              <XMarkIcon className="h-6 w-6" />
+            </Pressable> */}
+          </View>
+
+          <View className="flex-row items-center justify-between rounded-xl border-2 border-primary bg-primary/10 p-2">
+            <Text className="text-center text-xl font-semibold">{formattedTotal}</Text>
+
             <Pressable
               onPress={handlePurchase}
-              className="rounded-full bg-primary px-6 py-3 hover:bg-primary/80">
-              <Text className="text-center text-lg font-semibold capitalize text-white">
+              className="rounded-lg bg-primary px-10 py-3 hover:bg-primary/80">
+              <Text className="text-center font-semibold capitalize text-white">
                 {t('buy_now')}
               </Text>
             </Pressable>

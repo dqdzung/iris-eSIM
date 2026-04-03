@@ -34,16 +34,17 @@ const DataButton = ({
       );
   const isValid = isDataValid && supportTiktokCheck;
 
-  const baseClass = 'rounded-md border border-primary p-4';
-  const selectedStyle = `${selectedData === amount ? 'bg-primary text-white shadow-md' : 'bg-gray-200'}`;
-  const validStyle = `${!isValid ? 'cursor-not-allowed border-white/5 text-gray-400' : ''}`;
-  const hoverStyle = `${selectedData !== amount && isValid ? 'hover:bg-primary/20' : ''}`;
+  const baseClass = 'rounded-md p-4';
+  const selectedStyle = `${selectedData === amount ? 'bg-primary text-white' : 'bg-white'}`;
+  const validStyle = `${!isValid ? 'cursor-not-allowed border-white/5 text-gray-300' : 'drop-shadow'}`;
+  // const hoverStyle = `${selectedData !== amount && isValid ? 'hover:bg-primary/20' : ''}`;
 
-  const className = `${baseClass} ${selectedStyle} ${validStyle} ${hoverStyle}`;
+  // const className = `${baseClass} ${selectedStyle} ${validStyle} ${hoverStyle}`;
+  const className = `${baseClass} ${selectedStyle} ${validStyle}`;
 
   return (
     <Pressable className={className} key={amount} onPress={() => handleSelectData(amount)}>
-      <Text className="text-center text-xs text-inherit">
+      <Text className="text-center text-xs font-semibold text-inherit">
         {amount === '0GB' ? capitalize(t('unlimited')) : amount}
       </Text>
     </Pressable>

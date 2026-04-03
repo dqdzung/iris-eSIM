@@ -17,13 +17,16 @@ import { Country } from '@/types';
 import { filterCountry } from '@/utils/countryHelper';
 import { useGlobalDataContext } from '../_layout';
 import LanguageSelector from '@/components/home/LanguageSelector';
+import MagnifyingGlassIcon from '@heroicons/react/24/outline/MagnifyingGlassIcon';
+import { SearchActionSheet } from '@/components/detail/SearchActionSheet';
 
 export default function HomeScreen() {
   const { i18n, t } = useTranslation();
   const router = useRouter();
   const { width } = useWindowDimensions();
 
-  const [isOpen, setOpen] = useState(false);
+  const [isOpenLangSelector, setOpenLangSelector] = useState(false);
+  const [isOpenSearch, setOpenSearch] = useState(false);
 
   const { regions, uniqueCountries } = useGlobalDataContext();
 
@@ -54,14 +57,14 @@ export default function HomeScreen() {
 
   const debouncedSearch = debounce(fetchData, 500);
 
-  const handleSearch = (value: string) => {
-    if (!value) {
-      fetchData();
-      return;
-    }
-    const trimmed = value.trim().toLocaleLowerCase();
-    debouncedSearch(trimmed);
-  };
+  // const handleSearch = (value: string) => {
+  //   if (!value) {
+  //     fetchData();
+  //     return;
+  //   }
+  //   const trimmed = value.trim().toLocaleLowerCase();
+  //   debouncedSearch(trimmed);
+  // };
 
   const handlePress = useCallback((id: string) => router.push(`/detail/${id}`), [router]);
 
@@ -87,15 +90,15 @@ export default function HomeScreen() {
         <Pressable
           style={{ maxWidth: `calc(100% / ${numOfColumn})` as DimensionValue }}
           onPress={() => handlePress(item.id)}
-          className="h-24 flex-1 flex-row overflow-hidden rounded-lg border-2 border-gray-100 bg-gray-50 p-2 hover:drop-shadow-md">
+          className="h-24 flex-1 flex-row overflow-hidden rounded-lg bg-white px-3 py-3.5 drop-shadow-md">
           <View className="flex-1 justify-between">
-            <Text className="font-semibold">{name}</Text>
-            <Text className="font-semibold capitalize">
+            <Text className="font-semibold text-primary">{name}</Text>
+            <Text className="capitalize">
               {`${t('from')}: `}
               <Text className="text-lg font-bold">{formatted}</Text>
             </Text>
           </View>
-          <View className="absolute -bottom-1.5 -right-1.5 h-12 w-12 overflow-hidden rounded-full border-2 border-gray-100">
+          <View className="absolute -bottom-2 -right-2 h-12 w-12 overflow-hidden rounded-full border-2 border-gray-100">
             <Image source={img} className="h-full w-full" />
           </View>
         </Pressable>
@@ -109,7 +112,7 @@ export default function HomeScreen() {
   }, [fetchData]);
 
   return (
-    <View className="flex-1 items-center justify-center gap-2 bg-white px-4">
+    <View className="flex-1 items-center justify-center gap-2 px-4">
       <Stack.Screen
         options={{
           headerShown: false,
@@ -138,22 +141,32 @@ export default function HomeScreen() {
           // ),
         }}
       />
-      <TextInput
-        ref={inputRef}
-        keyboardType="web-search"
-        className="text-md my-2 w-full rounded-lg border border-gray-200 px-4 py-2 outline-none"
-        placeholder={`${capitalize(t('search'))}...`}
-        onChangeText={handleSearch}
-      />
 
-      <LanguageSelector open={isOpen} setOpen={setOpen} />
+      <View className="mt-4 w-full flex-row items-center justify-between gap-2">
+        {/* <TextInput
+          className="flex-1 mb-2 text-md rounded-full bg-white px-4 py-2 shadow-sm outline-none"
+          ref={inputRef}
+          keyboardType="web-search"
+          placeholder={`${capitalize(t('search'))} ${t('country')}/${t('region')}...`}
+          onChangeText={handleSearch}
+        /> */}
+        <Pressable
+          onPress={() => setOpenSearch(() => true)}
+          className="flex-1 flex-row items-center justify-between rounded-full bg-white px-4 py-2 shadow-sm">
+          <Text className="text-gray-400">{`${capitalize(t('search'))} ${t('country')}/${t('region')}...`}</Text>
+
+          <MagnifyingGlassIcon className="h-5 w-5 text-primary" />
+        </Pressable>
+
+        <LanguageSelector open={isOpenLangSelector} setOpen={setOpenLangSelector} />
+      </View>
 
       <View className="w-full flex-row justify-center gap-2">
         {['country', 'region'].map((type) => (
           <Text
             key={type}
             onPress={() => handleChangeFilter(type)}
-            className={`w-[25%] max-w-[100px] rounded-lg border border-gray-200 px-4 py-2 text-center capitalize ${filterType === type ? 'bg-primary' : ''} ${filterType === type ? 'text-white' : ''}`}>
+            className={`flex-1 rounded-sm border-b-4 border-transparent px-4 py-2 text-center capitalize text-gray-400 ${filterType === type ? 'border-b-primary font-semibold text-primary' : ''}`}>
             {t(type)}
           </Text>
         ))}
@@ -180,6 +193,8 @@ export default function HomeScreen() {
           showsVerticalScrollIndicator={false}
         />
       )}
+
+      <SearchActionSheet visible={isOpenSearch} onClose={() => setOpenSearch(false)} />
     </View>
   );
 }

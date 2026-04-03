@@ -4,6 +4,7 @@ import { Stack } from 'expo-router';
 import { orderBy } from 'lodash';
 import { createContext, ReactNode, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Layout() {
   return (
@@ -65,7 +66,7 @@ const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
         uniqueCountries: sortedUniqueCountries,
         countryAndRegion: sortedCountryAndRegion,
       }}>
-      {children}
+      <SafeAreaView className="h-full">{children}</SafeAreaView>
     </GlobalDataContext>
   );
 };
