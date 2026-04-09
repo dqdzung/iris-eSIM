@@ -18,6 +18,7 @@ import {
   QrCodeIcon,
   WalletIcon,
 } from '@heroicons/react/24/outline';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function Checkout() {
   const { i18n, t } = useTranslation();
@@ -75,7 +76,7 @@ export default function Checkout() {
   }, [countryId]);
 
   return (
-    <ScrollView contentContainerClassName="p-4 mb-5">
+    <ScrollView contentContainerClassName="p-4">
       <Stack.Screen options={{ title: capitalize(t('checkout_form.title')) }} />
 
       <View className="h-full flex-col gap-8">
@@ -156,7 +157,7 @@ export default function Checkout() {
                 label: (
                   <View className="ml-1 flex-row items-center gap-2">
                     <QrCodeIcon className="h-5 w-5" />
-                    <Text>{capitalize(t('checkout_form.qr'))}</Text>
+                    <Text>{t('checkout_form.qr')}</Text>
                   </View>
                 ),
                 value: 'qr',
@@ -165,7 +166,7 @@ export default function Checkout() {
                 label: (
                   <View className="ml-1 flex-row items-center gap-2">
                     <DevicePhoneMobileIcon className="h-5 w-5" />
-                    <Text>{capitalize(t('checkout_form.mobile'))}</Text>
+                    <Text>{t('checkout_form.mobile')}</Text>
                   </View>
                 ),
                 value: 'mobile',
@@ -174,7 +175,7 @@ export default function Checkout() {
                 label: (
                   <View className="ml-1 flex-row items-center gap-2">
                     <CreditCardIcon className="h-5 w-5" />
-                    <Text>{capitalize(t('checkout_form.atm'))}</Text>
+                    <Text>{t('checkout_form.atm')}</Text>
                   </View>
                 ),
                 value: 'atm',
@@ -183,7 +184,7 @@ export default function Checkout() {
                 label: (
                   <View className="ml-1 flex-row items-center gap-2">
                     <WalletIcon className="h-5 w-5" />
-                    <Text>{capitalize(t('checkout_form.wallet'))}</Text>
+                    <Text>{t('checkout_form.wallet')}</Text>
                   </View>
                 ),
                 value: 'wallet',
@@ -228,7 +229,7 @@ export default function Checkout() {
             </View>
 
             <View className="flex-1 flex-row items-center justify-between border-t border-gray-200 pt-4">
-              <Text className="text-lg font-bold">Tổng</Text>
+              <Text className="font-bold">Tổng</Text>
               <Text className="text-lg font-bold">
                 {formatCurrency(
                   parsedTotal - discountAmount - voucherAmount,
@@ -258,11 +259,15 @@ export default function Checkout() {
               </Text>
             </View>
 
-            <Pressable
-              onPress={handleSubmit(onSubmit)}
-              className="mt-4 h-10 items-center justify-center rounded-lg bg-primary">
-              <Text className="font-semibold text-white">{capitalize(t('checkout_form.pay'))}</Text>
-            </Pressable>
+            <LinearGradient
+              className="mt-5 rounded-xl px-10 py-3 drop-shadow-md"
+              colors={['rgba(58, 89, 237, 1)', 'rgba(125, 68, 225, 1)']}>
+              <Pressable onPress={handleSubmit(onSubmit)}>
+                <Text className="text-center font-semibold text-white">
+                  {capitalize(t('checkout_form.pay'))}
+                </Text>
+              </Pressable>
+            </LinearGradient>
           </View>
         </View>
       </View>

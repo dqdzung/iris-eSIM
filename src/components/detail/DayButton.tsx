@@ -26,7 +26,7 @@ const DayButton = ({
     : packages.some((item: any) => item.validity_days === day && item.tiktok === 'ENABLE');
   const isValid = isDayValid && supportTiktokCheck;
 
-  const baseClass = 'rounded-md p-2';
+  const baseClass = 'rounded-lg p-4';
   const selectedStyle = `${selectedDay === day ? 'bg-primary text-white' : 'bg-white'}`;
   const validStyle = `${!isValid ? 'cursor-not-allowed border-white/5 text-gray-300' : 'drop-shadow'}`;
   // const hoverStyle = `${selectedDay !== day && isValid ? 'hover:bg-primary/20' : ''}`;

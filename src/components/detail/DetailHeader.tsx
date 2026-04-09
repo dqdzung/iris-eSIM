@@ -4,6 +4,7 @@ import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import { InformationCircleIcon } from '@heroicons/react/24/solid';
 import { capitalize } from 'lodash';
 import { useTranslation } from 'react-i18next';
+import CompatibilityButton from '../CompatibilityButton';
 
 interface DetailHeaderProps {
   banner: string;
@@ -32,10 +33,7 @@ const DetailHeader = ({
             <Image source={flag} className="h-full w-full" />
           </View>
 
-          <Pressable className="flex-row gap-1 rounded-xl bg-white/50 px-2 py-1 backdrop-blur-sm hover:bg-white/70">
-            <Text className="text-xs">{capitalize(t('check_compatibility'))}</Text>
-            <QuestionMarkCircleIcon className="h-4 w-4" />
-          </Pressable>
+          <CompatibilityButton />
         </View>
 
         <Text className="text-[24px] text-white">

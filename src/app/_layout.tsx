@@ -25,10 +25,16 @@ const GlobalDataContext = createContext<{
   regions: typeof fakeData.regions;
   uniqueCountries: typeof fakeData.uniqueCountries;
   countryAndRegion: typeof fakeData.countryAndRegion;
+  popularCountries: typeof fakeData.popularCountries;
+  popularRegions: typeof fakeData.popularRegions;
+  listDevice: typeof fakeData.allDevices;
 }>({
   regions: [],
   uniqueCountries: [],
   countryAndRegion: [],
+  popularCountries: [],
+  popularRegions: [],
+  listDevice: [],
 });
 
 const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
@@ -65,6 +71,9 @@ const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
         regions: sortedRegions,
         uniqueCountries: sortedUniqueCountries,
         countryAndRegion: sortedCountryAndRegion,
+        popularCountries: fakeData.popularCountries,
+        popularRegions: fakeData.popularRegions,
+        listDevice: fakeData.allDevices,
       }}>
       <SafeAreaView className="h-full">{children}</SafeAreaView>
     </GlobalDataContext>

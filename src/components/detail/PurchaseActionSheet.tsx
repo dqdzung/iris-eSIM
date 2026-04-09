@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
 import { Modal, Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { MinusIcon, PlusIcon } from '@heroicons/react/24/solid';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
+import { capitalize } from 'lodash';
 
 export const PurchaseActionSheet = ({
   visible,
@@ -84,43 +85,21 @@ export const PurchaseActionSheet = ({
           className={`flex w-full flex-col gap-3 rounded-t-2xl bg-white p-4 shadow-lg transition-transform duration-300 ease-out ${
             isAnimating ? 'translate-y-0' : 'translate-y-full'
           }`}>
-          <View className="relative w-full flex-row items-center justify-between">
-            {/* <Text className="text-center text-lg font-semibold capitalize">{`${t('total')}:`}</Text> */}
-
-            <Text className="text-center font-semibold text-primary">{'Số lượng:'}</Text>
-            <View className="flex-row items-center gap-3">
-              <Pressable
-                onPress={handleMinus}
-                className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/50">
-                <MinusIcon className="h-5 w-5 text-black" />
-              </Pressable>
-
-              <View className="w-6">
-                <Text className="text-center text-xl font-semibold">{amount}</Text>
-              </View>
-
-              <Pressable
-                onPress={handleAdd}
-                className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
-                <PlusIcon className="h-5 w-5 text-white" />
-              </Pressable>
+          <View className="flex-row items-center justify-between rounded-xl border-2 border-primary bg-primary/10 p-2.5">
+            <View>
+              <Text className="text-xs text-gray-500">Tổng tiền</Text>
+              <Text className="text-center text-xl font-semibold">{formattedTotal}</Text>
             </View>
 
-            {/* <Pressable onPress={onClose}>
-              <XMarkIcon className="h-6 w-6" />
-            </Pressable> */}
-          </View>
-
-          <View className="flex-row items-center justify-between rounded-xl border-2 border-primary bg-primary/10 p-2">
-            <Text className="text-center text-xl font-semibold">{formattedTotal}</Text>
-
-            <Pressable
-              onPress={handlePurchase}
-              className="rounded-lg bg-primary px-10 py-3 hover:bg-primary/80">
-              <Text className="text-center font-semibold capitalize text-white">
-                {t('buy_now')}
-              </Text>
-            </Pressable>
+            <LinearGradient
+              className="rounded-xl px-10 py-3 drop-shadow-md"
+              colors={['rgba(58, 89, 237, 1)', 'rgba(125, 68, 225, 1)']}>
+              <Pressable onPress={handlePurchase}>
+                <Text className="text-center font-semibold text-white">
+                  {capitalize(t('buy_now'))}
+                </Text>
+              </Pressable>
+            </LinearGradient>
           </View>
         </View>
       </View>

@@ -15,7 +15,7 @@ import {
 import { fetchCountryData } from '@/api';
 import { PurchaseActionSheet } from '@/components/detail/PurchaseActionSheet';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import { SearchActionSheet } from '@/components/detail/SearchActionSheet';
+import { SearchActionSheet } from '@/components/SearchActionSheet';
 
 export default function DetailScreen() {
   const { i18n, t } = useTranslation();
@@ -40,6 +40,8 @@ export default function DetailScreen() {
   }, [selection]);
 
   const regionInfo = data?.region_info;
+  const carriers = regionInfo?.carriers.join(', ') || '';
+
   const packages = useMemo(() => data?.packages || [], [data]);
 
   const name = useMemo(() => {
@@ -47,8 +49,6 @@ export default function DetailScreen() {
     const isEnglish = i18n.language === 'en-US';
     return isEnglish ? regionInfo?.name : regionInfo?.name_vi;
   }, [regionInfo, i18n.language]);
-
-  const carriers = regionInfo?.carriers.join(', ') || '';
 
   const lowestPrice = useMemo(() => {
     if (packages.length === 0) return '';
@@ -78,7 +78,6 @@ export default function DetailScreen() {
 
   const validDayOptions = useMemo(() => {
     if (!selectedData) return dayOptions;
-
     const { amount, unit, isDaily } = convertDataStringToObj(selectedData, t);
     const filteredPackages = packages.filter(
       (p) =>
@@ -87,25 +86,21 @@ export default function DetailScreen() {
         (isDaily ? p.type === 'DAILY' : p.type !== 'DAILY') &&
         (isTiktokSupported ? p.tiktok === 'ENABLE' : true)
     );
-
     const days = filteredPackages.map((p) => p.validity_days);
     return [...new Set(days)];
   }, [packages, selectedData, dayOptions, isTiktokSupported, t]);
 
   const validDataOptions = useMemo(() => {
     if (!selectedDay) return dataOptions;
-
     const filteredPackages = packages.filter(
       (p) => p.validity_days === selectedDay && (isTiktokSupported ? p.tiktok === 'ENABLE' : true)
     );
-
     const dataStrings = filteredPackages.map((p) => convertDataObjToString(p, t));
     return [...new Set(dataStrings)];
   }, [packages, selectedDay, dataOptions, isTiktokSupported, t]);
 
   const selectedPackage = useMemo(() => {
     if (!selectedDay || !selectedData) return null;
-
     const { amount, unit, isDaily } = convertDataStringToObj(selectedData, t);
     const pkg = packages.find(
       (p) =>
@@ -115,7 +110,6 @@ export default function DetailScreen() {
         (isDaily ? p.type === 'DAILY' : p.type !== 'DAILY') &&
         (isTiktokSupported ? p.tiktok === 'ENABLE' : true)
     );
-
     return pkg;
   }, [packages, selectedDay, selectedData, isTiktokSupported, t]);
 

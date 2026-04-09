@@ -16,8 +16,6 @@ interface DaySelectorProps {
 }
 
 const DaySelector = (props: DaySelectorProps) => {
-  const { t } = useTranslation();
-
   return (
     <View className="gap-2 rounded-lg">
       <View className="flex-row items-center gap-2">

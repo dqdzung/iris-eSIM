@@ -4,7 +4,7 @@ import { FlatList, Modal, Pressable, Text, TextInput, TouchableOpacity, View } f
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import { capitalize, debounce } from 'lodash';
 import { delay, formatCurrency } from '@/utils';
-import { filterCountry } from '@/utils/countryHelper';
+import { filterCountry } from '@/utils/filterHelper';
 import { Country } from '@/types';
 import { useGlobalDataContext } from '@/app/_layout';
 import { useRouter } from 'expo-router';
@@ -98,13 +98,10 @@ export const SearchActionSheet = ({
     if (visible) {
       setTimeout(() => setIsAnimating(true), 10); // Small delay to trigger animation
       inputRef.current.focus(); // Focus on the input field when the modal opens
+      fetchData();
     } else {
       setIsAnimating(false);
     }
-  }, [visible]);
-
-  useEffect(() => {
-    visible && fetchData();
   }, [fetchData, visible]);
 
   if (!visible) return null;
