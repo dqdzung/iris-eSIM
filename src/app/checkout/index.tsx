@@ -15,10 +15,13 @@ import { formatCurrency } from '@/utils';
 import {
   CreditCardIcon,
   DevicePhoneMobileIcon,
+  InformationCircleIcon,
   QrCodeIcon,
   WalletIcon,
 } from '@heroicons/react/24/outline';
 import { LinearGradient } from 'expo-linear-gradient';
+import AgreementButton from '@/components/AgreementButton';
+import { CompatibilityActionSheet } from '@/components/CompatibilityActionSheet';
 
 export default function Checkout() {
   const { i18n, t } = useTranslation();
@@ -30,7 +33,7 @@ export default function Checkout() {
     total?: string;
   }>();
 
-  const parsedCountryId = countryId ? parseInt(countryId) : 0;
+  // const parsedCountryId = countryId ? parseInt(countryId) : 0;
   const parsedVariantId = variantId ? parseInt(variantId) : 0;
   const parsedAmount = amount ? parseInt(amount) : 0;
   const parsedTotal = total ? parseInt(total) : 0;
@@ -38,6 +41,7 @@ export default function Checkout() {
   const formattedTotal = formatCurrency(parsedTotal, i18n.language, isEnglish ? 'USD' : 'VND');
 
   const [data, setData] = useState<CountryData>();
+  const [isSheetVisible, setSheetVisible] = useState(false);
 
   const packageData = useMemo(() => {
     // filter with country id
@@ -48,7 +52,10 @@ export default function Checkout() {
     control,
     handleSubmit,
     formState: { errors },
+    setValue,
+    watch,
   } = useForm<CheckoutForm>({
+    mode: 'onChange',
     defaultValues: {
       name: '',
       phone: '',
@@ -65,6 +72,15 @@ export default function Checkout() {
     resolver: zodResolver(createCheckoutSchema(t)),
   });
 
+  const checkboxWatcher = watch(['termAndCondition', 'shareInfoAgreement']);
+
+  const isAllowPayment = useMemo(() => {
+    return checkboxWatcher.every((e) => e === true);
+  }, [checkboxWatcher]);
+
+  const onAcceptAgreement = () =>
+    setValue('termAndCondition', true, { shouldDirty: true, shouldTouch: true });
+
   const onSubmit: SubmitHandler<CheckoutForm> = (data: CheckoutForm) => {
     console.log(data);
   };
@@ -76,29 +92,43 @@ export default function Checkout() {
   }, [countryId]);
 
   return (
-    <ScrollView contentContainerClassName="p-4">
+    <View className="flex-1">
       <Stack.Screen options={{ title: capitalize(t('checkout_form.title')) }} />
 
-      <View className="h-full flex-col gap-8">
-        <View className="flex-col gap-3">
+      <ScrollView contentContainerClassName="flex-col gap-8 p-4">
+        <View>
           <Text className="mb-2 text-lg font-bold text-primary">
             {capitalize(t('checkout_form.purchase_info'))}
           </Text>
 
           {['name', 'phone', 'email', 'emailConfirm'].map((e, index) => {
             return (
-              <FormInput
-                key={index}
-                label={capitalize(t(`checkout_form.${e}`))}
-                fieldName={e}
-                control={control}
-                error={(errors as any)[e]}
-              />
+              <View key={index} className="mb-3">
+                <FormInput
+                  label={capitalize(t(`checkout_form.${e}`))}
+                  fieldName={e}
+                  control={control}
+                  error={(errors as any)[e]}
+                />
+              </View>
             );
           })}
 
           <View className="mt-5 flex-col gap-3">
-            {['deviceCompatibility', 'saveInfo', 'receipt'].map((e, index) => (
+            <FormCheckbox
+              label={
+                <View className="flex-row items-center gap-1">
+                  <Text>{t('checkout_form.deviceCompatibility')}</Text>
+                  <Pressable onPress={() => setSheetVisible(true)}>
+                    <InformationCircleIcon className="h-6 w-6 text-primary" />
+                  </Pressable>
+                </View>
+              }
+              fieldName="deviceCompatibility"
+              control={control}
+            />
+
+            {['saveInfo', 'receipt'].map((e, index) => (
               <FormCheckbox
                 key={index}
                 label={t(`checkout_form.${e}`)}
@@ -194,7 +224,7 @@ export default function Checkout() {
         </View>
 
         <View className="flex-col rounded-lg bg-white px-3 py-4 drop-shadow-md">
-          <Text className="text-lg font-semibold">Tổng quan</Text>
+          <Text className="text-[16px] font-semibold">Tổng quan</Text>
 
           <View className="mt-3 flex-row items-center gap-2 rounded-lg bg-gray-200 px-1">
             <FormInput
@@ -204,9 +234,14 @@ export default function Checkout() {
               error={errors.discountCode}
               placeholder="Mã giảm giá"
             />
-            <Pressable className="rounded-lg bg-primary p-3">
-              <Text className="text-white">Chọn mã</Text>
-            </Pressable>
+
+            <LinearGradient
+              className="rounded-lg px-4 py-3"
+              colors={['rgba(58, 89, 237, 1)', 'rgba(125, 68, 225, 1)']}>
+              <Pressable>
+                <Text className="text-white">Chọn mã</Text>
+              </Pressable>
+            </LinearGradient>
           </View>
 
           <Text className="mt-6 font-semibold">Chi tiết thanh toán</Text>
@@ -239,39 +274,43 @@ export default function Checkout() {
               </Text>
             </View>
           </View>
-
-          <View className="mt-6 flex-col gap-3">
-            <View className="flex-row items-center">
-              <FormCheckbox fieldName={'termAndCondition'} control={control} />
-              <Text className="text-xs text-gray-500">
-                Tôi đồng ý với{' '}
-                <Text className="font-semibold text-primary underline">
-                  Điều kiện và điều khoản
-                </Text>
-              </Text>
-            </View>
-            <View className="flex-row items-center">
-              <FormCheckbox fieldName={'shareInfoAgreement'} control={control} />
-              <Text className="text-xs text-gray-500">
-                Tôi đồng ý với{' '}
-                <Text className="font-semibold text-primary underline">chia sẻ thông tin</Text> cho
-                IRIS
-              </Text>
-            </View>
-
-            <LinearGradient
-              className="mt-5 rounded-xl px-10 py-3 drop-shadow-md"
-              colors={['rgba(58, 89, 237, 1)', 'rgba(125, 68, 225, 1)']}>
-              <Pressable onPress={handleSubmit(onSubmit)}>
-                <Text className="text-center font-semibold text-white">
-                  {capitalize(t('checkout_form.pay'))}
-                </Text>
-              </Pressable>
-            </LinearGradient>
-          </View>
         </View>
+      </ScrollView>
+
+      <View className="flex-col gap-3 rounded-t-2xl bg-white p-4 shadow-lg">
+        <View className="flex-row items-center">
+          <FormCheckbox fieldName={'termAndCondition'} control={control} />
+          <Text className="text-xs text-gray-500">
+            Tôi đồng ý với <AgreementButton onAccept={onAcceptAgreement} />
+          </Text>
+        </View>
+        <View className="flex-row items-center">
+          <FormCheckbox fieldName={'shareInfoAgreement'} control={control} />
+          <Text className="text-xs text-gray-500">
+            Tôi đồng ý với{' '}
+            <Text className="font-semibold text-primary underline">chia sẻ thông tin</Text> cho IRIS
+          </Text>
+        </View>
+
+        <LinearGradient
+          className={`${isAllowPayment ? '' : 'cursor-not-allowed'} mt-5 rounded-xl px-10 py-3`}
+          colors={
+            isAllowPayment
+              ? ['rgba(58, 89, 237, 1)', 'rgba(125, 68, 225, 1)']
+              : ['rgba(200, 200, 200, 1)', 'rgba(170, 170, 170, 1)']
+          }>
+          <Pressable disabled={!isAllowPayment} onPress={handleSubmit(onSubmit)}>
+            <Text className="text-center font-semibold text-white">
+              {capitalize(t('checkout_form.pay'))}
+            </Text>
+          </Pressable>
+        </LinearGradient>
       </View>
-    </ScrollView>
+
+      {isSheetVisible && (
+        <CompatibilityActionSheet visible={isSheetVisible} onClose={() => setSheetVisible(false)} />
+      )}
+    </View>
   );
 }
 

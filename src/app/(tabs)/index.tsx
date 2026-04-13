@@ -43,7 +43,7 @@ export default function HomeScreen() {
     [filterType, popularCountries, popularRegions]
   );
 
-  const debouncedSearch = debounce(fetchData, 500);
+  // const debouncedSearch = debounce(fetchData, 500);
 
   // const handleSearch = (value: string) => {
   //   if (!value) {

@@ -1,6 +1,6 @@
 import { Colors } from '@/constants/theme';
 import { Checkbox } from 'expo-checkbox';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Controller } from 'react-hook-form';
 import { Text, View } from 'react-native';
 
@@ -11,7 +11,7 @@ const FormCheckbox = ({
 }: {
   fieldName: string;
   control: any;
-  label?: string;
+  label?: ReactNode;
   required?: boolean;
 }) => {
   return (

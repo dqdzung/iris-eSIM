@@ -36,7 +36,7 @@ const FormInput = ({
               value={value}
               placeholder={placeholder}
             />
-            {error && <Text className="text-red-500">{capitalize(error.message)}</Text>}
+            {error && <Text className="text-red-500 text-[11px]">{capitalize(error.message)}</Text>}
           </View>
         );
       }}

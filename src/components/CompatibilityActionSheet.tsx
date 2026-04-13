@@ -69,11 +69,8 @@ export const CompatibilityActionSheet = ({
     if (visible) {
       setTimeout(() => setIsAnimating(true), 10); // Small delay to trigger animation
       inputRef.current.focus(); // Focus on the input field when the modal opens
-
       getListCompatibleDevice();
-    } else {
-      setIsAnimating(false);
-    }
+    } else setIsAnimating(false);
   }, [getListCompatibleDevice, visible]);
 
   if (!visible) return null;

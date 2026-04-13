@@ -99,9 +99,7 @@ export const SearchActionSheet = ({
       setTimeout(() => setIsAnimating(true), 10); // Small delay to trigger animation
       inputRef.current.focus(); // Focus on the input field when the modal opens
       fetchData();
-    } else {
-      setIsAnimating(false);
-    }
+    } else setIsAnimating(false);
   }, [fetchData, visible]);
 
   if (!visible) return null;
