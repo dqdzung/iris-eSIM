@@ -22,6 +22,7 @@ export const CompatibilityActionSheet = ({
   const [isAnimating, setIsAnimating] = useState(false);
   // const [loading, setLoading] = useState(false);
   const [listData, setListData] = useState<any[]>([]);
+  const [filter, setFilter] = useState<string | null>(null);
 
   const inputRef = useRef<any>(null);
 
@@ -32,10 +33,20 @@ export const CompatibilityActionSheet = ({
         await delay(300);
         // setLoading(false);
       }
-      const res = filterDevice(listDevice, searchTerm);
+      let res = filterDevice(listDevice, searchTerm);
+
+      if (filter) {
+        res = res.filter((item) => {
+          if (filter === 'Khác') {
+            return !['Apple', 'Samsung', 'Google'].includes(item.brand);
+          }
+          return item.brand === filter;
+        });
+      }
+
       setListData(res);
     },
-    [listDevice]
+    [listDevice, filter]
   );
 
   const debouncedSearch = debounce(getListCompatibleDevice, 500);
@@ -43,11 +54,22 @@ export const CompatibilityActionSheet = ({
   const handleSearch = (value: string) => {
     if (!value) {
       getListCompatibleDevice();
-
       return;
     }
     const trimmed = value.trim().toLocaleLowerCase();
+    setFilter(null);
     debouncedSearch(trimmed);
+  };
+
+  const handleClearInput = () => {
+    if (!inputRef.current || !inputRef.current.value) return;
+    inputRef.current.clear();
+    getListCompatibleDevice();
+  };
+
+  const handleFilter = (brand: string) => {
+    if (inputRef.current.value) inputRef.current.clear();
+    setFilter(brand);
   };
 
   const renderListItem = useCallback(({ item }: { item: { name: string; brand: string } }) => {
@@ -90,47 +112,63 @@ export const CompatibilityActionSheet = ({
           <View className="relative w-full flex-row items-center justify-between">
             <View />
 
-            <Text className="px-20 text-center text-[16px] font-semibold leading-6">
-              Kiểm tra xem điện thoại của Quý khách có hỗ trợ eSIM không?
-            </Text>
+            <Text className="px-20 text-center text-[16px] font-semibold leading-6">Thiết bị</Text>
 
             <Pressable onPress={onClose}>
               <XMarkIcon className="h-6 w-6" />
             </Pressable>
           </View>
 
-          <Text className="italic text-red-500">
-            Lưu ý: Vui lòng đảm bảo thiết bị của Quý khách hỗ trợ eSIM trước khi mua. Các thông tin
-            để kiểm tra dưới đây chỉ mang tính chất tham khảo.
-          </Text>
-
-          <View className="gap-2">
+          <View className="gap-5">
             <Text className="font-semibold">
               Để kiểm tra thiết bị có hỗ trợ eSIM không, ấn *#06# trên bàn phím, ấn gọi:
             </Text>
 
             <View>
-              <Text>- Màn hình hiện EID: có hỗ trợ eSIM</Text>
-              <Text>- Màn hình không hiện EID: không hỗ trợ eSIM.</Text>
+              <Text>- Màn hình hiện EID: Thiết bị có hỗ trợ eSIM</Text>
+              <Text>- Màn hình không hiện EID: Thiết bị không hỗ trợ eSIM.</Text>
+            </View>
+
+            <View className="flex-row flex-wrap items-center gap-1">
+              {['Apple', 'Samsung', 'Google', 'Khác'].map((brand) => (
+                <Pressable
+                  key={brand}
+                  onPress={() => handleFilter(brand)}
+                  className={`flex-1 rounded-full py-1.5 ${filter === brand ? 'bg-primary' : 'bg-white'} border border-gray-200`}>
+                  <Text className={`text-center ${filter === brand ? 'text-white' : ''}`}>
+                    {brand}
+                  </Text>
+                </Pressable>
+              ))}
             </View>
           </View>
 
-          <View className="gap-2.5">
-            <Text className="font-semibold">Hoặc tìm nhanh ở danh sách dưới đây:</Text>
-
-            <View className="flex-1 flex-row items-center justify-between gap-2 rounded-full bg-white px-4 py-3.5 drop-shadow">
-              <TextInput
-                ref={inputRef}
-                keyboardType="web-search"
-                className="text-md w-full px-1 outline-none"
-                placeholder={`${capitalize(t('search'))} thiết bị`}
-                onChangeText={handleSearch}
-              />
-              <MagnifyingGlassIcon className="h-5 w-5 stroke-2 text-primary" />
+          <View className="gap-5">
+            <View className="w-full flex-row items-center justify-between rounded-full bg-white px-4 py-3 shadow-md shadow-primary/50">
+              <View className="flex-row gap-2">
+                <MagnifyingGlassIcon className="h-5 w-5 stroke-2 text-primary" />
+                <TextInput
+                  ref={inputRef}
+                  keyboardType="web-search"
+                  className="text-md w-full px-1 outline-none"
+                  placeholder={`${capitalize(t('search'))} thiết bị`}
+                  onChangeText={handleSearch}
+                />
+              </View>
+              {inputRef.current?.value ? (
+                <Pressable onPress={handleClearInput} className="flex-row items-center gap-2">
+                  <XMarkIcon className="h-5 w-5 text-red-500" />
+                </Pressable>
+              ) : null}
             </View>
 
+            <Text className="text-xs italic text-primary">
+              Lưu ý: Vui lòng đảm bảo thiết bị của Quý khách hỗ trợ eSIM trước khi mua. Các thông
+              tin để kiểm tra dưới đây chỉ mang tính chất tham khảo.
+            </Text>
+
             {inputRef.current?.value && listData.length === 0 ? (
-              <View className="h-auto items-center py-10">
+              <View className="h-96 items-center py-10">
                 <Text className="italic">{`"${inputRef.current.value}" không hỗ trợ eSIM`}</Text>
               </View>
             ) : (

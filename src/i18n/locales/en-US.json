@@ -47,6 +47,7 @@
     "required_field": "this field is required",
     "invalid_email": "email is invalid",
     "email_mismatch": "email doesn't not match",
-    "invalid_phone": "phone number is invalid"
+    "invalid_phone": "phone number is invalid",
+    "device_compatibility_required": "please confirm device compatibility"
   }
 }

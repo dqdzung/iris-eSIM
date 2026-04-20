@@ -23,7 +23,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import AgreementButton from '@/components/AgreementButton';
 import { CompatibilityActionSheet } from '@/components/CompatibilityActionSheet';
 
-export default function Checkout() {
+export default function CheckoutScreen() {
   const { i18n, t } = useTranslation();
 
   const { countryId, variantId, amount, total } = useLocalSearchParams<{
@@ -60,14 +60,14 @@ export default function Checkout() {
       name: '',
       phone: '',
       email: '',
-      emailConfirm: '',
+      // emailConfirm: '',
       deviceCompatibility: false,
       saveInfo: false,
       receipt: false,
       paymentMethod: 'qr',
       discountCode: '',
-      termAndCondition: false,
-      shareInfoAgreement: false,
+      // termAndCondition: false,
+      // shareInfoAgreement: false,
     },
     resolver: zodResolver(createCheckoutSchema(t)),
   });
@@ -86,9 +86,7 @@ export default function Checkout() {
   };
 
   useEffect(() => {
-    if (countryId) {
-      fetchCountryData(countryId).then(setData);
-    }
+    if (countryId) fetchCountryData(countryId).then(setData);
   }, [countryId]);
 
   return (
@@ -101,7 +99,7 @@ export default function Checkout() {
             {capitalize(t('checkout_form.purchase_info'))}
           </Text>
 
-          {['name', 'phone', 'email', 'emailConfirm'].map((e, index) => {
+          {['name', 'phone', 'email'].map((e, index) => {
             return (
               <View key={index} className="mb-3">
                 <FormInput
@@ -109,25 +107,13 @@ export default function Checkout() {
                   fieldName={e}
                   control={control}
                   error={(errors as any)[e]}
+                  required={e !== 'email'}
                 />
               </View>
             );
           })}
 
           <View className="mt-5 flex-col gap-3">
-            <FormCheckbox
-              label={
-                <View className="flex-row items-center gap-1">
-                  <Text>{t('checkout_form.deviceCompatibility')}</Text>
-                  <Pressable onPress={() => setSheetVisible(true)}>
-                    <InformationCircleIcon className="h-6 w-6 text-primary" />
-                  </Pressable>
-                </View>
-              }
-              fieldName="deviceCompatibility"
-              control={control}
-            />
-
             {['saveInfo', 'receipt'].map((e, index) => (
               <FormCheckbox
                 key={index}
@@ -278,7 +264,7 @@ export default function Checkout() {
       </ScrollView>
 
       <View className="flex-col gap-3 rounded-t-2xl bg-white p-4 shadow-lg">
-        <View className="flex-row items-center">
+        {/* <View className="flex-row items-center">
           <FormCheckbox fieldName={'termAndCondition'} control={control} />
           <Text className="text-xs text-gray-500">
             Tôi đồng ý với <AgreementButton onAccept={onAcceptAgreement} />
@@ -290,7 +276,20 @@ export default function Checkout() {
             Tôi đồng ý với{' '}
             <Text className="font-semibold text-primary underline">chia sẻ thông tin</Text> cho IRIS
           </Text>
-        </View>
+        </View> */}
+
+        <FormCheckbox
+          label={
+            <View className="flex-row items-center gap-1">
+              <Text>{t('checkout_form.deviceCompatibility')}</Text>
+              <Pressable onPress={() => setSheetVisible(true)}>
+                <InformationCircleIcon className="h-6 w-6 text-primary" />
+              </Pressable>
+            </View>
+          }
+          fieldName="deviceCompatibility"
+          control={control}
+        />
 
         <LinearGradient
           className={`${isAllowPayment ? '' : 'cursor-not-allowed'} mt-5 rounded-xl px-10 py-3`}

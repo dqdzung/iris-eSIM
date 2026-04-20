@@ -5,3 +5,21 @@
 input:focus {
   outline: none;
 }
+
+body::-webkit-scrollbar {
+  width: 2px;
+}
+
+body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 10px;
+}
+
+body {
+  scrollbar-color: rgba(137, 137, 137, 0.3) transparent;
+  scrollbar-width: thin;
+}

@@ -5,7 +5,7 @@ import { useGlobalDataContext } from '../_layout';
 import SearchCountryInput from '@/components/SearchCountryInput';
 import ListCountryRegion from '@/components/ListCountryRegion';
 
-const DisplayAll = () => {
+const DisplayAllScreen = () => {
   const router = useRouter();
 
   const { regions } = useGlobalDataContext();
@@ -37,4 +37,4 @@ const DisplayAll = () => {
   );
 };
 
-export default DisplayAll;
+export default DisplayAllScreen;

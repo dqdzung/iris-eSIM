@@ -8,7 +8,7 @@ import { Country } from '@/types';
 import { filterCountry } from '@/utils/filterHelper';
 import { useGlobalDataContext } from './_layout';
 import NoResult from '@/components/home/NoResult';
-import { ChevronLeftIcon } from '@heroicons/react/24/outline';
+import { ChevronLeftIcon, ChevronRightIcon, MegaphoneIcon } from '@heroicons/react/24/outline';
 import SearchCountryInput from '@/components/SearchCountryInput';
 import ListCountryRegion from '@/components/ListCountryRegion';
 import CompatibilityButton from '@/components/CompatibilityButton';
@@ -53,6 +53,10 @@ export default function HomeScreen() {
     router.push(`/all`);
   };
 
+  const handleClickGuide = () => {
+    router.push(`/guide`);
+  };
+
   useEffect(() => {
     fetchData();
   }, [fetchData]);
@@ -63,9 +67,8 @@ export default function HomeScreen() {
 
       <View className="mt-4 w-full flex-row items-center justify-between gap-2">
         <View className="flex-1 flex-row items-center gap-2">
-          <CompatibilityButton />
-
           <SearchCountryInput />
+          <CompatibilityButton />
         </View>
       </View>
 
@@ -95,7 +98,20 @@ export default function HomeScreen() {
       ) : listData.length === 0 ? (
         <NoResult />
       ) : (
-        <ListCountryRegion data={listData} handlePress={handlePress} />
+        <View className="w-full flex-1">
+          <ListCountryRegion data={listData} handlePress={handlePress} />
+
+          <Pressable
+            onPress={handleClickGuide}
+            className="my-3 flex-row items-center justify-between gap-2 rounded-lg bg-white p-3 py-4 drop-shadow-sm">
+            <View className="flex-row items-center gap-2">
+              <MegaphoneIcon className="h-6 w-6 stroke-2 text-primary" />
+              <Text className="font-semibold text-primary">Xem hướng dẫn</Text>
+            </View>
+
+            <ChevronRightIcon className="h-5 w-5 stroke-2 text-primary" />
+          </Pressable>
+        </View>
       )}
     </View>
   );

@@ -47,6 +47,7 @@
     "required_field": "đây là trường bắt buộc",
     "invalid_email": "địa chỉ email không hợp lệ",
     "email_mismatch": "địa chỉ email không khớp",
-    "invalid_phone": "số điện thoại không hợp lệ"
+    "invalid_phone": "số điện thoại không hợp lệ",
+    "device_compatibility_required": "vui lòng xác nhận thiết bị hỗ trợ eSIM"
   }
 }

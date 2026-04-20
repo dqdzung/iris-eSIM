@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Pressable, Text } from 'react-native';
 import { AgreementActionSheet } from './AgreementActionSheet';
 
-const AgreementButton = ({ onAccept }: { onAccept: () => void }) => {
+const AgreementButton = ({ onAccept }: { onAccept?: () => void }) => {
   const [isSheetVisible, setIsSheetVisible] = useState(false);
 
   const handlePress = () => {
@@ -14,13 +14,13 @@ const AgreementButton = ({ onAccept }: { onAccept: () => void }) => {
   };
 
   const handleAcceptAgreement = () => {
-    onAccept();
+    onAccept?.();
     handleClose();
   };
 
   return (
     <Pressable onPress={handlePress}>
-      <Text className="font-semibold text-primary underline">Điều kiện và điều khoản</Text>
+      <Text className="font-semibold text-primary underline">Điều khoản dịch vụ</Text>
       <AgreementActionSheet
         visible={isSheetVisible}
         onClose={handleClose}

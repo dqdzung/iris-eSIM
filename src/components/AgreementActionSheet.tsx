@@ -12,7 +12,7 @@ export const AgreementActionSheet = ({
 }: {
   visible: boolean;
   onClose: () => void;
-  onAccept: () => void;
+  onAccept?: () => void;
 }) => {
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -40,7 +40,7 @@ export const AgreementActionSheet = ({
             <View />
 
             <Text className="px-20 text-center text-[16px] font-semibold leading-6">
-              Điều kiện và điều khoản
+              Điều khoản dịch vụ
             </Text>
 
             <Pressable onPress={onClose}>
@@ -49,42 +49,42 @@ export const AgreementActionSheet = ({
           </View>
 
           {/* content */}
-          <View className="flex-1">
-            <ScrollView>
-              <View className="gap-3 rounded-xl bg-primary/10 p-4">
-                <Text className="text-sm">
-                  Phần Điều khoản dịch vụ này đưa ra các điều khoản điều chỉnh dịch vụ giữa IRIS và
-                  khách hàng. Bằng việc đăng ký mua SIM du lịch tại IRIS, Quý khách đồng ý rằng các
-                  Điều khoản dịch vụ này cấu thành hợp đồng hoàn chỉnh giữa Quý khách hàng và IRIS
-                  (sau đây gọi chung là “Chúng tôi”, “Công ty”).
-                </Text>
+          <ScrollView>
+            <View className="gap-3 rounded-xl bg-primary/10 p-4">
+              <Text className="text-sm">
+                Phần Điều khoản dịch vụ này đưa ra các điều khoản điều chỉnh dịch vụ giữa IRIS và
+                khách hàng. Bằng việc đăng ký mua SIM du lịch tại IRIS, Quý khách đồng ý rằng các
+                Điều khoản dịch vụ này cấu thành hợp đồng hoàn chỉnh giữa Quý khách hàng và IRIS
+                (sau đây gọi chung là “Chúng tôi”, “Công ty”).
+              </Text>
 
-                <Text className="text-sm font-bold uppercase">
-                  TRƯỚC KHI NHẤP CHỌN NÚT “THANH TOÁN”, VUI LÒNG ĐỌC KỸ CÁC ĐIỀU KHOẢN SỬ DỤNG DỊCH
-                  VỤ DƯỚI ĐÂY.
-                </Text>
-              </View>
+              <Text className="text-sm font-bold uppercase">
+                TRƯỚC KHI NHẤP CHỌN NÚT “THANH TOÁN”, VUI LÒNG ĐỌC KỸ CÁC ĐIỀU KHOẢN SỬ DỤNG DỊCH VỤ
+                DƯỚI ĐÂY.
+              </Text>
+            </View>
 
-              <View className="mt-8 gap-3">
-                {termsAndConditions.map((term, index) => (
-                  <CollapsibleText
-                    className="rounded-xl bg-primary/10"
-                    key={index}
-                    title={`${index + 1}. ${term.title}`}
-                    content={term.content}
-                  />
-                ))}
-              </View>
-            </ScrollView>
-          </View>
+            <View className="mt-8 gap-3">
+              {termsAndConditions.map((term, index) => (
+                <CollapsibleText
+                  className="rounded-xl bg-primary/10"
+                  key={index}
+                  title={`${index + 1}. ${term.title}`}
+                  content={term.content}
+                />
+              ))}
+            </View>
+          </ScrollView>
 
-          <LinearGradient
-            className="rounded-xl px-10 py-3 drop-shadow-md"
-            colors={['rgba(58, 89, 237, 1)', 'rgba(125, 68, 225, 1)']}>
-            <Pressable onPress={onAccept}>
-              <Text className="text-center font-semibold text-white">Đã đọc và đồng ý</Text>
-            </Pressable>
-          </LinearGradient>
+          {onAccept && (
+            <LinearGradient
+              className="rounded-xl px-10 py-3 drop-shadow-md"
+              colors={['rgba(58, 89, 237, 1)', 'rgba(125, 68, 225, 1)']}>
+              <Pressable onPress={onAccept}>
+                <Text className="text-center font-semibold text-white">Đã đọc và đồng ý</Text>
+              </Pressable>
+            </LinearGradient>
+          )}
         </View>
       </View>
     </Modal>
