@@ -9,6 +9,7 @@ const FormInput = ({
   label,
   placeholder = '',
   required = true,
+  autoFocus = false,
 }: {
   fieldName: string;
   control: any;
@@ -16,6 +17,7 @@ const FormInput = ({
   label?: string;
   required?: boolean;
   placeholder?: string;
+  autoFocus?: boolean;
 }) => {
   return (
     <Controller
@@ -35,6 +37,7 @@ const FormInput = ({
               onChangeText={onChange}
               value={value}
               placeholder={placeholder}
+              autoFocus={autoFocus}
             />
             {error && <Text className="text-[11px] text-red-500">{capitalize(error.message)}</Text>}
           </View>

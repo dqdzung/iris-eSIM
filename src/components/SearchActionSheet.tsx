@@ -83,9 +83,9 @@ export const SearchActionSheet = ({
 
               <Text className="text-inherit">{name}</Text>
             </View>
-            <Text className="capitalize text-inherit">
+            <Text className="text-[10px] capitalize">
               {`${t('from')}: `}
-              <Text className="font-bold">{formatted}</Text>
+              <Text className="font-bold text-sm">{formatted}</Text>
             </Text>
           </View>
         </Pressable>

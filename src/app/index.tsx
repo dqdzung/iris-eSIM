@@ -8,7 +8,15 @@ import { Country } from '@/types';
 import { filterCountry } from '@/utils/filterHelper';
 import { useGlobalDataContext } from './_layout';
 import NoResult from '@/components/home/NoResult';
-import { ChevronLeftIcon, ChevronRightIcon, MegaphoneIcon } from '@heroicons/react/24/outline';
+import {
+  BookmarkIcon,
+  BookmarkSlashIcon,
+  BookOpenIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  MagnifyingGlassIcon,
+  MegaphoneIcon,
+} from '@heroicons/react/24/outline';
 import SearchCountryInput from '@/components/SearchCountryInput';
 import ListCountryRegion from '@/components/ListCountryRegion';
 import CompatibilityButton from '@/components/CompatibilityButton';
@@ -67,19 +75,27 @@ export default function HomeScreen() {
 
       <View className="mt-4 w-full flex-row items-center justify-between gap-2">
         <View className="flex-1 flex-row items-center gap-2">
-          <SearchCountryInput />
+          {/* <SearchCountryInput /> */}
+          <View className="flex-1 flex-row items-center justify-between rounded-full bg-white p-2 drop-shadow">
+            <Pressable onPress={handleClickAll} className="flex-1 flex-row items-center gap-2">
+              <MagnifyingGlassIcon className="h-5 w-5 stroke-2 text-primary" />
+              <Text className="text-xs text-gray-400/80">Quốc gia - Khu vực</Text>
+            </Pressable>
+          </View>
           <CompatibilityButton />
         </View>
       </View>
 
       <View className="w-full flex-row justify-center gap-2">
         {['country', 'region'].map((type) => (
-          <Text
-            key={type}
-            onPress={() => handleChangeFilter(type)}
-            className={`flex-1 rounded-sm border-b-4 border-transparent px-4 py-3 text-center capitalize text-gray-400 ${filterType === type ? 'border-b-primary font-semibold text-primary' : ''}`}>
-            {t(type)}
-          </Text>
+          <View key={type} className="flex-1">
+            <Text
+              onPress={() => handleChangeFilter(type)}
+              className={`px-4 py-3 text-center capitalize text-gray-400 ${filterType === type ? 'font-semibold text-primary' : ''}`}>
+              {t(type)}
+            </Text>
+            <View className={`h-1 rounded-t-lg ${filterType === type ? 'bg-primary' : ''}`} />
+          </View>
         ))}
       </View>
 
@@ -101,16 +117,19 @@ export default function HomeScreen() {
         <View className="w-full flex-1">
           <ListCountryRegion data={listData} handlePress={handlePress} />
 
-          <Pressable
-            onPress={handleClickGuide}
-            className="my-3 flex-row items-center justify-between gap-2 rounded-lg bg-white p-3 py-4 drop-shadow-sm">
+          <View className="my-3 flex-row items-center justify-between gap-2 rounded-lg bg-white p-3 drop-shadow-sm">
             <View className="flex-row items-center gap-2">
-              <MegaphoneIcon className="h-6 w-6 stroke-2 text-primary" />
-              <Text className="font-semibold text-primary">Xem hướng dẫn</Text>
+              <BookOpenIcon className="h-6 w-6 stroke-2 text-primary" />
+              <Text className="text-[10px] font-semibold text-primary">Hướng dẫn chi tiết</Text>
             </View>
 
-            <ChevronRightIcon className="h-5 w-5 stroke-2 text-primary" />
-          </Pressable>
+            <Pressable
+              onPress={handleClickGuide}
+              className="flex-row items-center gap-1 rounded-full border border-primary px-3 py-0.5">
+              <Text className="text-[10px] font-semibold text-primary">Xem hướng dẫn</Text>
+              <ChevronRightIcon className="h-5 w-5 stroke-2 text-primary" />
+            </Pressable>
+          </View>
         </View>
       )}
     </View>

@@ -78,9 +78,9 @@ export const AgreementActionSheet = ({
 
           {onAccept && (
             <LinearGradient
-              className="rounded-xl px-10 py-3 drop-shadow-md"
+              className="rounded-xl drop-shadow-md"
               colors={['rgba(58, 89, 237, 1)', 'rgba(125, 68, 225, 1)']}>
-              <Pressable onPress={onAccept}>
+              <Pressable className='py-3' onPress={onAccept}>
                 <Text className="text-center font-semibold text-white">Đã đọc và đồng ý</Text>
               </Pressable>
             </LinearGradient>

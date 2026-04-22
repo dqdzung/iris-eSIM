@@ -7,6 +7,7 @@ import { delay } from '@/utils';
 import { filterDevice } from '@/utils/filterHelper';
 import { useGlobalDataContext } from '@/app/_layout';
 import { DevicePhoneMobileIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { Image } from 'expo-image';
 
 export const CompatibilityActionSheet = ({
   visible,
@@ -65,6 +66,7 @@ export const CompatibilityActionSheet = ({
     if (!inputRef.current || !inputRef.current.value) return;
     inputRef.current.clear();
     getListCompatibleDevice();
+    inputRef.current.focus();
   };
 
   const handleFilter = (brand: string) => {
@@ -143,26 +145,32 @@ export const CompatibilityActionSheet = ({
             </View>
           </View>
 
-          <View className="gap-5">
-            <View className="w-full flex-row items-center justify-between rounded-full bg-white px-4 py-3 shadow-md shadow-primary/50">
-              <View className="flex-row gap-2">
-                <MagnifyingGlassIcon className="h-5 w-5 stroke-2 text-primary" />
-                <TextInput
-                  ref={inputRef}
-                  keyboardType="web-search"
-                  className="text-md w-full px-1 outline-none"
-                  placeholder={`${capitalize(t('search'))} thiết bị`}
-                  onChangeText={handleSearch}
-                />
+          <View className="">
+            <View className="-top-8 items-center">
+              <Image
+                source={require('../../assets/device.png')}
+                className="-bottom-8 h-[120px] w-[120px]"
+              />
+              <View className="w-full flex-row items-center justify-between rounded-full bg-white px-4 py-3 shadow-md shadow-primary/50">
+                <View className="flex-row gap-2">
+                  <MagnifyingGlassIcon className="h-5 w-5 stroke-2 text-primary" />
+                  <TextInput
+                    ref={inputRef}
+                    keyboardType="web-search"
+                    className="text-md w-full px-1 outline-none"
+                    placeholder={`${capitalize(t('search'))} thiết bị`}
+                    onChangeText={handleSearch}
+                  />
+                </View>
+                {inputRef.current?.value ? (
+                  <Pressable onPress={handleClearInput} className="flex-row items-center gap-2">
+                    <XMarkIcon className="h-5 w-5 text-red-500" />
+                  </Pressable>
+                ) : null}
               </View>
-              {inputRef.current?.value ? (
-                <Pressable onPress={handleClearInput} className="flex-row items-center gap-2">
-                  <XMarkIcon className="h-5 w-5 text-red-500" />
-                </Pressable>
-              ) : null}
             </View>
 
-            <Text className="text-xs italic text-primary">
+            <Text className="text-xs italic text-primary mb-4 -mt-3">
               Lưu ý: Vui lòng đảm bảo thiết bị của Quý khách hỗ trợ eSIM trước khi mua. Các thông
               tin để kiểm tra dưới đây chỉ mang tính chất tham khảo.
             </Text>

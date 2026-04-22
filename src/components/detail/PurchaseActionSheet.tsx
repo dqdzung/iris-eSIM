@@ -3,9 +3,8 @@ import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
 import { Modal, Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { InformationCircleIcon, MinusIcon, PlusIcon } from '@heroicons/react/24/solid';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { capitalize } from 'lodash';
 import FormCheckbox from '../checkout/FormCheckbox';
 import { CompatibilityActionSheet } from '../CompatibilityActionSheet';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -28,7 +27,7 @@ export const PurchaseActionSheet = ({
   selectedPackage: any;
 }) => {
   const { t } = useTranslation();
-  // const router = useRouter();
+  const router = useRouter();
   // const { id: countryId } = useLocalSearchParams<{ id: string }>();
 
   const [isAnimating, setIsAnimating] = useState(false);
@@ -46,7 +45,7 @@ export const PurchaseActionSheet = ({
     mode: 'onChange',
     defaultValues: {
       email: '',
-      deviceCompatibility: false,
+      deviceCompatibility: true,
     },
     resolver: zodResolver(
       z
@@ -65,6 +64,11 @@ export const PurchaseActionSheet = ({
 
   const onSubmit: SubmitHandler<Form> = (data: Form) => {
     console.log(data);
+    router.push({
+      pathname: '/result',
+      params: { success: Math.random() >= 0.5 ? 'true' : 'false' }, // Simulate success or failure randomly
+    });
+    onClose();
   };
 
   const packagePrice = useMemo(() => {
@@ -132,6 +136,7 @@ export const PurchaseActionSheet = ({
             control={control}
             error={errors.email}
             required={false}
+            autoFocus
           />
 
           <View className="relative w-full flex-row items-center justify-between">
@@ -186,13 +191,16 @@ export const PurchaseActionSheet = ({
             </View>
 
             <LinearGradient
-              className="rounded-xl px-10 py-3 drop-shadow-md"
+              className="rounded-xl drop-shadow-md"
               colors={
                 isValid
                   ? ['rgba(58, 89, 237, 1)', 'rgba(125, 68, 225, 1)']
                   : ['rgba(200, 200, 200, 1)', 'rgba(170, 170, 170, 1)']
               }>
-              <Pressable disabled={!isValid} onPress={handleSubmit(onSubmit)}>
+              <Pressable
+                className="px-10 py-3"
+                disabled={!isValid}
+                onPress={handleSubmit(onSubmit)}>
                 <Text className="text-center font-semibold text-white">Thanh toán</Text>
               </Pressable>
             </LinearGradient>
