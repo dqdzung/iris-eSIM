@@ -5,11 +5,19 @@
     "version": "1.0.0",
     "web": {
       "favicon": "./assets/favicon.png",
-      "bundler": "metro"
+      "bundler": "metro",
+      "output": "single",
+      "config": {
+        "router": {
+          "origin": "https://dqdzung.github.io/iris-eSIM/",
+          "history": "hash"
+        }
+      }
     },
     "experiments": {
       "tsconfigPaths": true,
-      "typedRoutes": true
+      "typedRoutes": true,
+      "baseUrl": "/iris-eSIM"
     },
     "plugins": ["expo-router", "expo-localization"],
     "orientation": "portrait",
