@@ -1,5 +1,5 @@
 import { Stack, useLocalSearchParams, usePathname } from 'expo-router';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { CountryData } from '@/types';
@@ -22,6 +22,8 @@ export default function DetailScreen() {
   const { i18n, t } = useTranslation();
   const { id: countryId } = useLocalSearchParams<{ id: string }>();
   const path = usePathname();
+
+  const scrollViewRef = useRef<ScrollView>(null);
 
   const [tab, setTab] = useState('spec');
   const [data, setData] = useState<CountryData>();
@@ -173,10 +175,16 @@ export default function DetailScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [path]);
 
+  useEffect(() => {
+    if (scrollViewRef && selectedPackage) {
+      scrollViewRef.current?.scrollToEnd({ animated: true });
+    }
+  }, [selectedPackage]);
+
   if (!data || !regionInfo) return null;
 
   return (
-    <ScrollView contentContainerClassName="p-4 gap-5">
+    <ScrollView contentContainerClassName="gap-5 p-4" ref={scrollViewRef}>
       <Stack.Screen
         options={{
           title: 'Chi tiết',
@@ -197,6 +205,7 @@ export default function DetailScreen() {
         coverage={regionInfo?.coverage_area}
       /> */}
 
+      {/* header */}
       <View className="flex-row items-center justify-between rounded-xl bg-white px-3 py-2 drop-shadow-sm">
         <View className="flex-row items-center gap-2">
           <View className="h-10 w-10 overflow-hidden rounded-full border-2 border-gray-100">
@@ -229,15 +238,16 @@ export default function DetailScreen() {
         selectedDay={selectedDay}
       />
 
+      {/* info */}
       {selectedPackage && (
         <>
-          <View>
+          <View className="gap-2">
             <View className="w-full flex-row justify-center gap-2">
               {Object.keys(mock).map((key) => (
                 <View key={key} className="flex-1">
                   <Text
                     onPress={() => handleChangeTab(key)}
-                    className={`px-4 py-3 text-center text-gray-400 ${tab === key ? 'font-semibold text-primary' : ''}`}>
+                    className={`pb-2 text-center text-gray-400 ${tab === key ? 'font-semibold text-primary' : ''}`}>
                     {key === 'spec' ? 'Thông số kỹ thuật' : 'Lưu ý'}
                   </Text>
                   <View className={`h-1 rounded-t-lg ${tab === key ? 'bg-primary' : ''}`} />
@@ -245,9 +255,11 @@ export default function DetailScreen() {
               ))}
             </View>
 
-            <View className="p-2">{(mock as any)?.[tab]}</View>
+            {/* <View className="p-2">{(mock as any)?.[tab]}</View> */}
+            <ScrollView className="h-[250px]">{(mock as any)?.[tab]}</ScrollView>
           </View>
 
+          {/* pay button */}
           <LinearGradient
             className="rounded-xl drop-shadow-md"
             colors={['rgba(58, 89, 237, 1)', 'rgba(125, 68, 225, 1)']}>
@@ -283,17 +295,30 @@ const notes = [
 
 const mock = {
   spec: (
-    <Text className="text-xs">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. A quaerat mollitia dicta? Quidem
-      doloremque numquam fuga, deleniti suscipit aliquam iure similique deserunt quos impedit,
-      aperiam ipsam tempore harum laborum ab, molestias temporibus. Molestiae animi aliquid quod
-      pariatur sint perferendis non, distinctio recusandae, esse quam omnis nobis quae nam ut
-      tempore excepturi cumque alias. Ut eius totam facere doloribus rem quas vel. Mollitia ex
-      aperiam cumque, recusandae atque deserunt? Ullam aperiam exercitationem architecto hic!
-      Asperiores ad fugit provident officia ducimus aspernatur quasi minus harum vel unde mollitia
-      rerum voluptatum ipsa quae, explicabo consequatur, voluptatibus iusto a at possimus illum
-      beatae dolor.
-    </Text>
+    <View className="gap-2">
+      <Text className="text-xs">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. A quaerat mollitia dicta? Quidem
+        doloremque numquam fuga, deleniti suscipit aliquam iure similique deserunt quos impedit,
+        aperiam ipsam tempore harum laborum ab, molestias temporibus. Molestiae animi aliquid quod
+        pariatur sint perferendis non, distinctio recusandae, esse quam omnis nobis quae nam ut
+        tempore excepturi cumque alias. Ut eius totam facere doloribus rem quas vel. Mollitia ex
+        aperiam cumque, recusandae atque deserunt? Ullam aperiam exercitationem architecto hic!
+        Asperiores ad fugit provident officia ducimus aspernatur quasi minus harum vel unde mollitia
+        rerum voluptatum ipsa quae, explicabo consequatur, voluptatibus iusto a at possimus illum
+        beatae dolor.
+      </Text>
+      <Text className="text-xs">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. A quaerat mollitia dicta? Quidem
+        doloremque numquam fuga, deleniti suscipit aliquam iure similique deserunt quos impedit,
+        aperiam ipsam tempore harum laborum ab, molestias temporibus. Molestiae animi aliquid quod
+        pariatur sint perferendis non, distinctio recusandae, esse quam omnis nobis quae nam ut
+        tempore excepturi cumque alias. Ut eius totam facere doloribus rem quas vel. Mollitia ex
+        aperiam cumque, recusandae atque deserunt? Ullam aperiam exercitationem architecto hic!
+        Asperiores ad fugit provident officia ducimus aspernatur quasi minus harum vel unde mollitia
+        rerum voluptatum ipsa quae, explicabo consequatur, voluptatibus iusto a at possimus illum
+        beatae dolor.
+      </Text>
+    </View>
   ),
   note: (
     <View className="flex-col gap-2">

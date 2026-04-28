@@ -136,7 +136,7 @@ export const CompatibilityActionSheet = ({
                 <Pressable
                   key={brand}
                   onPress={() => handleFilter(brand)}
-                  className={`flex-1 rounded-full py-1.5 ${filter === brand ? 'bg-primary' : 'bg-white'} border border-gray-200`}>
+                  className={`flex-1 rounded-full py-2 ${filter === brand ? 'bg-primary' : 'bg-white'} border border-gray-200`}>
                   <Text className={`text-center ${filter === brand ? 'text-white' : ''}`}>
                     {brand}
                   </Text>
@@ -148,7 +148,7 @@ export const CompatibilityActionSheet = ({
           <View className="">
             <View className="-top-8 items-center">
               <Image
-                source={require('../../assets/device.png')}
+                source={require('@assets/device.png')}
                 className="-bottom-8 h-[120px] w-[120px]"
               />
               <View className="w-full flex-row items-center justify-between rounded-full bg-white px-4 py-3 shadow-md shadow-primary/50">
@@ -170,7 +170,7 @@ export const CompatibilityActionSheet = ({
               </View>
             </View>
 
-            <Text className="text-xs italic text-primary mb-4 -mt-3">
+            <Text className="-mt-3 mb-4 text-xs italic text-primary">
               Lưu ý: Vui lòng đảm bảo thiết bị của Quý khách hỗ trợ eSIM trước khi mua. Các thông
               tin để kiểm tra dưới đây chỉ mang tính chất tham khảo.
             </Text>

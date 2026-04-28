@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import translationEn from './locales/en-US.json';
 import translationVi from './locales/vi-VN.json';
 
-const DEFAULT_LANGUAGE = 'en-US';
+const DEFAULT_LANGUAGE = 'vi-VN';
 const STORAGE_LANGUAGE_KEY = 'lang';
 
 const resources = {
@@ -38,12 +38,12 @@ const languages = [
   {
     code: 'vi-VN',
     name: 'vietnamese',
-    flagSrc: require('../../assets/vietnamese.svg'),
+    flagSrc: require('@assets/vietnamese.svg'),
   },
   {
     code: 'en-US',
     name: 'english',
-    flagSrc: require('../../assets/english.svg'),
+    flagSrc: require('@assets/english.svg'),
   },
 ];
 

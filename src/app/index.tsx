@@ -70,10 +70,10 @@ export default function HomeScreen() {
   }, [fetchData]);
 
   return (
-    <View className="flex-1 items-center justify-center gap-2 px-4">
+    <View className="flex-1 items-center justify-center gap-2 p-4">
       <Stack.Screen options={{ headerShown: false }} />
 
-      <View className="mt-4 w-full flex-row items-center justify-between gap-2">
+      <View className="w-full flex-row items-center justify-between gap-2">
         <View className="flex-1 flex-row items-center gap-2">
           {/* <SearchCountryInput /> */}
           <View className="flex-1 flex-row items-center justify-between rounded-full bg-white p-2 drop-shadow">
@@ -114,10 +114,10 @@ export default function HomeScreen() {
       ) : listData.length === 0 ? (
         <NoResult />
       ) : (
-        <View className="w-full flex-1">
+        <View className="w-full flex-1 gap-2">
           <ListCountryRegion data={listData} handlePress={handlePress} />
 
-          <View className="my-3 flex-row items-center justify-between gap-2 rounded-lg bg-white p-3 drop-shadow-sm">
+          <View className="flex-row items-center justify-between gap-2 rounded-lg bg-white p-3 drop-shadow-sm">
             <View className="flex-row items-center gap-2">
               <BookOpenIcon className="h-6 w-6 stroke-2 text-primary" />
               <Text className="text-[10px] font-semibold text-primary">Hướng dẫn chi tiết</Text>

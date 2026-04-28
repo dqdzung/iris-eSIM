@@ -103,7 +103,7 @@ const PurchaseSection = ({ selectedPackage }: { selectedPackage: any }) => {
         <View className="flex-row items-center gap-3">
           <Pressable
             onPress={handleMinus}
-            className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/50">
+            className="h-7 w-7 items-center justify-center rounded-lg bg-primary/50">
             <MinusIcon className="h-5 w-5 text-white" />
           </Pressable>
 
@@ -113,7 +113,7 @@ const PurchaseSection = ({ selectedPackage }: { selectedPackage: any }) => {
 
           <Pressable
             onPress={handleAdd}
-            className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
+            className="h-7 w-7 items-center justify-center rounded-lg bg-primary">
             <PlusIcon className="h-5 w-5 text-white" />
           </Pressable>
         </View>
@@ -156,7 +156,7 @@ const PurchaseSection = ({ selectedPackage }: { selectedPackage: any }) => {
               ? ['rgba(58, 89, 237, 1)', 'rgba(125, 68, 225, 1)']
               : ['rgba(200, 200, 200, 1)', 'rgba(170, 170, 170, 1)']
           }>
-          <Pressable className="px-10 py-3" disabled={!isValid} onPress={handleSubmit(onSubmit)}>
+          <Pressable disabled={!isValid} onPress={handleSubmit(onSubmit)} className="px-10 py-3">
             <Text className="text-center font-semibold text-white">Thanh toán</Text>
           </Pressable>
         </LinearGradient>

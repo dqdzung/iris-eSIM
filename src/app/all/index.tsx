@@ -2,15 +2,14 @@ import { Stack, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FlatList, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { useGlobalDataContext } from '../_layout';
-import SearchCountryInput from '@/components/SearchCountryInput';
-import ListCountryRegion from '@/components/ListCountryRegion';
-import { ChevronLeftIcon, MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { delay, formatCurrency } from '@/utils';
 import { filterCountry } from '@/utils/filterHelper';
 import { Country } from '@/types';
 import { Image } from 'expo-image';
 import { useTranslation } from 'react-i18next';
 import { debounce } from 'lodash';
+import NavHeader from '@/components/NavHeader';
 
 const DisplayAllScreen = () => {
   const router = useRouter();
@@ -24,7 +23,6 @@ const DisplayAllScreen = () => {
   const [listData, setListData] = useState<Country[]>([]);
 
   const handlePress = useCallback((id: string) => router.push(`/detail/${id}`), [router]);
-  const handleBack = useCallback(() => router.canGoBack() && router.back(), [router]);
 
   const fetchData = useCallback(
     async (searchTerm?: string) => {
@@ -99,13 +97,7 @@ const DisplayAllScreen = () => {
     <View className="flex-1">
       <Stack.Screen options={{ headerShown: false }} />
 
-      <View className="mb-4 h-[64px] flex-row items-center gap-2 border-b-[1px] border-gray-300 bg-primary px-4">
-        <Pressable onPress={handleBack}>
-          <ChevronLeftIcon className="h-6 w-6 stroke-2 text-white" />
-        </Pressable>
-
-        {/* <SearchCountryInput /> */}
-
+      <NavHeader>
         <View className="flex-1 flex-row items-center justify-between rounded-full bg-white px-4 py-0.5 shadow-md shadow-primary/50">
           <View className="flex-1 flex-row items-center gap-2">
             <MagnifyingGlassIcon className="h-5 w-5 stroke-2 font-bold text-primary" />
@@ -123,14 +115,14 @@ const DisplayAllScreen = () => {
             </Pressable>
           ) : null}
         </View>
-      </View>
+      </NavHeader>
 
       {loading ? (
         <View className="flex-1 items-center justify-center">
           <Text className="capitalize">{t('loading')}...</Text>
         </View>
       ) : (
-        <ScrollView contentContainerClassName="px-4 pb-4 gap-5">
+        <ScrollView contentContainerClassName="p-4 gap-5">
           {inputRef.current?.value ? (
             <View className="gap-2">
               <Text className="text-[16px] font-semibold text-primary">Kết quả tìm kiếm</Text>

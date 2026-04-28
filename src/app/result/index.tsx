@@ -20,6 +20,8 @@ const ResultScreen = () => {
       router.back();
   };
 
+  const handleClickSupport = () => router.push('/support');
+
   const imgPath = isPaymentSuccessful ? successImg : failureImg;
 
   return (
@@ -49,7 +51,7 @@ const ResultScreen = () => {
       </LinearGradient>
 
       <Pressable
-        // onPress={handleClickGuide}
+        onPress={handleClickSupport}
         className="flex-row items-center justify-between gap-2 rounded-xl bg-white px-3 py-2 drop-shadow-sm">
         <View className="flex-row items-center gap-2">
           <QuestionMarkCircleIcon className="h-6 w-6 stroke-2 text-primary" />

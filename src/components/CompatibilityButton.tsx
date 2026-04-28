@@ -20,7 +20,9 @@ const CompatibilityButton = () => {
           className="flex-row items-center gap-1 px-2.5 py-1.5"
           onPress={() => setSheetVisible(true)}>
           <InformationCircleIcon className="h-4 w-4 stroke-2 text-primary" />
-          <Text className="text-xs font-medium text-primary">{capitalize(t('check_compatibility'))}</Text>
+          <Text className="text-xs font-medium text-primary">
+            {capitalize(t('check_compatibility'))}
+          </Text>
         </Pressable>
       </LinearGradient>
 

@@ -222,9 +222,9 @@ export default function CheckoutScreen() {
             />
 
             <LinearGradient
-              className="rounded-lg px-4 py-3"
+              className="rounded-lg"
               colors={['rgba(58, 89, 237, 1)', 'rgba(125, 68, 225, 1)']}>
-              <Pressable>
+              <Pressable className="px-4 py-3">
                 <Text className="text-white">Chọn mã</Text>
               </Pressable>
             </LinearGradient>
@@ -292,13 +292,16 @@ export default function CheckoutScreen() {
         />
 
         <LinearGradient
-          className={`${isAllowPayment ? '' : 'cursor-not-allowed'} mt-5 rounded-xl px-10 py-3`}
+          className={`${isAllowPayment ? '' : 'cursor-not-allowed'} mt-5 rounded-xl`}
           colors={
             isAllowPayment
               ? ['rgba(58, 89, 237, 1)', 'rgba(125, 68, 225, 1)']
               : ['rgba(200, 200, 200, 1)', 'rgba(170, 170, 170, 1)']
           }>
-          <Pressable disabled={!isAllowPayment} onPress={handleSubmit(onSubmit)}>
+          <Pressable
+            disabled={!isAllowPayment}
+            onPress={handleSubmit(onSubmit)}
+            className="px-10 py-3">
             <Text className="text-center font-semibold text-white">
               {capitalize(t('checkout_form.pay'))}
             </Text>

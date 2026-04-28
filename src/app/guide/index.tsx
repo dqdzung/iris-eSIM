@@ -1,4 +1,4 @@
-import { ChevronRightIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
+import { ChevronRightIcon, DocumentIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
 import { Stack } from 'expo-router';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 
@@ -6,7 +6,7 @@ export default function GuideScreen() {
   return (
     <ScrollView className="flex-1 p-4">
       <Stack.Screen options={{ title: 'Hướng dẫn' }} />
-      <View className="gap-6">
+    <View className="gap-6">
         <View className="gap-2">
           <View className="flex-row items-center gap-2">
             <View className="h-8 w-8 items-center justify-center rounded-md bg-primary">
@@ -25,7 +25,7 @@ export default function GuideScreen() {
         <View className="gap-2">
           <View className="flex-row items-center gap-2">
             <View className="h-8 w-8 items-center justify-center rounded-md bg-primary">
-              <InformationCircleIcon className="h-6 w-6 text-white" />
+              <DocumentIcon className="h-5 w-5 text-white" />
             </View>
             <Text className="text-lg font-semibold">Điều khoản dịch vụ</Text>
           </View>

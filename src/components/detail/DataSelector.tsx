@@ -23,7 +23,7 @@ const DataSelector = (props: DataSelectorProps) => {
   const { dataOptions, isTiktokSupported, handleToggle } = props;
 
   return (
-    <View className="gap-4">
+    <View className="gap-3">
       <View className="flex-row items-center justify-between">
         <View className="flex-row items-center gap-2">
           <CircleStackIcon className="h-5 w-5 text-primary" />
@@ -32,7 +32,7 @@ const DataSelector = (props: DataSelectorProps) => {
 
         <View className="flex-row items-center gap-2">
           <Text className="italic text-gray-400">{capitalize(t('support'))}: </Text>
-          <Image className="h-5 w-5" source={require('../../../assets/tiktok-logo.png')} />
+          <Image className="h-5 w-5" source={require('@assets/tiktok-logo.png')} />
 
           <Switch
             //@ts-expect-error
@@ -44,7 +44,7 @@ const DataSelector = (props: DataSelectorProps) => {
         </View>
       </View>
 
-      <View className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-6">
+      <View className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
         {dataOptions?.map((amount: string) => (
           <DataButton key={amount} amount={amount} {...props} />
         ))}

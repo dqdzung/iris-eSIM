@@ -9,5 +9,5 @@
       "@assets/*": ["./assets/*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts"]
+  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "nativewind-env.d.ts", "expo-env.d.ts"]
 }
