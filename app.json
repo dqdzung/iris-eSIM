@@ -6,20 +6,16 @@
     "web": {
       "favicon": "./assets/favicon.png",
       "bundler": "metro",
-      "output": "single",
-      "config": {
-        "router": {
-          "origin": "https://dqdzung.github.io/iris-eSIM/",
-          "history": "hash"
-        }
-      }
+      "output": "single"
     },
     "experiments": {
       "tsconfigPaths": true,
-      "typedRoutes": true,
-      "baseUrl": "/iris-eSIM"
+      "typedRoutes": true
     },
-    "plugins": ["expo-router", "expo-localization"],
+    "plugins": [
+      "expo-router",
+      "expo-localization"
+    ],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -28,7 +24,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -36,6 +34,12 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+      }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "37933748-827c-4fb3-84d4-dddd9ba7bdc7"
       }
     }
   }

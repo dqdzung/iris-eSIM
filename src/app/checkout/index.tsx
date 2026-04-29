@@ -82,6 +82,7 @@ export default function CheckoutScreen() {
     setValue('termAndCondition', true, { shouldDirty: true, shouldTouch: true });
 
   const onSubmit: SubmitHandler<CheckoutForm> = (data: CheckoutForm) => {
+    // TODO: handle checkout logic
     console.log(data);
   };
 

@@ -5,7 +5,7 @@
     "start": "expo start",
     "web": "expo start --web",
     "predeploy": "expo export -p web",
-    "deploy": "gh-pages --nojekyll -d dist",
+    "deploy": "netlify deploy --dir dist",
     "lint": "eslint \"**/*.{js,jsx,ts,tsx}\" && prettier -c \"**/*.{js,jsx,ts,tsx,json}\"",
     "format": "eslint \"**/*.{js,jsx,ts,tsx}\" --fix && prettier \"**/*.{js,jsx,ts,tsx,json}\" --write"
   },
@@ -44,7 +44,6 @@
     "eslint": "^9.25.1",
     "eslint-config-expo": "~10.0.0",
     "eslint-config-prettier": "^10.1.2",
-    "gh-pages": "^6.3.0",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.11",
     "tailwindcss": "^3.4.0",

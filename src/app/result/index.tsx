@@ -13,8 +13,7 @@ const ResultScreen = () => {
 
   const handleClick = () => {
     if (isPaymentSuccessful) {
-      // Navigate to transaction details page or show details
-      console.log('Navigating to transaction details...');
+      // TODO: Navigate to transaction details page or show details
     } else
       // Navigate back to the previous screen or home
       router.back();

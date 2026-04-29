@@ -19,6 +19,7 @@ const SupportScreen = () => {
   };
 
   const onSubmit = () => {
+    // TODO: handle submit support request
     console.log(value);
   };
 

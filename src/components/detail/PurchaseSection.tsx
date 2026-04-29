@@ -53,6 +53,8 @@ const PurchaseSection = ({ selectedPackage }: { selectedPackage: any }) => {
 
   const onSubmit: SubmitHandler<Form> = (data: Form) => {
     console.log(data);
+
+    // TODO: handle checkout logic
     router.push({
       pathname: '/result',
       params: { success: Math.random() >= 0.5 ? 'true' : 'false' }, // Simulate success or failure randomly
