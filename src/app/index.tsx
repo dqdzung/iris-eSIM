@@ -9,17 +9,17 @@ import { filterCountry } from '@/utils/filterHelper';
 import { useGlobalDataContext } from './_layout';
 import NoResult from '@/components/home/NoResult';
 import {
-  BookmarkIcon,
-  BookmarkSlashIcon,
+  ArrowPathIcon,
   BookOpenIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   MagnifyingGlassIcon,
-  MegaphoneIcon,
 } from '@heroicons/react/24/outline';
-import SearchCountryInput from '@/components/SearchCountryInput';
 import ListCountryRegion from '@/components/ListCountryRegion';
 import CompatibilityButton from '@/components/CompatibilityButton';
+import { Image } from 'expo-image';
+import headerImg from '@assets/header.jpg';
+import NavHeader from '@/components/NavHeader';
 
 export default function HomeScreen() {
   const { t } = useTranslation();
@@ -70,68 +70,84 @@ export default function HomeScreen() {
   }, [fetchData]);
 
   return (
-    <View className="flex-1 items-center justify-center gap-2 p-4">
+    <View className="flex-1">
       <Stack.Screen options={{ headerShown: false }} />
-
-      <View className="w-full flex-row items-center justify-between gap-2">
-        <View className="flex-1 flex-row items-center gap-2">
-          {/* <SearchCountryInput /> */}
-          <View className="flex-1 flex-row items-center justify-between rounded-full bg-white p-2 drop-shadow">
-            <Pressable onPress={handleClickAll} className="flex-1 flex-row items-center gap-2">
-              <MagnifyingGlassIcon className="h-5 w-5 stroke-2 text-primary" />
-              <Text className="text-xs text-gray-400/80">Quốc gia - Khu vực</Text>
-            </Pressable>
-          </View>
-          <CompatibilityButton />
+      <NavHeader>
+        <View className="flex-1 flex-row items-center justify-between">
+          <Text className="text-[16px] font-semibold text-white">eSIM du lịch</Text>
         </View>
-      </View>
 
-      <View className="w-full flex-row justify-center gap-2">
-        {['country', 'region'].map((type) => (
-          <View key={type} className="flex-1">
-            <Text
-              onPress={() => handleChangeFilter(type)}
-              className={`px-4 py-3 text-center capitalize text-gray-400 ${filterType === type ? 'font-semibold text-primary' : ''}`}>
-              {t(type)}
-            </Text>
-            <View className={`h-1 rounded-t-lg ${filterType === type ? 'bg-primary' : ''}`} />
-          </View>
-        ))}
-      </View>
-
-      <View className="mt-3 w-full flex-row justify-between">
-        <Text className="font-semibold text-primary">Phổ biến</Text>
-        <Pressable className="flex-row items-center gap-1" onPress={handleClickAll}>
-          <Text className="text-xs text-primary">Tất cả</Text>
-          <ChevronLeftIcon className="h-3 w-3 rotate-180 stroke-2 text-primary" />
+        <Pressable className="flex-row items-center gap-2">
+          <Text className="font-semibold text-white">Lịch sử</Text>
+          <ArrowPathIcon className="h-5 w-5 stroke-2 text-white" />
         </Pressable>
-      </View>
+      </NavHeader>
 
-      {loading ? (
-        <View className="flex-1 justify-center">
-          <Text className="text-lg">{capitalize(t('loading'))}...</Text>
+      <View className="flex-1 gap-2 p-4">
+        <View className="mb-1 h-[70px] w-full overflow-hidden rounded-lg">
+          <Image source={headerImg} className="h-full w-full" contentFit="cover" />
         </View>
-      ) : listData.length === 0 ? (
-        <NoResult />
-      ) : (
-        <View className="w-full flex-1 gap-2">
-          <ListCountryRegion data={listData} handlePress={handlePress} />
 
-          <View className="flex-row items-center justify-between gap-2 rounded-lg bg-white p-3 drop-shadow-sm">
-            <View className="flex-row items-center gap-2">
-              <BookOpenIcon className="h-6 w-6 stroke-2 text-primary" />
-              <Text className="text-[10px] font-semibold text-primary">Hướng dẫn chi tiết</Text>
+        <View className="flex-row items-center justify-between gap-2">
+          <View className="flex-1 flex-row items-center gap-2">
+            {/* <SearchCountryInput /> */}
+            <View className="flex-1 flex-row items-center justify-between rounded-full bg-white p-2 drop-shadow">
+              <Pressable onPress={handleClickAll} className="flex-1 flex-row items-center gap-2">
+                <MagnifyingGlassIcon className="h-5 w-5 stroke-2 text-primary" />
+                <Text className="text-xs text-gray-400/80">Quốc gia - Khu vực</Text>
+              </Pressable>
             </View>
-
-            <Pressable
-              onPress={handleClickGuide}
-              className="flex-row items-center gap-1 rounded-full border border-primary px-3 py-0.5">
-              <Text className="text-[10px] font-semibold text-primary">Xem hướng dẫn</Text>
-              <ChevronRightIcon className="h-5 w-5 stroke-2 text-primary" />
-            </Pressable>
+            <CompatibilityButton />
           </View>
         </View>
-      )}
+
+        <View className="flex-row justify-center gap-2">
+          {['country', 'region'].map((type) => (
+            <View key={type} className="flex-1">
+              <Text
+                onPress={() => handleChangeFilter(type)}
+                className={`px-4 py-3 text-center capitalize text-gray-400 ${filterType === type ? 'font-semibold text-primary' : ''}`}>
+                {t(type)}
+              </Text>
+              <View className={`h-1 rounded-t-lg ${filterType === type ? 'bg-primary' : ''}`} />
+            </View>
+          ))}
+        </View>
+
+        <View className="mt-3 flex-row justify-between">
+          <Text className="font-semibold text-primary">Phổ biến</Text>
+          <Pressable className="flex-row items-center gap-1" onPress={handleClickAll}>
+            <Text className="text-xs text-primary">Tất cả</Text>
+            <ChevronLeftIcon className="h-3 w-3 rotate-180 stroke-2 text-primary" />
+          </Pressable>
+        </View>
+
+        {loading ? (
+          <View className="flex-1 justify-center">
+            <Text className="text-lg">{capitalize(t('loading'))}...</Text>
+          </View>
+        ) : listData.length === 0 ? (
+          <NoResult />
+        ) : (
+          <View className="flex-1 gap-2">
+            <ListCountryRegion data={listData} handlePress={handlePress} />
+
+            <View className="flex-row items-center justify-between gap-2 rounded-lg bg-white p-3 drop-shadow-sm">
+              <View className="flex-row items-center gap-2">
+                <BookOpenIcon className="h-6 w-6 stroke-2 text-primary" />
+                <Text className="text-[10px] font-semibold text-primary">Hướng dẫn chi tiết</Text>
+              </View>
+
+              <Pressable
+                onPress={handleClickGuide}
+                className="flex-row items-center gap-1 rounded-full border border-primary px-3 py-0.5">
+                <Text className="text-[10px] font-semibold text-primary">Xem hướng dẫn</Text>
+                <ChevronRightIcon className="h-5 w-5 stroke-2 text-primary" />
+              </Pressable>
+            </View>
+          </View>
+        )}
+      </View>
     </View>
   );
 }

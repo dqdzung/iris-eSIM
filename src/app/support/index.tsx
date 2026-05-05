@@ -29,7 +29,7 @@ const SupportScreen = () => {
 
       <NavHeader>
         <View className="flex-1 flex-row items-center justify-between">
-          <Text className="font-['Helvetica', 'sans-serif'] text-[18px] font-medium text-white ">
+          <Text className="text-[16px] font-medium text-white ">
             Hỗ trợ giao dịch
           </Text>
 

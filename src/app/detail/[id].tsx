@@ -17,6 +17,7 @@ import { SearchActionSheet } from '@/components/SearchActionSheet';
 import CompatibilityButton from '@/components/CompatibilityButton';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
+import NavHeader from '@/components/NavHeader';
 
 export default function DetailScreen() {
   const { i18n, t } = useTranslation();
@@ -184,10 +185,10 @@ export default function DetailScreen() {
   if (!data || !regionInfo) return null;
 
   return (
-    <ScrollView contentContainerClassName="gap-5 p-4" ref={scrollViewRef}>
+    <View className="flex-1">
       <Stack.Screen
         options={{
-          title: 'Chi tiết',
+          headerShown: false,
           // headerRight: () => (
           //   <Pressable onPress={() => setSearchSheetVisible(true)}>
           //     <MagnifyingGlassIcon className="mr-4 h-6 w-6 text-white" />
@@ -195,6 +196,10 @@ export default function DetailScreen() {
           // ),
         }}
       />
+
+      <NavHeader>
+        <Text className="text-[16px] font-semibold text-white ">Chi tiết</Text>
+      </NavHeader>
 
       {/* <DetailHeader
         banner={regionInfo.banner}
@@ -205,84 +210,86 @@ export default function DetailScreen() {
         coverage={regionInfo?.coverage_area}
       /> */}
 
-      {/* header */}
-      <View className="flex-row items-center justify-between rounded-xl bg-white px-3 py-2 drop-shadow-sm">
-        <View className="flex-row items-center gap-2">
-          <View className="h-10 w-10 overflow-hidden rounded-full border-2 border-gray-100">
-            <Image source={regionInfo.flag} className="h-full w-full" />
+      <ScrollView ref={scrollViewRef} contentContainerClassName="gap-5 p-4">
+        {/* header */}
+        <View className="flex-row items-center justify-between rounded-xl bg-white px-3 py-2 drop-shadow-sm">
+          <View className="flex-row items-center gap-2">
+            <View className="h-10 w-10 overflow-hidden rounded-full border-2 border-gray-100">
+              <Image source={regionInfo.flag} className="h-full w-full" />
+            </View>
+            <Text className="text-lg font-medium">{name}</Text>
           </View>
-          <Text className="text-lg font-medium">{name}</Text>
+
+          <CompatibilityButton />
         </View>
 
-        <CompatibilityButton />
-      </View>
+        <DaySelector
+          dayOptions={dayOptions}
+          selectedDay={selectedDay}
+          validDayOptions={validDayOptions}
+          handleSelectDay={handleSelectDay}
+          isTiktokSupported={isTiktokSupported}
+          packages={packages}
+          selectedData={selectedData}
+        />
 
-      <DaySelector
-        dayOptions={dayOptions}
-        selectedDay={selectedDay}
-        validDayOptions={validDayOptions}
-        handleSelectDay={handleSelectDay}
-        isTiktokSupported={isTiktokSupported}
-        packages={packages}
-        selectedData={selectedData}
-      />
+        <DataSelector
+          dataOptions={dataOptions}
+          selectedData={selectedData}
+          validDataOptions={validDataOptions}
+          handleSelectData={handleSelectData}
+          isTiktokSupported={isTiktokSupported}
+          handleToggle={handleToggle}
+          packages={packages}
+          selectedDay={selectedDay}
+        />
 
-      <DataSelector
-        dataOptions={dataOptions}
-        selectedData={selectedData}
-        validDataOptions={validDataOptions}
-        handleSelectData={handleSelectData}
-        isTiktokSupported={isTiktokSupported}
-        handleToggle={handleToggle}
-        packages={packages}
-        selectedDay={selectedDay}
-      />
+        {/* info */}
+        {selectedPackage && (
+          <>
+            <View className="gap-2">
+              <View className="w-full flex-row justify-center gap-2">
+                {Object.keys(mock).map((key) => (
+                  <View key={key} className="flex-1">
+                    <Text
+                      onPress={() => handleChangeTab(key)}
+                      className={`pb-2 text-center text-gray-400 ${tab === key ? 'font-semibold text-primary' : ''}`}>
+                      {key === 'spec' ? 'Thông số kỹ thuật' : 'Lưu ý'}
+                    </Text>
+                    <View className={`h-1 rounded-t-lg ${tab === key ? 'bg-primary' : ''}`} />
+                  </View>
+                ))}
+              </View>
 
-      {/* info */}
-      {selectedPackage && (
-        <>
-          <View className="gap-2">
-            <View className="w-full flex-row justify-center gap-2">
-              {Object.keys(mock).map((key) => (
-                <View key={key} className="flex-1">
-                  <Text
-                    onPress={() => handleChangeTab(key)}
-                    className={`pb-2 text-center text-gray-400 ${tab === key ? 'font-semibold text-primary' : ''}`}>
-                    {key === 'spec' ? 'Thông số kỹ thuật' : 'Lưu ý'}
-                  </Text>
-                  <View className={`h-1 rounded-t-lg ${tab === key ? 'bg-primary' : ''}`} />
-                </View>
-              ))}
+              {/* <View className="p-2">{(mock as any)?.[tab]}</View> */}
+              <ScrollView className="h-[250px]">{(mock as any)?.[tab]}</ScrollView>
             </View>
 
-            {/* <View className="p-2">{(mock as any)?.[tab]}</View> */}
-            <ScrollView className="h-[250px]">{(mock as any)?.[tab]}</ScrollView>
-          </View>
+            {/* pay button */}
+            <LinearGradient
+              className="rounded-xl drop-shadow-md"
+              colors={['rgba(58, 89, 237, 1)', 'rgba(125, 68, 225, 1)']}>
+              <Pressable onPress={() => setPurchaseSheetVisible(true)} className="px-10 py-3">
+                <Text className="text-center font-semibold text-white">Mua ngay</Text>
+              </Pressable>
+            </LinearGradient>
 
-          {/* pay button */}
-          <LinearGradient
-            className="rounded-xl drop-shadow-md"
-            colors={['rgba(58, 89, 237, 1)', 'rgba(125, 68, 225, 1)']}>
-            <Pressable onPress={() => setPurchaseSheetVisible(true)} className="px-10 py-3">
-              <Text className="text-center font-semibold text-white">Mua ngay</Text>
-            </Pressable>
-          </LinearGradient>
+            <PurchaseActionSheet
+              selectedPackage={selectedPackage}
+              visible={isPurchaseSheetVisible}
+              onClose={() => setPurchaseSheetVisible(false)}
+            />
+          </>
+        )}
 
-          <PurchaseActionSheet
-            selectedPackage={selectedPackage}
-            visible={isPurchaseSheetVisible}
-            onClose={() => setPurchaseSheetVisible(false)}
+        {isSearchSheetVisible && (
+          <SearchActionSheet
+            visible={isSearchSheetVisible}
+            onClose={() => setSearchSheetVisible(false)}
           />
-        </>
-      )}
-
-      {isSearchSheetVisible && (
-        <SearchActionSheet
-          visible={isSearchSheetVisible}
-          onClose={() => setSearchSheetVisible(false)}
-        />
-      )}
-    </ScrollView>
+        )}
+      </ScrollView>
+    </View>
   );
 }
 
