@@ -1,13 +1,18 @@
 import NavHeader from '@/components/NavHeader';
+import { useToast } from '@/components/Toast';
 import { ClipboardDocumentIcon, HomeIcon } from '@heroicons/react/24/outline';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Stack, useRouter } from 'expo-router';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Pressable, Text, TextInput, View } from 'react-native';
 
 const SupportScreen = () => {
   const router = useRouter();
+  const toast = useToast();
+  const { t } = useTranslation();
   const [value, onChangeText] = React.useState('');
+  const [submitting, setSubmitting] = React.useState(false);
 
   const handleChangeText = (text: string) => {
     if (text.length > 200) return;
@@ -18,9 +23,23 @@ const SupportScreen = () => {
     router.dismissTo('/');
   };
 
-  const onSubmit = () => {
-    // TODO: handle submit support request
-    console.log(value);
+  const onSubmit = async () => {
+    if (submitting) return;
+    if (!value.trim()) {
+      toast.error(t('toast.support_empty'));
+      return;
+    }
+    setSubmitting(true);
+    try {
+      // TODO: replace with real support API call
+      await new Promise((resolve) => setTimeout(resolve, 400));
+      toast.success(t('toast.support_submitted'));
+      onChangeText('');
+    } catch {
+      toast.error(t('toast.support_failed'));
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -86,7 +105,7 @@ const SupportScreen = () => {
           <LinearGradient
             className="mt-5 w-full rounded-xl drop-shadow-md"
             colors={['rgba(58, 89, 237, 1)', 'rgba(125, 68, 225, 1)']}>
-            <Pressable onPress={onSubmit} className="py-3">
+            <Pressable onPress={onSubmit} disabled={submitting} className="py-3">
               <Text className="text-center font-semibold text-white">Gửi yêu cầu</Text>
             </Pressable>
           </LinearGradient>

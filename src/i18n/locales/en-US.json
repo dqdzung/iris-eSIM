@@ -49,5 +49,13 @@
     "email_mismatch": "email doesn't not match",
     "invalid_phone": "phone number is invalid",
     "device_compatibility_required": "please confirm device compatibility"
+  },
+  "toast": {
+    "load_country_failed": "Couldn't load package details. Please try again.",
+    "checkout_submitted": "Order received! Redirecting to payment…",
+    "checkout_failed": "We couldn't submit your order. Please try again.",
+    "support_submitted": "Support request sent. We'll be in touch soon.",
+    "support_failed": "Couldn't send your request. Please try again.",
+    "support_empty": "Please describe the issue before submitting."
   }
 }
