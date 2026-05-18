@@ -6,12 +6,10 @@ npm-debug.*
 *.p8
 *.p12
 *.key
+*.pem
 *.mobileprovision
 *.orig.*
 web-build/
-
-
-
 
 ios
 android
@@ -28,3 +26,7 @@ expo-env.d.ts
 # @end expo-cli
 # Local Netlify folder
 .netlify
+
+.claude
+.idea
+.env*
