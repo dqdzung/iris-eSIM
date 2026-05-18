@@ -1,5 +1,6 @@
 import { authenticate, verifyInfo, verifySession } from '@/api';
 import fakeData from '@/api/fakeData/data';
+import { ToastProvider } from '@/components/Toast';
 import { Colors } from '@/constants/theme';
 import { Stack } from 'expo-router';
 import { orderBy } from 'lodash';
@@ -9,16 +10,18 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Layout() {
   return (
-    <GlobalDataProvider>
-      <Stack
-        screenOptions={{
-          headerStyle: { backgroundColor: Colors.primary },
-          headerTintColor: '#fff',
-        }}>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="detail/[id]" />
-      </Stack>
-    </GlobalDataProvider>
+    <ToastProvider>
+      <GlobalDataProvider>
+        <Stack
+          screenOptions={{
+            headerStyle: { backgroundColor: Colors.primary },
+            headerTintColor: '#fff',
+          }}>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="detail/[id]" />
+        </Stack>
+      </GlobalDataProvider>
+    </ToastProvider>
   );
 }
 
