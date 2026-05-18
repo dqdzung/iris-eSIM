@@ -20,6 +20,7 @@ import CompatibilityButton from '@/components/CompatibilityButton';
 import { Image } from 'expo-image';
 import headerImg from '@assets/header.jpg';
 import NavHeader from '@/components/NavHeader';
+import { authenticate } from '@/api';
 
 export default function HomeScreen() {
   const { t } = useTranslation();

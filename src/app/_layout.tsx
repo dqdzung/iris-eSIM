@@ -1,8 +1,9 @@
+import { authenticate, verifyInfo, verifySession } from '@/api';
 import fakeData from '@/api/fakeData/data';
 import { Colors } from '@/constants/theme';
 import { Stack } from 'expo-router';
 import { orderBy } from 'lodash';
-import { createContext, ReactNode, useContext, useMemo } from 'react';
+import { createContext, ReactNode, useContext, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -64,6 +65,15 @@ const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
     );
     return sorted;
   }, [sortBy]);
+
+  useEffect(() => {
+    authenticate().then((res) => {
+      if (res.success && res.data?.loginToken)
+        verifySession(res.data?.loginToken).then((res) => {
+          verifyInfo();
+        });
+    });
+  }, []);
 
   return (
     <GlobalDataContext

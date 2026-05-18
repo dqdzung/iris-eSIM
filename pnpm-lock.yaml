@@ -50,6 +50,9 @@ importers:
       lodash:
         specifier: ^4.17.23
         version: 4.17.23
+      mkcert:
+        specifier: ^3.2.0
+        version: 3.2.0
       nativewind:
         specifier: latest
         version: 4.2.2(react-native-reanimated@4.1.6(@babel/core@7.29.0)(react-native-worklets@0.5.1(@babel/core@7.29.0)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native-safe-area-context@5.6.2(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(tailwindcss@3.4.19(yaml@2.8.2))
@@ -1894,6 +1897,10 @@ packages:
     resolution: {integrity: sha512-1rXeuUUiGGrykh+CeBdu5Ie7OJwinCgQY0bc7GCRxy5xVHy+moaqkpL/jqQq0MtQOeYcrqEz4abc5f0KtU7W4A==}
     engines: {node: '>=12.5.0'}
 
+  commander@11.1.0:
+    resolution: {integrity: sha512-yPVavfyCcRhmorC7rWlkHn15b4wDVgVmBA7kV4QVBsF7kv/9TKJAbAXVTxvTnwP8HHKjRCJDClKbciiYS7p0DQ==}
+    engines: {node: '>=16'}
+
   commander@12.1.0:
     resolution: {integrity: sha512-Vw8qHK3bZM9y/P10u3Vib8o/DdkvA2OtPtZvD871QKjy74Wj1WSKFILMPRPSdUSx5RFK1arlJzEtA4PkFgnbuA==}
     engines: {node: '>=18'}
@@ -3351,6 +3358,11 @@ packages:
   minizlib@3.1.0:
     resolution: {integrity: sha512-KZxYo1BUkWD2TVFLr0MQoM8vUUigWD3LlD83a/75BqC+4qE0Hb1Vo5v1FgcfaNXvfXzr+5EhQ6ing/CaBijTlw==}
     engines: {node: '>= 18'}
+
+  mkcert@3.2.0:
+    resolution: {integrity: sha512-026Eivq9RoOjOuLJGzbhGwXUAjBxRX11Z7Jbm4/7lqT/Av+XNy9SPrJte6+UpEt7i+W3e/HZYxQqlQcqXZWSzg==}
+    engines: {node: '>=16'}
+    hasBin: true
 
   mkdirp@1.0.4:
     resolution: {integrity: sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==}
@@ -6946,6 +6958,8 @@ snapshots:
       color-convert: 2.0.1
       color-string: 1.9.1
 
+  commander@11.1.0: {}
+
   commander@12.1.0: {}
 
   commander@2.20.3: {}
@@ -8728,6 +8742,11 @@ snapshots:
   minizlib@3.1.0:
     dependencies:
       minipass: 7.1.3
+
+  mkcert@3.2.0:
+    dependencies:
+      commander: 11.1.0
+      node-forge: 1.3.3
 
   mkdirp@1.0.4: {}
 
