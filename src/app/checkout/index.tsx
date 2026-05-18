@@ -22,9 +22,11 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import AgreementButton from '@/components/AgreementButton';
 import { CompatibilityActionSheet } from '@/components/CompatibilityActionSheet';
+import { useToast } from '@/components/Toast';
 
 export default function CheckoutScreen() {
   const { i18n, t } = useTranslation();
+  const toast = useToast();
 
   const { countryId, variantId, amount, total } = useLocalSearchParams<{
     countryId?: string;
@@ -81,14 +83,23 @@ export default function CheckoutScreen() {
   const onAcceptAgreement = () =>
     setValue('termAndCondition', true, { shouldDirty: true, shouldTouch: true });
 
-  const onSubmit: SubmitHandler<CheckoutForm> = (data: CheckoutForm) => {
-    // TODO: handle checkout logic
-    console.log(data);
+  const onSubmit: SubmitHandler<CheckoutForm> = async (data: CheckoutForm) => {
+    try {
+      // TODO: replace with real checkout API call
+      await new Promise((resolve) => setTimeout(resolve, 400));
+      void data;
+      toast.success(t('toast.checkout_submitted'));
+    } catch {
+      toast.error(t('toast.checkout_failed'));
+    }
   };
 
   useEffect(() => {
-    if (countryId) fetchCountryData(countryId).then(setData);
-  }, [countryId]);
+    if (!countryId) return;
+    fetchCountryData(countryId)
+      .then(setData)
+      .catch(() => toast.error(t('toast.load_country_failed')));
+  }, [countryId, t, toast]);
 
   return (
     <View className="flex-1">
