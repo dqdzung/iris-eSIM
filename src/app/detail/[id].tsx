@@ -18,9 +18,11 @@ import CompatibilityButton from '@/components/CompatibilityButton';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import NavHeader from '@/components/NavHeader';
+import { useToast } from '@/components/Toast';
 
 export default function DetailScreen() {
   const { i18n, t } = useTranslation();
+  const toast = useToast();
   const { id: countryId } = useLocalSearchParams<{ id: string }>();
   const path = usePathname();
 
@@ -155,10 +157,11 @@ export default function DetailScreen() {
   };
 
   useEffect(() => {
-    if (countryId) {
-      fetchCountryData(countryId).then(setData);
-    }
-  }, [countryId]);
+    if (!countryId) return;
+    fetchCountryData(countryId)
+      .then(setData)
+      .catch(() => toast.error(t('toast.load_country_failed')));
+  }, [countryId, t, toast]);
 
   // open action sheet when select package
   // useEffect(() => {
