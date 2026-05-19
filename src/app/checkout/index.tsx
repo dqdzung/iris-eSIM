@@ -20,6 +20,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { LinearGradient } from 'expo-linear-gradient';
 import { CompatibilityActionSheet } from '@/components/CompatibilityActionSheet';
+import LoadingOverlay from '@/components/LoadingOverlay';
 import PrimaryButton from '@/components/PrimaryButton';
 import { useToast } from '@/components/Toast';
 import { useCurrency } from '@/hooks/useCurrency';
@@ -44,6 +45,7 @@ export default function CheckoutScreen() {
 
   const [data, setData] = useState<CountryData>();
   const [isSheetVisible, setSheetVisible] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const packageData = useMemo(() => {
     // filter with country id
@@ -84,6 +86,8 @@ export default function CheckoutScreen() {
     setValue('termAndCondition', true, { shouldDirty: true, shouldTouch: true });
 
   const onSubmit: SubmitHandler<CheckoutForm> = async (data: CheckoutForm) => {
+    if (submitting) return;
+    setSubmitting(true);
     try {
       // TODO: replace with real checkout API call
       await new Promise((resolve) => setTimeout(resolve, 400));
@@ -91,6 +95,8 @@ export default function CheckoutScreen() {
       toast.success(t('toast.checkout_submitted'));
     } catch {
       toast.error(t('toast.checkout_failed'));
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -102,7 +108,7 @@ export default function CheckoutScreen() {
   }, [countryId, t, toast]);
 
   return (
-    <View className="flex-1">
+    <View className="relative flex-1">
       <Stack.Screen options={{ title: capitalize(t('checkout_form.title')) }} />
 
       <ScrollView contentContainerClassName="flex-col gap-8 p-4">
@@ -296,7 +302,7 @@ export default function CheckoutScreen() {
         />
 
         <PrimaryButton
-          disabled={!isAllowPayment}
+          disabled={!isAllowPayment || submitting}
           onPress={handleSubmit(onSubmit)}
           className="mt-5 rounded-xl"
           label={capitalize(t('checkout_form.pay'))}
@@ -306,6 +312,8 @@ export default function CheckoutScreen() {
       {isSheetVisible && (
         <CompatibilityActionSheet visible={isSheetVisible} onClose={() => setSheetVisible(false)} />
       )}
+
+      <LoadingOverlay isVisible={submitting} />
     </View>
   );
 }
