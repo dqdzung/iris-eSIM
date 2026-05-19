@@ -7,7 +7,7 @@ export const useCurrency = () => {
   const locale = i18n.language;
   const isEnglish = locale === 'en-US';
   const currency = isEnglish ? 'USD' : 'VND';
-  
+
   const format = useCallback(
     (value: number) => formatCurrency(value, locale, currency),
     [locale, currency]

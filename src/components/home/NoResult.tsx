@@ -8,7 +8,7 @@ const NoResult = () => {
 
   return (
     <View className="flex-1 justify-center">
-      <Text className="text-lg italic">{capitalize(t('no_result'))}</Text>
+      <Text className="text-lg italic text-center">{capitalize(t('no_result'))}</Text>
     </View>
   );
 };

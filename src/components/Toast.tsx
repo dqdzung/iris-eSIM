@@ -67,9 +67,7 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
   return (
     <ToastContext value={value}>
       {children}
-      <View
-        pointerEvents="box-none"
-        className="absolute left-0 right-0 top-4 z-50 items-center gap-2 px-4">
+      <View pointerEvents="box-none" className="absolute top-0 z-50 w-full items-center">
         {toasts.map((t) => (
           <ToastRow key={t.id} item={t} onDismiss={() => dismiss(t.id)} />
         ))}
@@ -93,13 +91,15 @@ const ToastRow = ({ item, onDismiss }: { item: ToastItem; onDismiss: () => void 
 
   return (
     <Animated.View
-      style={{ opacity, transform: [{ translateY }] }}
-      className={`w-full max-w-md flex-row items-center gap-2 rounded-lg ${bg} px-4 py-3 shadow-lg`}>
-      <Icon className="h-5 w-5 text-white" />
-      <Text className="flex-1 text-sm font-medium text-white">{item.message}</Text>
-      <Pressable onPress={onDismiss} hitSlop={8}>
-        <XMarkIcon className="h-4 w-4 text-white/80" />
-      </Pressable>
+      className="w-full"
+      style={{ width: '100%', opacity, transform: [{ translateY }] }}>
+      <View className={`flex-row items-center gap-2 ${bg} px-4 py-3 shadow-lg`}>
+        <Icon className="h-5 w-5 text-white" />
+        <Text className="flex-1 text-sm font-medium text-white">{item.message}</Text>
+        <Pressable onPress={onDismiss} hitSlop={8}>
+          <XMarkIcon className="h-4 w-4 stroke-2 text-white" />
+        </Pressable>
+      </View>
     </Animated.View>
   );
 };
