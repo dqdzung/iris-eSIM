@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Modal, Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { capitalize } from 'lodash';
+import { Package } from '@/types';
 import { useCurrency } from '@/hooks/useCurrency';
 import { InformationCircleIcon, MinusIcon, PlusIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'expo-router';
@@ -25,7 +26,7 @@ export const PurchaseActionSheet = ({
 }: {
   visible: boolean;
   onClose: () => void;
-  selectedPackage: any;
+  selectedPackage: Package;
 }) => {
   const { t } = useTranslation();
   const router = useRouter();

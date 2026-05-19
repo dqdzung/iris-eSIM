@@ -1,4 +1,5 @@
 import { TFunction } from 'i18next';
+import { Package } from '@/types';
 
 const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
@@ -81,7 +82,7 @@ const convertDataStringToObj = (item: string, t: TFunction) => {
   };
 };
 
-const convertDataObjToString = (item: any, t: TFunction) => {
+const convertDataObjToString = (item: Package, t: TFunction) => {
   const isDaily = item.type === 'DAILY';
   return `${item.data_amount}${item.data_unit}${isDaily ? t('per_day') : ''}`;
 };
