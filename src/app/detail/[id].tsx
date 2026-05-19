@@ -18,7 +18,7 @@ import { useToast } from '@/components/Toast';
 
 export default function DetailScreen() {
   const { t } = useTranslation();
-  const { format, isEnglish } = useCurrency();
+  const { isEnglish } = useCurrency();
   const toast = useToast();
   const { id: countryId } = useLocalSearchParams<{ id: string }>();
   const path = usePathname();
@@ -38,7 +38,6 @@ export default function DetailScreen() {
   const { selectedDay, selectedData, isTiktokSupported } = selection;
 
   const regionInfo = data?.region_info;
-  const carriers = regionInfo?.carriers.join(', ') || '';
 
   const packages = useMemo(() => data?.packages || [], [data]);
 
@@ -46,18 +45,6 @@ export default function DetailScreen() {
     if (!regionInfo) return '';
     return isEnglish ? regionInfo?.name : regionInfo?.name_vi;
   }, [regionInfo, isEnglish]);
-
-  const lowestPrice = useMemo(() => {
-    if (packages.length === 0) return '';
-    const prices = packages.map((p) => (isEnglish ? p.selling_price_usd : p.selling_price));
-    return format(Math.min(...prices));
-  }, [packages, isEnglish, format]);
-
-  const highestPrice = useMemo(() => {
-    if (packages.length === 0) return '';
-    const prices = packages.map((p) => (isEnglish ? p.selling_price_usd : p.selling_price));
-    return format(Math.max(...prices));
-  }, [packages, isEnglish, format]);
 
   const dayOptions = useMemo(() => {
     const days = packages.map((p) => p.validity_days);

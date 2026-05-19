@@ -1,8 +1,19 @@
 import fakePackData from '@/api/fakeData/pack.json';
-import { CountryData } from '@/types';
+import { Country, CountryData } from '@/types';
+import { PARTNER } from '@/constants';
 import ApiService from './apiService';
-import { AuthenticateResponseData, HttpError, VerifySessionResponseData } from './type';
+import {
+  AuthenticateResponseData,
+  HttpError,
+  TypeLocation,
+  VerifySessionResponseData,
+} from './type';
 import { API_PATH } from './apiPath';
+
+type RegionsApiItem = Omit<Country, 'fromPrice' | 'fromPriceUsd'> & {
+  fromPrice: string;
+  fromPriceUsd: string;
+};
 
 const apiService = new ApiService();
 
@@ -64,8 +75,6 @@ export const verifySession = async (
     });
 
     if (res) {
-      console.log(res);
-
       return {
         success: true,
         data: res,
@@ -97,8 +106,6 @@ export const verifyInfo = async (): Promise<{
     const res = await apiService.get<VerifySessionResponseData>(API_PATH.info);
 
     if (res) {
-      console.log(res);
-
       return {
         success: true,
         data: res,
@@ -117,6 +124,36 @@ export const verifyInfo = async (): Promise<{
       success: false,
       message: msg,
       data: null,
+    };
+  }
+};
+
+export const fetchRegions = async (
+  typeLocation: TypeLocation | '' = '',
+  keyword: string = ''
+): Promise<{
+  success: boolean;
+  message?: string;
+  data: Country[];
+}> => {
+  try {
+    const res = await apiService.post<{ data: RegionsApiItem[] }>(API_PATH.regions, {
+      typeLocation,
+      partner: PARTNER,
+      keyword,
+    });
+    const items = (res.data ?? []).map((item) => ({
+      ...item,
+      fromPrice: Number(item.fromPrice),
+      fromPriceUsd: Number(item.fromPriceUsd),
+    }));
+    return { success: true, data: items };
+  } catch (error) {
+    const err = error as HttpError;
+    return {
+      success: false,
+      message: err.cause?.detail?.error,
+      data: [],
     };
   }
 };

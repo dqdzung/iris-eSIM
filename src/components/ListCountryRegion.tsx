@@ -9,7 +9,7 @@ const ListCountryRegion = ({
   handlePress,
   data,
 }: {
-  handlePress: (id: string) => void;
+  handlePress: (id: number) => void;
   data: Country[];
 }) => {
   const { t } = useTranslation();
@@ -27,15 +27,15 @@ const ListCountryRegion = ({
     ({ item }: { item: Country }) => {
       if (!item) return null;
 
-      const name = isEnglish ? item?.name : item.name_vi;
-      const price = isEnglish ? item.from_price_usd : item.from_price;
+      const name = isEnglish ? item.nameLocation : item.nameVi;
+      const price = isEnglish ? item.fromPriceUsd : item.fromPrice;
       const formatted = format(price);
       const img = item.icon;
 
       return (
         <Pressable
           style={{ maxWidth: `calc(100% / ${numOfColumn})` as DimensionValue }}
-          onPress={() => handlePress(item.id)}
+          onPress={() => handlePress(item.locationId)}
           className="h-24 flex-1 flex-row overflow-hidden rounded-lg bg-white px-3 py-3.5 drop-shadow-md">
           <View className="flex-1 justify-between">
             <Text className="font-semibold text-primary">{name}</Text>
@@ -59,7 +59,7 @@ const ListCountryRegion = ({
       columnWrapperClassName="gap-2"
       contentContainerClassName="gap-2"
       key={numOfColumn}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item) => String(item.locationId)}
       numColumns={numOfColumn}
       data={data}
       renderItem={renderListItem}
