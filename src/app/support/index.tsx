@@ -1,7 +1,7 @@
 import NavHeader from '@/components/NavHeader';
+import PrimaryButton from '@/components/PrimaryButton';
 import { useToast } from '@/components/Toast';
 import { ClipboardDocumentIcon, HomeIcon } from '@heroicons/react/24/outline';
-import { LinearGradient } from 'expo-linear-gradient';
 import { Stack, useRouter } from 'expo-router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -48,9 +48,7 @@ const SupportScreen = () => {
 
       <NavHeader>
         <View className="flex-1 flex-row items-center justify-between">
-          <Text className="text-[16px] font-medium text-white ">
-            Hỗ trợ giao dịch
-          </Text>
+          <Text className="text-[16px] font-medium text-white ">Hỗ trợ giao dịch</Text>
 
           <Pressable onPress={handleGoHome}>
             <HomeIcon className="h-5 w-5 stroke-2 font-bold text-white" />
@@ -102,13 +100,13 @@ const SupportScreen = () => {
             </Text>
           </View>
 
-          <LinearGradient
+          <PrimaryButton
+            onPress={onSubmit}
+            disabled={submitting}
             className="mt-5 w-full rounded-xl drop-shadow-md"
-            colors={['rgba(58, 89, 237, 1)', 'rgba(125, 68, 225, 1)']}>
-            <Pressable onPress={onSubmit} disabled={submitting} className="py-3">
-              <Text className="text-center font-semibold text-white">Gửi yêu cầu</Text>
-            </Pressable>
-          </LinearGradient>
+            pressableClassName="py-3"
+            label="Gửi yêu cầu"
+          />
         </View>
       </View>
     </View>

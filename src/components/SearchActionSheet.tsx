@@ -3,13 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { FlatList, Modal, Pressable, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import { capitalize, debounce } from 'lodash';
-import { delay, formatCurrency } from '@/utils';
+import { delay } from '@/utils';
 import { filterCountry } from '@/utils/filterHelper';
 import { Country } from '@/types';
 import { useGlobalDataContext } from '@/app/_layout';
 import { useRouter } from 'expo-router';
 import { Image } from 'expo-image';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { useCurrency } from '@/hooks/useCurrency';
 
 export const SearchActionSheet = ({
   visible,
@@ -18,8 +19,9 @@ export const SearchActionSheet = ({
   visible: boolean;
   onClose: () => void;
 }) => {
-  const { i18n, t } = useTranslation();
+  const { t } = useTranslation();
   const router = useRouter();
+  const { format, isEnglish } = useCurrency();
 
   const { countryAndRegion } = useGlobalDataContext();
 
@@ -65,10 +67,9 @@ export const SearchActionSheet = ({
     ({ item }: { item: Country }) => {
       if (!item) return null;
 
-      const isEnglish = i18n.language === 'en-US';
       const name = isEnglish ? item?.name : item.name_vi;
       const price = isEnglish ? item.from_price_usd : item.from_price;
-      const formatted = formatCurrency(price, i18n.language, isEnglish ? 'USD' : 'VND');
+      const formatted = format(price);
       const img = item.icon;
 
       return (
@@ -85,13 +86,13 @@ export const SearchActionSheet = ({
             </View>
             <Text className="text-[10px] capitalize">
               {`${t('from')}: `}
-              <Text className="font-bold text-sm">{formatted}</Text>
+              <Text className="text-sm font-bold">{formatted}</Text>
             </Text>
           </View>
         </Pressable>
       );
     },
-    [handlePress, i18n.language, t]
+    [handlePress, isEnglish, format, t]
   );
 
   useEffect(() => {

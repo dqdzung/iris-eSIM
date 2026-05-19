@@ -3,17 +3,19 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FlatList, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { useGlobalDataContext } from '../_layout';
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { delay, formatCurrency } from '@/utils';
+import { delay } from '@/utils';
 import { filterCountry } from '@/utils/filterHelper';
 import { Country } from '@/types';
 import { Image } from 'expo-image';
 import { useTranslation } from 'react-i18next';
 import { debounce } from 'lodash';
 import NavHeader from '@/components/NavHeader';
+import { useCurrency } from '@/hooks/useCurrency';
 
 const DisplayAllScreen = () => {
   const router = useRouter();
-  const { i18n, t } = useTranslation();
+  const { t } = useTranslation();
+  const { format, isEnglish } = useCurrency();
 
   const { regions, countryAndRegion, uniqueCountries } = useGlobalDataContext();
 
@@ -59,10 +61,9 @@ const DisplayAllScreen = () => {
     ({ item }: { item: Country }) => {
       if (!item) return null;
 
-      const isEnglish = i18n.language === 'en-US';
       const name = isEnglish ? item?.name : item.name_vi;
       const price = isEnglish ? item.from_price_usd : item.from_price;
-      const formatted = formatCurrency(price, i18n.language, isEnglish ? 'USD' : 'VND');
+      const formatted = format(price);
       const img = item.icon;
 
       return (
@@ -85,7 +86,7 @@ const DisplayAllScreen = () => {
         </Pressable>
       );
     },
-    [handlePress, i18n.language, t]
+    [handlePress, isEnglish, format, t]
   );
 
   useEffect(() => {

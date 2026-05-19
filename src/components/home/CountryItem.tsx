@@ -1,5 +1,5 @@
 import { Country } from '@/types';
-import { formatCurrency } from '@/utils';
+import { useCurrency } from '@/hooks/useCurrency';
 import { Image } from 'expo-image';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -14,12 +14,12 @@ const CountryItem = ({
   numOfColumn: number;
   handlePress: (id: string) => void;
 }) => {
-  const { i18n, t } = useTranslation();
+  const { t } = useTranslation();
+  const { format, isEnglish } = useCurrency();
 
-  const isEnglish = i18n.language === 'en-US';
   const name = isEnglish ? item?.name : item.name_vi;
   const price = isEnglish ? item.from_price_usd : item.from_price;
-  const formatted = formatCurrency(price, i18n.language, isEnglish ? 'USD' : 'VND');
+  const formatted = format(price);
   const img = item.icon;
 
   return (
