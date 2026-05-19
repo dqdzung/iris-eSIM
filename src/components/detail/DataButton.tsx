@@ -29,7 +29,7 @@ const DataButton = ({
   const supportTiktokCheck = !isTiktokSupported
     ? true
     : packages.some(
-        (item: any) =>
+        (item) =>
           item.data_amount === dataAmount && item.data_unit === unit && item.tiktok === 'ENABLE'
       );
   const isValid = isDataValid && supportTiktokCheck;

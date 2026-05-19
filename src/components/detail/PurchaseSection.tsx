@@ -3,6 +3,7 @@ import { capitalize } from 'lodash';
 import { t } from 'i18next';
 import React, { useMemo, useState } from 'react';
 import { View, Pressable, Text } from 'react-native';
+import { Package } from '@/types';
 import FormCheckbox from '../checkout/FormCheckbox';
 import FormInput from '../checkout/FormInput';
 import { CompatibilityActionSheet } from '../CompatibilityActionSheet';
@@ -18,7 +19,7 @@ type Form = {
   deviceCompatibility: boolean;
 };
 
-const PurchaseSection = ({ selectedPackage }: { selectedPackage: any }) => {
+const PurchaseSection = ({ selectedPackage }: { selectedPackage: Package }) => {
   const router = useRouter();
   const { format, isEnglish } = useCurrency();
 

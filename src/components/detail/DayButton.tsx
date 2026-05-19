@@ -23,7 +23,7 @@ const DayButton = ({
   const isDayValid = selectedData ? validDayOptions.includes(day) : true;
   const supportTiktokCheck = !isTiktokSupported
     ? true
-    : packages.some((item: any) => item.validity_days === day && item.tiktok === 'ENABLE');
+    : packages.some((item) => item.validity_days === day && item.tiktok === 'ENABLE');
   const isValid = isDayValid && supportTiktokCheck;
 
   const baseClass = 'rounded-lg p-4';
