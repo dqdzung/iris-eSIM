@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { XMarkIcon } from '@heroicons/react/24/solid';
+import { useTranslation } from 'react-i18next';
 import { CollapsibleText } from './CollapsibleText';
 import PrimaryButton from './PrimaryButton';
 import termsAndConditions from '@/constants/terms.json';
@@ -14,6 +15,7 @@ export const AgreementActionSheet = ({
   onClose: () => void;
   onAccept?: () => void;
 }) => {
+  const { t } = useTranslation();
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
@@ -39,8 +41,8 @@ export const AgreementActionSheet = ({
           <View className="relative w-full flex-row items-center justify-between">
             <View />
 
-            <Text className="px-20 text-center text-[16px] font-semibold leading-6">
-              Điều khoản dịch vụ
+            <Text className="px-20 text-center text-[16px] font-semibold capitalize leading-6">
+              {t('terms_of_service')}
             </Text>
 
             <Pressable onPress={onClose}>
@@ -77,7 +79,11 @@ export const AgreementActionSheet = ({
           </ScrollView>
 
           {onAccept && (
-            <PrimaryButton onPress={onAccept} pressableClassName="py-3" label="Đã đọc và đồng ý" />
+            <PrimaryButton
+              onPress={onAccept}
+              pressableClassName="py-3"
+              label={t('agreement_accept')}
+            />
           )}
         </View>
       </View>

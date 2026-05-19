@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Modal, Pressable, Text, TouchableOpacity, View } from 'react-native';
+import { capitalize } from 'lodash';
 import { useCurrency } from '@/hooks/useCurrency';
 import { InformationCircleIcon, MinusIcon, PlusIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'expo-router';
@@ -136,7 +137,9 @@ export const PurchaseActionSheet = ({
           />
 
           <View className="relative w-full flex-row items-center justify-between">
-            <Text className="text-lg font-semibold text-primary">Số lượng</Text>
+            <Text className="text-lg font-semibold capitalize text-primary">
+              {t('purchase.quantity')}
+            </Text>
             <View className="flex-row items-center gap-3">
               <Pressable
                 onPress={handleMinus}
@@ -182,14 +185,14 @@ export const PurchaseActionSheet = ({
 
           <View className="flex-row items-center justify-between rounded-xl border-2 border-primary bg-primary/10 p-2.5">
             <View>
-              <Text className="text-xs text-gray-500">Tổng tiền</Text>
+              <Text className="text-xs capitalize text-gray-500">{t('purchase.total_price')}</Text>
               <Text className="text-center text-xl font-semibold">{formattedTotal}</Text>
             </View>
 
             <PrimaryButton
               disabled={!isValid}
               onPress={handleSubmit(onSubmit)}
-              label="Thanh toán"
+              label={capitalize(t('checkout_form.pay'))}
             />
           </View>
         </View>

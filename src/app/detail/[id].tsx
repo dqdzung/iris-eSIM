@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { CountryData } from '@/types';
 import DaySelector from '@/components/detail/DaySelector';
 import DataSelector from '@/components/detail/DataSelector';
+import { capitalize } from 'lodash';
 import { dataSortFunc, convertDataObjToString, convertDataStringToObj } from '@/utils';
 import { useCurrency } from '@/hooks/useCurrency';
 import { fetchCountryData } from '@/api';
@@ -175,7 +176,7 @@ export default function DetailScreen() {
       />
 
       <NavHeader>
-        <Text className="text-[16px] font-semibold text-white ">Chi tiết</Text>
+        <Text className="text-[16px] font-semibold capitalize text-white ">{t('nav.detail')}</Text>
       </NavHeader>
 
       {/* <DetailHeader
@@ -243,7 +244,10 @@ export default function DetailScreen() {
             </View>
 
             {/* pay button */}
-            <PrimaryButton onPress={() => setPurchaseSheetVisible(true)} label="Mua ngay" />
+            <PrimaryButton
+              onPress={() => setPurchaseSheetVisible(true)}
+              label={capitalize(t('buy_now'))}
+            />
 
             <PurchaseActionSheet
               selectedPackage={selectedPackage}

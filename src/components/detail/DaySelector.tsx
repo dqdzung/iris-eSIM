@@ -1,5 +1,6 @@
 import { View, Text } from 'react-native';
 import { CalendarDaysIcon } from '@heroicons/react/24/outline';
+import { useTranslation } from 'react-i18next';
 import { Package } from '@/types';
 import DayButton from './DayButton';
 
@@ -14,14 +15,15 @@ interface DaySelectorProps {
 }
 
 const DaySelector = (props: DaySelectorProps) => {
+  const { t } = useTranslation();
   return (
     <View className="gap-3">
       <View className="flex-row items-center gap-2">
         <CalendarDaysIcon className="h-5 w-5 text-primary" />
-        <Text className="font-semibold text-primary">Thời gian</Text>
+        <Text className="font-semibold capitalize text-primary">{t('duration')}</Text>
       </View>
 
-      <View className="grid grid-cols-6 sm:grid-cols-8 gap-3">
+      <View className="grid grid-cols-6 gap-3 sm:grid-cols-8">
         {props.dayOptions?.map((day: number) => (
           <DayButton key={day} day={day} {...props} />
         ))}

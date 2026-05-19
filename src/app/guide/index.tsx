@@ -1,18 +1,21 @@
 import { ChevronRightIcon, DocumentIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
 import { Stack } from 'expo-router';
+import { capitalize } from 'lodash';
+import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 
 export default function GuideScreen() {
+  const { t } = useTranslation();
   return (
     <ScrollView className="flex-1 p-4">
-      <Stack.Screen options={{ title: 'Hướng dẫn' }} />
-    <View className="gap-6">
+      <Stack.Screen options={{ title: capitalize(t('guide')) }} />
+      <View className="gap-6">
         <View className="gap-2">
           <View className="flex-row items-center gap-2">
             <View className="h-8 w-8 items-center justify-center rounded-md bg-primary">
               <InformationCircleIcon className="h-6 w-6 text-white" />
             </View>
-            <Text className="text-lg font-semibold">Hướng dẫn</Text>
+            <Text className="text-lg font-semibold capitalize">{t('guide')}</Text>
           </View>
 
           <Button title="eSIM du lịch là gì?" />
@@ -27,7 +30,7 @@ export default function GuideScreen() {
             <View className="h-8 w-8 items-center justify-center rounded-md bg-primary">
               <DocumentIcon className="h-5 w-5 text-white" />
             </View>
-            <Text className="text-lg font-semibold">Điều khoản dịch vụ</Text>
+            <Text className="text-lg font-semibold capitalize">{t('terms_of_service')}</Text>
           </View>
 
           <Button title="Điều khoản dịch vụ" />

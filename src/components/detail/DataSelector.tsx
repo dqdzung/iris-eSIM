@@ -27,7 +27,7 @@ const DataSelector = (props: DataSelectorProps) => {
       <View className="flex-row items-center justify-between">
         <View className="flex-row items-center gap-2">
           <CircleStackIcon className="h-5 w-5 text-primary" />
-          <Text className="font-semibold text-primary">Dung lượng</Text>
+          <Text className="font-semibold capitalize text-primary">{t('data')}</Text>
         </View>
 
         <View className="flex-row items-center gap-2">
