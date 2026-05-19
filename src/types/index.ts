@@ -30,4 +30,15 @@ export type CountryData = {
   packages: Package[];
 };
 
-export type Country = any;
+export type Country = {
+  locationId: number;
+  code: string;
+  nameLocation: string;
+  nameVi: string;
+  typeLocation: 'COUNTRY' | 'REGION';
+  icon: string;
+  banner: string;
+  fromPrice: number;
+  fromPriceUsd: number;
+  isPopular?: boolean;
+};

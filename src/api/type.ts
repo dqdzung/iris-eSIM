@@ -25,3 +25,5 @@ export type VerifySessionResponseData = {
   expireInMinutes: number;
   sessionToken: string;
 };
+
+export type TypeLocation = 'COUNTRY' | 'REGION';

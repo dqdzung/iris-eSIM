@@ -24,7 +24,7 @@ const DisplayAllScreen = () => {
   const [loading, setLoading] = useState(false);
   const [listData, setListData] = useState<Country[]>([]);
 
-  const handlePress = useCallback((id: string) => router.push(`/detail/${id}`), [router]);
+  const handlePress = useCallback((id: number) => router.push(`/detail/${id}`), [router]);
 
   const fetchData = useCallback(
     async (searchTerm?: string) => {
@@ -61,14 +61,14 @@ const DisplayAllScreen = () => {
     ({ item }: { item: Country }) => {
       if (!item) return null;
 
-      const name = isEnglish ? item?.name : item.name_vi;
-      const price = isEnglish ? item.from_price_usd : item.from_price;
+      const name = isEnglish ? item.nameLocation : item.nameVi;
+      const price = isEnglish ? item.fromPriceUsd : item.fromPrice;
       const formatted = format(price);
       const img = item.icon;
 
       return (
         <Pressable
-          onPress={() => handlePress(item.id)}
+          onPress={() => handlePress(item.locationId)}
           className="w-full flex-row overflow-hidden rounded-lg p-1 hover:text-primary hover:drop-shadow-md">
           <View className="flex-1 flex-row items-center justify-between">
             <View className="flex-row items-center gap-2">
@@ -140,7 +140,7 @@ const DisplayAllScreen = () => {
                 <FlatList
                   className="w-full"
                   contentContainerClassName="gap-2"
-                  keyExtractor={(item) => item.id}
+                  keyExtractor={(item) => String(item.locationId)}
                   numColumns={1}
                   data={listData}
                   renderItem={renderListItem}
@@ -155,7 +155,7 @@ const DisplayAllScreen = () => {
                 <FlatList
                   className="w-full"
                   contentContainerClassName="gap-2"
-                  keyExtractor={(item) => item.id}
+                  keyExtractor={(item) => String(item.locationId)}
                   numColumns={1}
                   data={regions as Country[]}
                   renderItem={renderListItem}
@@ -168,7 +168,7 @@ const DisplayAllScreen = () => {
                 <FlatList
                   className="w-full"
                   contentContainerClassName="gap-2"
-                  keyExtractor={(item) => item.id}
+                  keyExtractor={(item) => String(item.locationId)}
                   numColumns={1}
                   data={uniqueCountries as Country[]}
                   renderItem={renderListItem}

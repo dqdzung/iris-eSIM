@@ -48,7 +48,7 @@ export default function HomeScreen() {
     [filterType, popularCountries, popularRegions]
   );
 
-  const handlePress = useCallback((id: string) => router.push(`/detail/${id}`), [router]);
+  const handlePress = useCallback((id: number) => router.push(`/detail/${id}`), [router]);
 
   const handleChangeFilter = (type: string) => {
     if (inputRef.current?.value) {

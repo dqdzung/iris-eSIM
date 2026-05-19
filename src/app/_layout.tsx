@@ -1,10 +1,11 @@
-import { authenticate, verifyInfo, verifySession } from '@/api';
+import { authenticate, fetchRegions, verifyInfo, verifySession } from '@/api';
 import fakeData from '@/api/fakeData/data';
-import { ToastProvider } from '@/components/Toast';
+import { ToastProvider, useToast } from '@/components/Toast';
 import { Colors } from '@/constants/theme';
+import { Country } from '@/types';
 import { Stack } from 'expo-router';
 import { orderBy } from 'lodash';
-import { createContext, ReactNode, useContext, useEffect, useMemo } from 'react';
+import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -25,14 +26,16 @@ export default function Layout() {
   );
 }
 
-const GlobalDataContext = createContext<{
-  regions: typeof fakeData.regions;
-  uniqueCountries: typeof fakeData.uniqueCountries;
-  countryAndRegion: typeof fakeData.countryAndRegion;
-  popularCountries: typeof fakeData.popularCountries;
-  popularRegions: typeof fakeData.popularRegions;
+type GlobalData = {
+  regions: Country[];
+  uniqueCountries: Country[];
+  countryAndRegion: Country[];
+  popularCountries: Country[];
+  popularRegions: Country[];
   listDevice: typeof fakeData.allDevices;
-}>({
+};
+
+const GlobalDataContext = createContext<GlobalData>({
   regions: [],
   uniqueCountries: [],
   countryAndRegion: [],
@@ -42,40 +45,52 @@ const GlobalDataContext = createContext<{
 });
 
 const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
+  const toast = useToast();
 
-  const sortBy = useMemo(() => (i18n.language === 'en-US' ? 'name' : 'name_vi'), [i18n.language]);
+  const [regions, setRegions] = useState<Country[]>([]);
+  const [uniqueCountries, setUniqueCountries] = useState<Country[]>([]);
 
-  const sortedRegions = useMemo(() => {
-    const sorted = orderBy(fakeData.regions, [(region) => region[sortBy].toLowerCase()], ['asc']);
-    return sorted;
-  }, [sortBy]);
+  const sortBy: keyof Country = i18n.language === 'en-US' ? 'nameLocation' : 'nameVi';
 
-  const sortedUniqueCountries = useMemo(() => {
-    const sorted = orderBy(
-      fakeData.uniqueCountries,
-      [(region) => region[sortBy].toLowerCase()],
-      ['asc']
-    );
-    return sorted;
-  }, [sortBy]);
+  const sortedRegions = useMemo(
+    () => orderBy(regions, [(r) => String(r[sortBy]).toLowerCase()], ['asc']),
+    [regions, sortBy]
+  );
 
-  const sortedCountryAndRegion = useMemo(() => {
-    const sorted = orderBy(
-      fakeData.countryAndRegion,
-      [(region) => region[sortBy].toLowerCase()],
-      ['asc']
-    );
-    return sorted;
-  }, [sortBy]);
+  const sortedUniqueCountries = useMemo(
+    () => orderBy(uniqueCountries, [(c) => String(c[sortBy]).toLowerCase()], ['asc']),
+    [uniqueCountries, sortBy]
+  );
+
+  const sortedCountryAndRegion = useMemo(
+    () => [...sortedRegions, ...sortedUniqueCountries],
+    [sortedRegions, sortedUniqueCountries]
+  );
+
+  const popularCountries = useMemo(
+    () => sortedUniqueCountries.filter((c) => c.isPopular),
+    [sortedUniqueCountries]
+  );
+  const popularRegions = useMemo(() => sortedRegions.filter((r) => r.isPopular), [sortedRegions]);
 
   useEffect(() => {
     authenticate().then((res) => {
-      if (res.success && res.data?.loginToken)
-        verifySession(res.data?.loginToken).then((res) => {
-          verifyInfo();
+      if (res.success && res.data?.loginToken) {
+        verifySession(res.data?.loginToken).then(() => {
+          fetchRegions().then((r) => {
+            if (!r.success) {
+              toast.error(t('toast.load_country_failed'));
+              return;
+            }
+            setUniqueCountries(r.data.filter((item) => item.typeLocation === 'COUNTRY'));
+            setRegions(r.data.filter((item) => item.typeLocation === 'REGION'));
+          });
         });
+      }
+      // verifyInfo();
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -84,8 +99,8 @@ const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
         regions: sortedRegions,
         uniqueCountries: sortedUniqueCountries,
         countryAndRegion: sortedCountryAndRegion,
-        popularCountries: fakeData.popularCountries,
-        popularRegions: fakeData.popularRegions,
+        popularCountries,
+        popularRegions,
         listDevice: fakeData.allDevices,
       }}>
       <SafeAreaView className="h-full">{children}</SafeAreaView>

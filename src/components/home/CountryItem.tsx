@@ -12,20 +12,20 @@ const CountryItem = ({
 }: {
   item: Country;
   numOfColumn: number;
-  handlePress: (id: string) => void;
+  handlePress: (id: number) => void;
 }) => {
   const { t } = useTranslation();
   const { format, isEnglish } = useCurrency();
 
-  const name = isEnglish ? item?.name : item.name_vi;
-  const price = isEnglish ? item.from_price_usd : item.from_price;
+  const name = isEnglish ? item.nameLocation : item.nameVi;
+  const price = isEnglish ? item.fromPriceUsd : item.fromPrice;
   const formatted = format(price);
   const img = item.icon;
 
   return (
     <Pressable
       style={{ width: `calc(100% / ${numOfColumn})` as DimensionValue }}
-      onPress={() => handlePress(item.id)}
+      onPress={() => handlePress(item.locationId)}
       className="h-24 flex-1 flex-row overflow-hidden rounded-lg bg-white px-3 py-3.5 drop-shadow-md">
       <View className="flex-1 justify-between">
         <Text className="font-semibold text-primary">{name}</Text>
