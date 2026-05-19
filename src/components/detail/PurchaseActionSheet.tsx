@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import i18next from 'i18next';
 import { Modal, Pressable, Text, TouchableOpacity, View } from 'react-native';
+import { useCurrency } from '@/hooks/useCurrency';
 import { InformationCircleIcon, MinusIcon, PlusIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'expo-router';
-import { LinearGradient } from 'expo-linear-gradient';
 import FormCheckbox from '../checkout/FormCheckbox';
 import { CompatibilityActionSheet } from '../CompatibilityActionSheet';
+import PrimaryButton from '../PrimaryButton';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -28,14 +28,12 @@ export const PurchaseActionSheet = ({
 }) => {
   const { t } = useTranslation();
   const router = useRouter();
+  const { format, isEnglish } = useCurrency();
   // const { id: countryId } = useLocalSearchParams<{ id: string }>();
 
   const [isAnimating, setIsAnimating] = useState(false);
   const [amount, setAmount] = useState(1);
   const [isSheetVisible, setSheetVisible] = useState(false);
-
-  const currentLocale = i18next.language;
-  const isEnglish = currentLocale === 'en-US';
 
   const {
     control,
@@ -85,12 +83,7 @@ export const PurchaseActionSheet = ({
     return packagePrice * amount;
   }, [packagePrice, amount]);
 
-  const formattedTotal = useMemo(() => {
-    return totalCost.toLocaleString(currentLocale, {
-      style: 'currency',
-      currency: isEnglish ? 'USD' : 'VND',
-    });
-  }, [currentLocale, isEnglish, totalCost]);
+  const formattedTotal = useMemo(() => format(totalCost), [format, totalCost]);
 
   const handleAdd = () => {
     if (amount >= 10) return;
@@ -193,20 +186,11 @@ export const PurchaseActionSheet = ({
               <Text className="text-center text-xl font-semibold">{formattedTotal}</Text>
             </View>
 
-            <LinearGradient
-              className="rounded-xl drop-shadow-md"
-              colors={
-                isValid
-                  ? ['rgba(58, 89, 237, 1)', 'rgba(125, 68, 225, 1)']
-                  : ['rgba(200, 200, 200, 1)', 'rgba(170, 170, 170, 1)']
-              }>
-              <Pressable
-                className="px-10 py-3"
-                disabled={!isValid}
-                onPress={handleSubmit(onSubmit)}>
-                <Text className="text-center font-semibold text-white">Thanh toán</Text>
-              </Pressable>
-            </LinearGradient>
+            <PrimaryButton
+              disabled={!isValid}
+              onPress={handleSubmit(onSubmit)}
+              label="Thanh toán"
+            />
           </View>
         </View>
       </View>

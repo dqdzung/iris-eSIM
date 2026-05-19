@@ -1,11 +1,11 @@
 import { ChevronRightIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import { Image } from 'expo-image';
-import { LinearGradient } from 'expo-linear-gradient';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
 import successImg from '@assets/success.png';
 import failureImg from '@assets/failure.png';
 import NavHeader from '@/components/NavHeader';
+import PrimaryButton from '@/components/PrimaryButton';
 
 const ResultScreen = () => {
   const router = useRouter();
@@ -47,15 +47,11 @@ const ResultScreen = () => {
           </View>
         </View>
 
-        <LinearGradient
-          className="rounded-xl drop-shadow-md"
-          colors={['rgba(58, 89, 237, 1)', 'rgba(125, 68, 225, 1)']}>
-          <Pressable className="py-3" onPress={handleClick}>
-            <Text className="text-center font-semibold text-white">
-              {isPaymentSuccessful ? 'Chi tiết giao dịch' : 'Quay lại'}
-            </Text>
-          </Pressable>
-        </LinearGradient>
+        <PrimaryButton
+          onPress={handleClick}
+          pressableClassName="py-3"
+          label={isPaymentSuccessful ? 'Chi tiết giao dịch' : 'Quay lại'}
+        />
 
         <Pressable
           onPress={handleClickSupport}

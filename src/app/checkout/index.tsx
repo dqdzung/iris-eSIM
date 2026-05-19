@@ -11,7 +11,6 @@ import { CountryData } from '@/types';
 import FormCheckbox from '@/components/checkout/FormCheckbox';
 import FormInput from '@/components/checkout/FormInput';
 import FormRadioGroup from '@/components/checkout/FormRadioGroup';
-import { formatCurrency } from '@/utils';
 import {
   CreditCardIcon,
   DevicePhoneMobileIcon,
@@ -20,13 +19,15 @@ import {
   WalletIcon,
 } from '@heroicons/react/24/outline';
 import { LinearGradient } from 'expo-linear-gradient';
-import AgreementButton from '@/components/AgreementButton';
 import { CompatibilityActionSheet } from '@/components/CompatibilityActionSheet';
+import PrimaryButton from '@/components/PrimaryButton';
 import { useToast } from '@/components/Toast';
+import { useCurrency } from '@/hooks/useCurrency';
 
 export default function CheckoutScreen() {
-  const { i18n, t } = useTranslation();
+  const { t } = useTranslation();
   const toast = useToast();
+  const { format } = useCurrency();
 
   const { countryId, variantId, amount, total } = useLocalSearchParams<{
     countryId?: string;
@@ -39,8 +40,7 @@ export default function CheckoutScreen() {
   const parsedVariantId = variantId ? parseInt(variantId) : 0;
   const parsedAmount = amount ? parseInt(amount) : 0;
   const parsedTotal = total ? parseInt(total) : 0;
-  const isEnglish = i18n.language === 'en-US';
-  const formattedTotal = formatCurrency(parsedTotal, i18n.language, isEnglish ? 'USD' : 'VND');
+  const formattedTotal = format(parsedTotal);
 
   const [data, setData] = useState<CountryData>();
   const [isSheetVisible, setSheetVisible] = useState(false);
@@ -250,25 +250,17 @@ export default function CheckoutScreen() {
             </View>
             <View className="flex-1 flex-row justify-between">
               <Text className="text-gray-400">Giảm giá</Text>
-              <Text className="font-semibold text-primary">
-                -{formatCurrency(discountAmount, i18n.language, isEnglish ? 'USD' : 'VND')}
-              </Text>
+              <Text className="font-semibold text-primary">-{format(discountAmount)}</Text>
             </View>
             <View className="flex-1 flex-row justify-between">
               <Text className="text-gray-400">Voucher</Text>
-              <Text className="font-semibold text-primary">
-                -{formatCurrency(voucherAmount, i18n.language, isEnglish ? 'USD' : 'VND')}
-              </Text>
+              <Text className="font-semibold text-primary">-{format(voucherAmount)}</Text>
             </View>
 
             <View className="flex-1 flex-row items-center justify-between border-t border-gray-200 pt-4">
               <Text className="font-bold">Tổng</Text>
               <Text className="text-lg font-bold">
-                {formatCurrency(
-                  parsedTotal - discountAmount - voucherAmount,
-                  i18n.language,
-                  isEnglish ? 'USD' : 'VND'
-                )}
+                {format(parsedTotal - discountAmount - voucherAmount)}
               </Text>
             </View>
           </View>
@@ -303,22 +295,12 @@ export default function CheckoutScreen() {
           control={control}
         />
 
-        <LinearGradient
-          className={`${isAllowPayment ? '' : 'cursor-not-allowed'} mt-5 rounded-xl`}
-          colors={
-            isAllowPayment
-              ? ['rgba(58, 89, 237, 1)', 'rgba(125, 68, 225, 1)']
-              : ['rgba(200, 200, 200, 1)', 'rgba(170, 170, 170, 1)']
-          }>
-          <Pressable
-            disabled={!isAllowPayment}
-            onPress={handleSubmit(onSubmit)}
-            className="px-10 py-3">
-            <Text className="text-center font-semibold text-white">
-              {capitalize(t('checkout_form.pay'))}
-            </Text>
-          </Pressable>
-        </LinearGradient>
+        <PrimaryButton
+          disabled={!isAllowPayment}
+          onPress={handleSubmit(onSubmit)}
+          className="mt-5 rounded-xl"
+          label={capitalize(t('checkout_form.pay'))}
+        />
       </View>
 
       {isSheetVisible && (

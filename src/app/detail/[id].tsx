@@ -1,27 +1,24 @@
 import { Stack, useLocalSearchParams, usePathname } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { CountryData } from '@/types';
 import DaySelector from '@/components/detail/DaySelector';
 import DataSelector from '@/components/detail/DataSelector';
-import {
-  formatCurrency,
-  dataSortFunc,
-  convertDataObjToString,
-  convertDataStringToObj,
-} from '@/utils';
+import { dataSortFunc, convertDataObjToString, convertDataStringToObj } from '@/utils';
+import { useCurrency } from '@/hooks/useCurrency';
 import { fetchCountryData } from '@/api';
 import { PurchaseActionSheet } from '@/components/detail/PurchaseActionSheet';
 import { SearchActionSheet } from '@/components/SearchActionSheet';
 import CompatibilityButton from '@/components/CompatibilityButton';
 import { Image } from 'expo-image';
-import { LinearGradient } from 'expo-linear-gradient';
 import NavHeader from '@/components/NavHeader';
+import PrimaryButton from '@/components/PrimaryButton';
 import { useToast } from '@/components/Toast';
 
 export default function DetailScreen() {
-  const { i18n, t } = useTranslation();
+  const { t } = useTranslation();
+  const { format, isEnglish } = useCurrency();
   const toast = useToast();
   const { id: countryId } = useLocalSearchParams<{ id: string }>();
   const path = usePathname();
@@ -38,13 +35,7 @@ export default function DetailScreen() {
   const [isPurchaseSheetVisible, setPurchaseSheetVisible] = useState(false);
   const [isSearchSheetVisible, setSearchSheetVisible] = useState(false);
 
-  const { selectedDay, selectedData, isTiktokSupported } = useMemo(() => {
-    return {
-      selectedDay: selection.selectedDay,
-      selectedData: selection.selectedData,
-      isTiktokSupported: selection.isTiktokSupported,
-    };
-  }, [selection]);
+  const { selectedDay, selectedData, isTiktokSupported } = selection;
 
   const regionInfo = data?.region_info;
   const carriers = regionInfo?.carriers.join(', ') || '';
@@ -53,25 +44,20 @@ export default function DetailScreen() {
 
   const name = useMemo(() => {
     if (!regionInfo) return '';
-    const isEnglish = i18n.language === 'en-US';
     return isEnglish ? regionInfo?.name : regionInfo?.name_vi;
-  }, [regionInfo, i18n.language]);
+  }, [regionInfo, isEnglish]);
 
   const lowestPrice = useMemo(() => {
     if (packages.length === 0) return '';
-    const isEnglish = i18n.language === 'en-US';
     const prices = packages.map((p) => (isEnglish ? p.selling_price_usd : p.selling_price));
-    const minPrice = Math.min(...prices);
-    return formatCurrency(minPrice, i18n.language, isEnglish ? 'USD' : 'VND');
-  }, [packages, i18n.language]);
+    return format(Math.min(...prices));
+  }, [packages, isEnglish, format]);
 
   const highestPrice = useMemo(() => {
     if (packages.length === 0) return '';
-    const isEnglish = i18n.language === 'en-US';
     const prices = packages.map((p) => (isEnglish ? p.selling_price_usd : p.selling_price));
-    const maxPrice = Math.max(...prices);
-    return formatCurrency(maxPrice, i18n.language, isEnglish ? 'USD' : 'VND');
-  }, [packages, i18n.language]);
+    return format(Math.max(...prices));
+  }, [packages, isEnglish, format]);
 
   const dayOptions = useMemo(() => {
     const days = packages.map((p) => p.validity_days);
@@ -161,7 +147,8 @@ export default function DetailScreen() {
     fetchCountryData(countryId)
       .then(setData)
       .catch(() => toast.error(t('toast.load_country_failed')));
-  }, [countryId, t, toast]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [countryId, t]);
 
   // open action sheet when select package
   // useEffect(() => {
@@ -269,13 +256,7 @@ export default function DetailScreen() {
             </View>
 
             {/* pay button */}
-            <LinearGradient
-              className="rounded-xl drop-shadow-md"
-              colors={['rgba(58, 89, 237, 1)', 'rgba(125, 68, 225, 1)']}>
-              <Pressable onPress={() => setPurchaseSheetVisible(true)} className="px-10 py-3">
-                <Text className="text-center font-semibold text-white">Mua ngay</Text>
-              </Pressable>
-            </LinearGradient>
+            <PrimaryButton onPress={() => setPurchaseSheetVisible(true)} label="Mua ngay" />
 
             <PurchaseActionSheet
               selectedPackage={selectedPackage}
