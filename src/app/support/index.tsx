@@ -3,6 +3,7 @@ import PrimaryButton from '@/components/PrimaryButton';
 import { useToast } from '@/components/Toast';
 import { ClipboardDocumentIcon, HomeIcon } from '@heroicons/react/24/outline';
 import { Stack, useRouter } from 'expo-router';
+import { capitalize } from 'lodash';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, Text, TextInput, View } from 'react-native';
@@ -48,7 +49,9 @@ const SupportScreen = () => {
 
       <NavHeader>
         <View className="flex-1 flex-row items-center justify-between">
-          <Text className="text-[16px] font-medium text-white ">Hỗ trợ giao dịch</Text>
+          <Text className="text-[16px] font-medium capitalize text-white ">
+            {t('nav.support_transaction')}
+          </Text>
 
           <Pressable onPress={handleGoHome}>
             <HomeIcon className="h-5 w-5 stroke-2 font-bold text-white" />
@@ -64,26 +67,26 @@ const SupportScreen = () => {
 
           <View className="w-full rounded-lg bg-white p-4 text-gray-400">
             <View className="flex-row justify-between pb-4">
-              <Text className="text-inherit">Mã giao dịch</Text>
+              <Text className="capitalize text-inherit">{t('support_screen.transaction_id')}</Text>
               <Text className="text-inherit">EW3E911444e</Text>
             </View>
             <View className="flex-row justify-between border-b-2 border-t-2 border-gray-100/50 py-4">
-              <Text className="text-inherit">Thời gian</Text>
+              <Text className="capitalize text-inherit">{t('time')}</Text>
               <Text className="text-inherit">{new Date().toLocaleString()}</Text>
             </View>
             <View className="flex-row justify-between pt-4">
-              <Text className="text-inherit">Email</Text>
+              <Text className="capitalize text-inherit">{t('checkout_form.email')}</Text>
               <Text className="text-inherit">user@example.com</Text>
             </View>
           </View>
 
           <View className="w-full flex-row justify-between rounded-lg bg-white p-4 text-gray-400">
-            <Text className="text-inherit">SĐT liên hệ</Text>
+            <Text className="capitalize text-inherit">{t('support_screen.contact_phone')}</Text>
             <Text className="text-black">0123456789</Text>
           </View>
 
           <View className="w-full justify-between gap-1 rounded-lg bg-white p-4 text-gray-400">
-            <Text className="text-inherit">Nội dung</Text>
+            <Text className="capitalize text-inherit">{t('support_screen.content')}</Text>
 
             <TextInput
               className="text-black outline-none"
@@ -105,7 +108,7 @@ const SupportScreen = () => {
             disabled={submitting}
             className="mt-5 w-full rounded-xl drop-shadow-md"
             pressableClassName="py-3"
-            label="Gửi yêu cầu"
+            label={capitalize(t('support_screen.send_request'))}
           />
         </View>
       </View>

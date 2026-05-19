@@ -25,6 +25,47 @@
   "total": "tổng cộng",
   "buy_now": "mua ngay",
   "support": "hỗ trợ",
+  "duration": "thời gian",
+  "time": "thời gian",
+  "terms_of_service": "điều khoản dịch vụ",
+  "agreement_accept": "Đã đọc và đồng ý",
+  "country_region_placeholder": "Quốc gia - Khu vực",
+  "nav": {
+    "history": "lịch sử",
+    "detail": "chi tiết",
+    "transaction_result": "kết quả giao dịch",
+    "support_transaction": "hỗ trợ giao dịch",
+    "compatibility_devices": "thiết bị"
+  },
+  "home_screen": {
+    "app_title": "eSIM du lịch",
+    "popular": "phổ biến",
+    "see_all": "tất cả",
+    "detailed_guide": "hướng dẫn chi tiết",
+    "view_guide": "xem hướng dẫn"
+  },
+  "all_screen": {
+    "search_result": "kết quả tìm kiếm"
+  },
+  "result_screen": {
+    "success_title": "Thanh toán thành công!",
+    "success_body": "Chúc mừng Quý khách đã thanh toán thành công",
+    "fail_title": "Thanh toán thất bại!",
+    "fail_body": "Vui lòng kiểm tra lại thông tin đăng ký hoặc chờ đợi tín hiệu mạng ổn định lại.",
+    "transaction_detail": "chi tiết giao dịch",
+    "go_back": "quay lại",
+    "support_request": "yêu cầu hỗ trợ"
+  },
+  "support_screen": {
+    "transaction_id": "mã giao dịch",
+    "contact_phone": "SĐT liên hệ",
+    "content": "nội dung",
+    "send_request": "gửi yêu cầu"
+  },
+  "purchase": {
+    "quantity": "số lượng",
+    "total_price": "tổng tiền"
+  },
   "checkout_form": {
     "title": "thông tin đặt hàng",
     "purchase_info": "thông tin người mua",
@@ -41,7 +82,15 @@
     "qr": "Mã QR",
     "mobile": "Tiền di động",
     "atm": "Thẻ ATM",
-    "wallet": "Ví điện tử"
+    "wallet": "Ví điện tử",
+    "summary": "tổng quan",
+    "payment_detail": "chi tiết thanh toán",
+    "subtotal": "tạm tính",
+    "discount": "giảm giá",
+    "voucher": "voucher",
+    "total_short": "tổng",
+    "discount_code": "mã giảm giá",
+    "choose_code": "chọn mã"
   },
   "error": {
     "required_field": "đây là trường bắt buộc",

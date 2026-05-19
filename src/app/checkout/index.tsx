@@ -222,7 +222,7 @@ export default function CheckoutScreen() {
         </View>
 
         <View className="flex-col rounded-lg bg-white px-3 py-4 drop-shadow-md">
-          <Text className="text-[16px] font-semibold">Tổng quan</Text>
+          <Text className="text-[16px] font-semibold capitalize">{t('checkout_form.summary')}</Text>
 
           <View className="mt-3 flex-row items-center gap-2 rounded-lg bg-gray-200 px-1">
             <FormInput
@@ -230,35 +230,35 @@ export default function CheckoutScreen() {
               fieldName={'discountCode'}
               control={control}
               error={errors.discountCode}
-              placeholder="Mã giảm giá"
+              placeholder={capitalize(t('checkout_form.discount_code'))}
             />
 
             <LinearGradient
               className="rounded-lg"
               colors={['rgba(58, 89, 237, 1)', 'rgba(125, 68, 225, 1)']}>
               <Pressable className="px-4 py-3">
-                <Text className="text-white">Chọn mã</Text>
+                <Text className="capitalize text-white">{t('checkout_form.choose_code')}</Text>
               </Pressable>
             </LinearGradient>
           </View>
 
-          <Text className="mt-6 font-semibold">Chi tiết thanh toán</Text>
+          <Text className="mt-6 font-semibold capitalize">{t('checkout_form.payment_detail')}</Text>
           <View className="mt-3 flex-col gap-3">
             <View className="flex-1 flex-row justify-between">
-              <Text className="text-gray-400">Tạm tính</Text>
+              <Text className="capitalize text-gray-400">{t('checkout_form.subtotal')}</Text>
               <Text className="font-semibold">{formattedTotal}</Text>
             </View>
             <View className="flex-1 flex-row justify-between">
-              <Text className="text-gray-400">Giảm giá</Text>
+              <Text className="capitalize text-gray-400">{t('checkout_form.discount')}</Text>
               <Text className="font-semibold text-primary">-{format(discountAmount)}</Text>
             </View>
             <View className="flex-1 flex-row justify-between">
-              <Text className="text-gray-400">Voucher</Text>
+              <Text className="capitalize text-gray-400">{t('checkout_form.voucher')}</Text>
               <Text className="font-semibold text-primary">-{format(voucherAmount)}</Text>
             </View>
 
             <View className="flex-1 flex-row items-center justify-between border-t border-gray-200 pt-4">
-              <Text className="font-bold">Tổng</Text>
+              <Text className="font-bold capitalize">{t('checkout_form.total_short')}</Text>
               <Text className="text-lg font-bold">
                 {format(parsedTotal - discountAmount - voucherAmount)}
               </Text>

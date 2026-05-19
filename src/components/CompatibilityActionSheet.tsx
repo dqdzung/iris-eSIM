@@ -114,7 +114,9 @@ export const CompatibilityActionSheet = ({
           <View className="relative w-full flex-row items-center justify-between">
             <View />
 
-            <Text className="px-20 text-center text-[16px] font-semibold leading-6">Thiết bị</Text>
+            <Text className="px-20 text-center text-[16px] font-semibold capitalize leading-6">
+              {t('nav.compatibility_devices')}
+            </Text>
 
             <Pressable onPress={onClose}>
               <XMarkIcon className="h-6 w-6" />

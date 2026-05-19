@@ -106,7 +106,7 @@ const DisplayAllScreen = () => {
               ref={inputRef}
               keyboardType="web-search"
               className="w-full px-1 py-2 text-xs outline-none"
-              placeholder="Quốc gia - Khu vực"
+              placeholder={t('country_region_placeholder')}
               onChangeText={handleSearch}
             />
           </View>
@@ -126,7 +126,9 @@ const DisplayAllScreen = () => {
         <ScrollView contentContainerClassName="p-4 gap-5">
           {inputRef.current?.value ? (
             <View className="gap-2">
-              <Text className="text-[16px] font-semibold text-primary">Kết quả tìm kiếm</Text>
+              <Text className="text-[16px] font-semibold capitalize text-primary">
+                {t('all_screen.search_result')}
+              </Text>
 
               {listData.length === 0 ? (
                 <View className="flex-1">
@@ -151,7 +153,9 @@ const DisplayAllScreen = () => {
           ) : (
             <>
               <View className="gap-2">
-                <Text className="text-[16px] font-semibold text-primary">Khu vực</Text>
+                <Text className="text-[16px] font-semibold capitalize text-primary">
+                  {t('region')}
+                </Text>
                 <FlatList
                   className="w-full"
                   contentContainerClassName="gap-2"
@@ -164,7 +168,9 @@ const DisplayAllScreen = () => {
               </View>
 
               <View className="gap-2">
-                <Text className="text-[16px] font-semibold text-primary">Quốc gia</Text>
+                <Text className="text-[16px] font-semibold capitalize text-primary">
+                  {t('country')}
+                </Text>
                 <FlatList
                   className="w-full"
                   contentContainerClassName="gap-2"

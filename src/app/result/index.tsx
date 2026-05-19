@@ -2,6 +2,8 @@ import { ChevronRightIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/ou
 import { Image } from 'expo-image';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { capitalize } from 'lodash';
 import successImg from '@assets/success.png';
 import failureImg from '@assets/failure.png';
 import NavHeader from '@/components/NavHeader';
@@ -9,6 +11,7 @@ import PrimaryButton from '@/components/PrimaryButton';
 
 const ResultScreen = () => {
   const router = useRouter();
+  const { t } = useTranslation();
   const { success: successParam } = useLocalSearchParams<{ success: string }>();
   const isPaymentSuccessful = successParam === 'true';
 
@@ -29,7 +32,9 @@ const ResultScreen = () => {
       <Stack.Screen options={{ headerShown: false }} />
 
       <NavHeader>
-        <Text className="text-[16px] font-semibold text-white ">Kết quả giao dịch</Text>
+        <Text className="text-[16px] font-semibold capitalize text-white ">
+          {t('nav.transaction_result')}
+        </Text>
       </NavHeader>
 
       <View className="flex-1 gap-3 p-4">
@@ -37,12 +42,10 @@ const ResultScreen = () => {
           <Image source={imgPath} className="h-[200px] w-full" contentFit="contain" />
           <View className="gap-2">
             <Text className="text-center text-xl font-bold text-primary">
-              {isPaymentSuccessful ? 'Thanh toán thành công!' : 'Thanh toán thất bại!'}
+              {t(isPaymentSuccessful ? 'result_screen.success_title' : 'result_screen.fail_title')}
             </Text>
             <Text className="text-center">
-              {isPaymentSuccessful
-                ? 'Chúc mừng Quý khách đã thanh toán thành công'
-                : 'Vui lòng kiểm tra lại thông tin đang ký hoặc chờ đợi tín hiệu mạng ổn định lại.'}
+              {t(isPaymentSuccessful ? 'result_screen.success_body' : 'result_screen.fail_body')}
             </Text>
           </View>
         </View>
@@ -50,7 +53,9 @@ const ResultScreen = () => {
         <PrimaryButton
           onPress={handleClick}
           pressableClassName="py-3"
-          label={isPaymentSuccessful ? 'Chi tiết giao dịch' : 'Quay lại'}
+          label={capitalize(
+            t(isPaymentSuccessful ? 'result_screen.transaction_detail' : 'result_screen.go_back')
+          )}
         />
 
         <Pressable
@@ -58,7 +63,9 @@ const ResultScreen = () => {
           className="flex-row items-center justify-between gap-2 rounded-xl bg-white px-3 py-2 drop-shadow-sm">
           <View className="flex-row items-center gap-2">
             <QuestionMarkCircleIcon className="h-6 w-6 stroke-2 text-primary" />
-            <Text className="text-[10px] font-semibold text-primary">Yêu cầu hỗ trợ</Text>
+            <Text className="text-[10px] font-semibold capitalize text-primary">
+              {t('result_screen.support_request')}
+            </Text>
           </View>
 
           <ChevronRightIcon className="h-5 w-5 stroke-2 text-primary" />

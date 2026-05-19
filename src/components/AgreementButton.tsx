@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Pressable, Text } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { AgreementActionSheet } from './AgreementActionSheet';
 
 const AgreementButton = ({ onAccept }: { onAccept?: () => void }) => {
+  const { t } = useTranslation();
   const [isSheetVisible, setIsSheetVisible] = useState(false);
 
   const handlePress = () => {
@@ -20,7 +22,9 @@ const AgreementButton = ({ onAccept }: { onAccept?: () => void }) => {
 
   return (
     <Pressable onPress={handlePress}>
-      <Text className="font-semibold text-primary underline">Điều khoản dịch vụ</Text>
+      <Text className="font-semibold capitalize text-primary underline">
+        {t('terms_of_service')}
+      </Text>
       <AgreementActionSheet
         visible={isSheetVisible}
         onClose={handleClose}

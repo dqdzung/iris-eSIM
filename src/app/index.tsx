@@ -75,11 +75,11 @@ export default function HomeScreen() {
       <Stack.Screen options={{ headerShown: false }} />
       <NavHeader>
         <View className="flex-1 flex-row items-center justify-between">
-          <Text className="text-[16px] font-semibold text-white">eSIM du lịch</Text>
+          <Text className="text-[16px] font-semibold text-white">{t('home_screen.app_title')}</Text>
         </View>
 
         <Pressable className="flex-row items-center gap-2">
-          <Text className="font-semibold text-white">Lịch sử</Text>
+          <Text className="font-semibold capitalize text-white">{t('nav.history')}</Text>
           <ArrowPathIcon className="h-5 w-5 stroke-2 text-white" />
         </Pressable>
       </NavHeader>
@@ -95,7 +95,7 @@ export default function HomeScreen() {
             <View className="flex-1 flex-row items-center justify-between rounded-full bg-white p-2 drop-shadow">
               <Pressable onPress={handleClickAll} className="flex-1 flex-row items-center gap-2">
                 <MagnifyingGlassIcon className="h-5 w-5 stroke-2 text-primary" />
-                <Text className="text-xs text-gray-400/80">Quốc gia - Khu vực</Text>
+                <Text className="text-xs text-gray-400/80">{t('country_region_placeholder')}</Text>
               </Pressable>
             </View>
             <CompatibilityButton />
@@ -116,9 +116,9 @@ export default function HomeScreen() {
         </View>
 
         <View className="mt-3 flex-row justify-between">
-          <Text className="font-semibold text-primary">Phổ biến</Text>
+          <Text className="font-semibold capitalize text-primary">{t('home_screen.popular')}</Text>
           <Pressable className="flex-row items-center gap-1" onPress={handleClickAll}>
-            <Text className="text-xs text-primary">Tất cả</Text>
+            <Text className="text-xs capitalize text-primary">{t('home_screen.see_all')}</Text>
             <ChevronLeftIcon className="h-3 w-3 rotate-180 stroke-2 text-primary" />
           </Pressable>
         </View>
@@ -136,13 +136,17 @@ export default function HomeScreen() {
             <View className="flex-row items-center justify-between gap-2 rounded-lg bg-white p-3 drop-shadow-sm">
               <View className="flex-row items-center gap-2">
                 <BookOpenIcon className="h-6 w-6 stroke-2 text-primary" />
-                <Text className="text-[10px] font-semibold text-primary">Hướng dẫn chi tiết</Text>
+                <Text className="text-[10px] font-semibold capitalize text-primary">
+                  {t('home_screen.detailed_guide')}
+                </Text>
               </View>
 
               <Pressable
                 onPress={handleClickGuide}
                 className="flex-row items-center gap-1 rounded-full border border-primary px-3 py-0.5">
-                <Text className="text-[10px] font-semibold text-primary">Xem hướng dẫn</Text>
+                <Text className="text-[10px] font-semibold capitalize text-primary">
+                  {t('home_screen.view_guide')}
+                </Text>
                 <ChevronRightIcon className="h-5 w-5 stroke-2 text-primary" />
               </Pressable>
             </View>

@@ -25,6 +25,47 @@
   "total": "total",
   "buy_now": "buy now",
   "support": "support",
+  "duration": "duration",
+  "time": "time",
+  "terms_of_service": "terms of service",
+  "agreement_accept": "I've read and agree",
+  "country_region_placeholder": "Country - Region",
+  "nav": {
+    "history": "history",
+    "detail": "detail",
+    "transaction_result": "transaction result",
+    "support_transaction": "transaction support",
+    "compatibility_devices": "devices"
+  },
+  "home_screen": {
+    "app_title": "Travel eSIM",
+    "popular": "popular",
+    "see_all": "view all",
+    "detailed_guide": "detailed guide",
+    "view_guide": "view guide"
+  },
+  "all_screen": {
+    "search_result": "search results"
+  },
+  "result_screen": {
+    "success_title": "Payment successful!",
+    "success_body": "Thank you, your payment was processed successfully.",
+    "fail_title": "Payment failed!",
+    "fail_body": "Please double-check your registration info or wait for the network to stabilize.",
+    "transaction_detail": "transaction details",
+    "go_back": "go back",
+    "support_request": "request support"
+  },
+  "support_screen": {
+    "transaction_id": "transaction id",
+    "contact_phone": "contact phone",
+    "content": "content",
+    "send_request": "send request"
+  },
+  "purchase": {
+    "quantity": "quantity",
+    "total_price": "total price"
+  },
   "checkout_form": {
     "title": "checkout info",
     "purchase_info": "customer info",
@@ -41,7 +82,15 @@
     "qr": "QR code",
     "mobile": "Mobile money",
     "atm": "ATM card",
-    "wallet": "E-wallet"
+    "wallet": "E-wallet",
+    "summary": "summary",
+    "payment_detail": "payment details",
+    "subtotal": "subtotal",
+    "discount": "discount",
+    "voucher": "voucher",
+    "total_short": "total",
+    "discount_code": "discount code",
+    "choose_code": "choose code"
   },
   "error": {
     "required_field": "this field is required",
