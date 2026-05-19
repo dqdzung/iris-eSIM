@@ -6,7 +6,6 @@ import { delay } from '@/utils';
 import { Stack, useRouter } from 'expo-router';
 import { Country } from '@/types';
 import { filterCountry } from '@/utils/filterHelper';
-import { useGlobalDataContext } from './_layout';
 import NoResult from '@/components/home/NoResult';
 import {
   ArrowPathIcon,
@@ -19,14 +18,15 @@ import ListCountryRegion from '@/components/ListCountryRegion';
 import CompatibilityButton from '@/components/CompatibilityButton';
 import { Image } from 'expo-image';
 import headerImg from '@assets/header.jpg';
+import LoadingOverlay from '@/components/LoadingOverlay';
 import NavHeader from '@/components/NavHeader';
-import { authenticate } from '@/api';
+import { useGlobalDataContext } from '@/hooks/useGlobalDataContext';
 
 export default function HomeScreen() {
   const { t } = useTranslation();
   const router = useRouter();
 
-  const { popularCountries, popularRegions } = useGlobalDataContext();
+  const { popularCountries, popularRegions, loading: bootLoading } = useGlobalDataContext();
 
   const inputRef = useRef<any>(null);
 
@@ -34,7 +34,7 @@ export default function HomeScreen() {
   const [filterType, setFilterType] = useState<'country' | 'region'>('country');
   const [listData, setListData] = useState<Country[]>([]);
 
-  const fetchData = useCallback(
+  const filterData = useCallback(
     async (searchTerm?: string) => {
       if (searchTerm) {
         setLoading(true);
@@ -67,8 +67,8 @@ export default function HomeScreen() {
   };
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    filterData();
+  }, [filterData]);
 
   return (
     <View className="flex-1">
@@ -84,7 +84,7 @@ export default function HomeScreen() {
         </Pressable>
       </NavHeader>
 
-      <View className="flex-1 gap-2 p-4">
+      <View className="relative flex-1 gap-2 p-4">
         <View className="mb-1 h-[70px] w-full overflow-hidden rounded-lg">
           <Image source={headerImg} className="h-full w-full" contentFit="cover" />
         </View>
@@ -152,6 +152,8 @@ export default function HomeScreen() {
             </View>
           </View>
         )}
+
+        <LoadingOverlay isVisible={bootLoading} />
       </View>
     </View>
   );

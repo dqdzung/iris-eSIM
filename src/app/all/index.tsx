@@ -9,6 +9,7 @@ import { Country } from '@/types';
 import { Image } from 'expo-image';
 import { useTranslation } from 'react-i18next';
 import { debounce } from 'lodash';
+import LoadingOverlay from '@/components/LoadingOverlay';
 import NavHeader from '@/components/NavHeader';
 import { useCurrency } from '@/hooks/useCurrency';
 
@@ -17,7 +18,12 @@ const DisplayAllScreen = () => {
   const { t } = useTranslation();
   const { format, isEnglish } = useCurrency();
 
-  const { regions, countryAndRegion, uniqueCountries } = useGlobalDataContext();
+  const {
+    regions,
+    countryAndRegion,
+    uniqueCountries,
+    loading: bootLoading,
+  } = useGlobalDataContext();
 
   const inputRef = useRef<any>(null);
 
@@ -118,73 +124,77 @@ const DisplayAllScreen = () => {
         </View>
       </NavHeader>
 
-      {loading ? (
-        <View className="flex-1 items-center justify-center">
-          <Text className="capitalize">{t('loading')}...</Text>
-        </View>
-      ) : (
-        <ScrollView contentContainerClassName="p-4 gap-5">
-          {inputRef.current?.value ? (
-            <View className="gap-2">
-              <Text className="text-[16px] font-semibold capitalize text-primary">
-                {t('all_screen.search_result')}
-              </Text>
+      <View className="relative flex-1">
+        {loading ? (
+          <View className="flex-1 items-center justify-center">
+            <Text className="capitalize">{t('loading')}...</Text>
+          </View>
+        ) : (
+          <ScrollView contentContainerClassName="p-4 gap-5">
+            {inputRef.current?.value ? (
+              <View className="gap-2">
+                <Text className="text-[16px] font-semibold capitalize text-primary">
+                  {t('all_screen.search_result')}
+                </Text>
 
-              {listData.length === 0 ? (
-                <View className="flex-1">
-                  <Text className="">
-                    Không có kết quả nào phù hợp với từ khoá &quot;
-                    <Text className="font-semibold">{inputRef.current.value}</Text>&quot;. Vui lòng
-                    thử với từ khoá khác.
+                {listData.length === 0 ? (
+                  <View className="flex-1">
+                    <Text className="">
+                      Không có kết quả nào phù hợp với từ khoá &quot;
+                      <Text className="font-semibold">{inputRef.current.value}</Text>&quot;. Vui
+                      lòng thử với từ khoá khác.
+                    </Text>
+                  </View>
+                ) : (
+                  <FlatList
+                    className="w-full"
+                    contentContainerClassName="gap-2"
+                    keyExtractor={(item) => String(item.locationId)}
+                    numColumns={1}
+                    data={listData}
+                    renderItem={renderListItem}
+                    showsVerticalScrollIndicator={false}
+                  />
+                )}
+              </View>
+            ) : (
+              <>
+                <View className="gap-2">
+                  <Text className="text-[16px] font-semibold capitalize text-primary">
+                    {t('region')}
                   </Text>
+                  <FlatList
+                    className="w-full"
+                    contentContainerClassName="gap-2"
+                    keyExtractor={(item) => String(item.locationId)}
+                    numColumns={1}
+                    data={regions as Country[]}
+                    renderItem={renderListItem}
+                    showsVerticalScrollIndicator={false}
+                  />
                 </View>
-              ) : (
-                <FlatList
-                  className="w-full"
-                  contentContainerClassName="gap-2"
-                  keyExtractor={(item) => String(item.locationId)}
-                  numColumns={1}
-                  data={listData}
-                  renderItem={renderListItem}
-                  showsVerticalScrollIndicator={false}
-                />
-              )}
-            </View>
-          ) : (
-            <>
-              <View className="gap-2">
-                <Text className="text-[16px] font-semibold capitalize text-primary">
-                  {t('region')}
-                </Text>
-                <FlatList
-                  className="w-full"
-                  contentContainerClassName="gap-2"
-                  keyExtractor={(item) => String(item.locationId)}
-                  numColumns={1}
-                  data={regions as Country[]}
-                  renderItem={renderListItem}
-                  showsVerticalScrollIndicator={false}
-                />
-              </View>
 
-              <View className="gap-2">
-                <Text className="text-[16px] font-semibold capitalize text-primary">
-                  {t('country')}
-                </Text>
-                <FlatList
-                  className="w-full"
-                  contentContainerClassName="gap-2"
-                  keyExtractor={(item) => String(item.locationId)}
-                  numColumns={1}
-                  data={uniqueCountries as Country[]}
-                  renderItem={renderListItem}
-                  showsVerticalScrollIndicator={false}
-                />
-              </View>
-            </>
-          )}
-        </ScrollView>
-      )}
+                <View className="gap-2">
+                  <Text className="text-[16px] font-semibold capitalize text-primary">
+                    {t('country')}
+                  </Text>
+                  <FlatList
+                    className="w-full"
+                    contentContainerClassName="gap-2"
+                    keyExtractor={(item) => String(item.locationId)}
+                    numColumns={1}
+                    data={uniqueCountries as Country[]}
+                    renderItem={renderListItem}
+                    showsVerticalScrollIndicator={false}
+                  />
+                </View>
+              </>
+            )}
+          </ScrollView>
+        )}
+
+        <LoadingOverlay isVisible={bootLoading} />
+      </View>
 
       {/* <ScrollView contentContainerClassName="gap-5 px-4 pb-4">
         <View>

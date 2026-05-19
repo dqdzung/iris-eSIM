@@ -1,3 +1,4 @@
+import LoadingOverlay from '@/components/LoadingOverlay';
 import NavHeader from '@/components/NavHeader';
 import PrimaryButton from '@/components/PrimaryButton';
 import { useToast } from '@/components/Toast';
@@ -59,7 +60,7 @@ const SupportScreen = () => {
         </View>
       </NavHeader>
 
-      <View className="flex-1 items-center p-4">
+      <View className="relative flex-1 items-center p-4">
         <View className="mt-5 w-full items-center gap-2">
           <View className="absolute -top-5 z-10 h-10 w-10 items-center justify-center rounded-full bg-primary">
             <ClipboardDocumentIcon className="h-5 w-5 stroke-2 text-white" />
@@ -111,6 +112,8 @@ const SupportScreen = () => {
             label={capitalize(t('support_screen.send_request'))}
           />
         </View>
+
+        <LoadingOverlay isVisible={submitting} />
       </View>
     </View>
   );

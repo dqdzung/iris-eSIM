@@ -15,7 +15,7 @@ const NavHeader = ({ children }: { children: ReactNode }) => {
     <LinearGradient
       colors={['rgba(112, 63, 203, 1)', 'rgba(69, 87, 236, 1)']}
       start={{ x: 0, y: 1 }}
-      className="h-[64px] flex-row items-center gap-2 border-b-[1px] border-gray-300 bg-primary px-4">
+      className="h-[65px] flex-row items-center gap-2 bg-primary px-4">
       <Pressable onPress={handleBack}>
         <ChevronLeftIcon className="h-6 w-6 stroke-2 text-white" />
       </Pressable>
