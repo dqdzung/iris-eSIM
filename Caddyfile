@@ -1,0 +1,29 @@
+# Local dev reverse proxy for iris-eSIM
+#
+# Solves the cross-origin cookie problem by serving the Expo web app and the
+# backend API under the same origin (https://localhost:8443). With same-origin
+# requests, the backend's default `SameSite=Lax` session cookie works fine.
+#
+# Usage:
+#   1. brew install caddy        (one-time)
+#   2. caddy run                  (in this directory)
+#   3. expo start --web           (in another terminal, leave on port 8081)
+#   4. Open https://localhost:8443 in the browser
+#
+# Make sure .env has: EXPO_PUBLIC_API_URL=https://localhost:8443
+
+https://localhost:8443 {
+	tls ./localhost.pem ./localhost-key.pem
+
+	# Proxy API requests to the backend (keep the /api prefix)
+	handle /api/* {
+		reverse_proxy http://192.168.1.9:35015 {
+			header_up Host {upstream_hostport}
+		}
+	}
+
+	# Everything else goes to the Expo web dev server (default port 8081)
+	handle {
+		reverse_proxy http://localhost:8081
+	}
+}

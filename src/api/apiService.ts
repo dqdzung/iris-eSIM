@@ -1,6 +1,4 @@
-import { he } from 'zod/v4/locales';
 import { HttpError } from './type';
-import { fetch } from 'expo/fetch';
 
 const baseUrl = process.env.EXPO_PUBLIC_API_URL;
 
@@ -59,8 +57,8 @@ class ApiService {
       }
 
       const response = await fetch(buildUrl(url), {
-        method,
         ...options,
+        method,
         credentials: 'include',
         headers,
         body: requestBody ?? undefined,
