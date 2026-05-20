@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Modal, Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { capitalize } from 'lodash';
 import { Package } from '@/types';
-import { useCurrency } from '@/hooks/useCurrency';
+import { formatVnd } from '@/utils';
 import { InformationCircleIcon, MinusIcon, PlusIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'expo-router';
 import FormCheckbox from '../checkout/FormCheckbox';
@@ -30,7 +30,6 @@ export const PurchaseActionSheet = ({
 }) => {
   const { t } = useTranslation();
   const router = useRouter();
-  const { format, isEnglish } = useCurrency();
   // const { id: countryId } = useLocalSearchParams<{ id: string }>();
 
   const [isAnimating, setIsAnimating] = useState(false);
@@ -74,18 +73,12 @@ export const PurchaseActionSheet = ({
     onClose();
   };
 
-  const packagePrice = useMemo(() => {
-    const price: number = isEnglish
-      ? selectedPackage.selling_price_usd
-      : selectedPackage.selling_price;
-    return price;
-  }, [isEnglish, selectedPackage.selling_price, selectedPackage.selling_price_usd]);
+  const totalCost = useMemo(
+    () => selectedPackage.amount * amount,
+    [selectedPackage.amount, amount]
+  );
 
-  const totalCost = useMemo(() => {
-    return packagePrice * amount;
-  }, [packagePrice, amount]);
-
-  const formattedTotal = useMemo(() => format(totalCost), [format, totalCost]);
+  const formattedTotal = useMemo(() => formatVnd(totalCost), [totalCost]);
 
   const handleAdd = () => {
     if (amount >= 10) return;

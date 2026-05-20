@@ -1,12 +1,8 @@
 import { Pressable, Text, View } from 'react-native';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { capitalize } from 'lodash';
-import { delay } from '@/utils';
 import { Stack, useRouter } from 'expo-router';
-import { Country } from '@/types';
 import { filterCountry } from '@/utils/filterHelper';
-import NoResult from '@/components/home/NoResult';
 import {
   ArrowPathIcon,
   BookOpenIcon,
@@ -30,23 +26,12 @@ export default function HomeScreen() {
 
   const inputRef = useRef<any>(null);
 
-  const [loading, setLoading] = useState(false);
   const [filterType, setFilterType] = useState<'country' | 'region'>('country');
-  const [listData, setListData] = useState<Country[]>([]);
 
-  const filterData = useCallback(
-    async (searchTerm?: string) => {
-      if (searchTerm) {
-        setLoading(true);
-        await delay(300);
-        setLoading(false);
-      }
-      const list = filterType === 'country' ? popularCountries : popularRegions;
-      const res = filterCountry(list, searchTerm);
-      setListData(res);
-    },
-    [filterType, popularCountries, popularRegions]
-  );
+  const listData = useMemo(() => {
+    const list = filterType === 'country' ? popularCountries : popularRegions;
+    return filterCountry(list);
+  }, [filterType, popularCountries, popularRegions]);
 
   const handlePress = useCallback((id: number) => router.push(`/detail/${id}`), [router]);
 
@@ -66,9 +51,7 @@ export default function HomeScreen() {
     router.push(`/guide`);
   };
 
-  useEffect(() => {
-    filterData();
-  }, [filterData]);
+  console.log('render home', listData.find((item) => item.locationId === 107));
 
   return (
     <View className="flex-1">
@@ -123,35 +106,27 @@ export default function HomeScreen() {
           </Pressable>
         </View>
 
-        {loading ? (
-          <View className="flex-1 justify-center">
-            <Text className="text-lg">{capitalize(t('loading'))}...</Text>
-          </View>
-        ) : listData.length === 0 ? (
-          <NoResult />
-        ) : (
-          <View className="flex-1 gap-2">
-            <ListCountryRegion data={listData} handlePress={handlePress} />
+        <View className="flex-1 gap-2">
+          <ListCountryRegion data={listData} handlePress={handlePress} />
 
-            <View className="flex-row items-center justify-between gap-2 rounded-lg bg-white p-3 drop-shadow-sm">
-              <View className="flex-row items-center gap-2">
-                <BookOpenIcon className="h-6 w-6 stroke-2 text-primary" />
-                <Text className="text-[10px] font-semibold capitalize text-primary">
-                  {t('home_screen.detailed_guide')}
-                </Text>
-              </View>
-
-              <Pressable
-                onPress={handleClickGuide}
-                className="flex-row items-center gap-1 rounded-full border border-primary px-3 py-0.5">
-                <Text className="text-[10px] font-semibold capitalize text-primary">
-                  {t('home_screen.view_guide')}
-                </Text>
-                <ChevronRightIcon className="h-5 w-5 stroke-2 text-primary" />
-              </Pressable>
+          <View className="flex-row items-center justify-between gap-2 rounded-lg bg-white p-3 drop-shadow-sm">
+            <View className="flex-row items-center gap-2">
+              <BookOpenIcon className="h-6 w-6 stroke-2 text-primary" />
+              <Text className="text-[10px] font-semibold capitalize text-primary">
+                {t('home_screen.detailed_guide')}
+              </Text>
             </View>
+
+            <Pressable
+              onPress={handleClickGuide}
+              className="flex-row items-center gap-1 rounded-full border border-primary px-3 py-0.5">
+              <Text className="text-[10px] font-semibold capitalize text-primary">
+                {t('home_screen.view_guide')}
+              </Text>
+              <ChevronRightIcon className="h-5 w-5 stroke-2 text-primary" />
+            </Pressable>
           </View>
-        )}
+        </View>
 
         <LoadingOverlay isVisible={bootLoading} />
       </View>

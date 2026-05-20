@@ -1,20 +1,15 @@
 import { View, Text } from 'react-native';
 import { CalendarDaysIcon } from '@heroicons/react/24/outline';
 import { useTranslation } from 'react-i18next';
-import { Package } from '@/types';
 import DayButton from './DayButton';
 
 interface DaySelectorProps {
   dayOptions: number[];
   selectedDay: number;
-  validDayOptions: number[];
   handleSelectDay: (day: number) => void;
-  isTiktokSupported: boolean;
-  packages: Package[];
-  selectedData: string;
 }
 
-const DaySelector = (props: DaySelectorProps) => {
+const DaySelector = ({ dayOptions, selectedDay, handleSelectDay }: DaySelectorProps) => {
   const { t } = useTranslation();
   return (
     <View className="gap-3">
@@ -24,8 +19,13 @@ const DaySelector = (props: DaySelectorProps) => {
       </View>
 
       <View className="grid grid-cols-6 gap-3 sm:grid-cols-8">
-        {props.dayOptions?.map((day: number) => (
-          <DayButton key={day} day={day} {...props} />
+        {dayOptions.map((day) => (
+          <DayButton
+            key={day}
+            day={day}
+            selectedDay={selectedDay}
+            handleSelectDay={handleSelectDay}
+          />
         ))}
       </View>
     </View>

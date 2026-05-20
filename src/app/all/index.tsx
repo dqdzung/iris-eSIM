@@ -1,9 +1,9 @@
 import { Stack, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FlatList, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
-import { useGlobalDataContext } from '../_layout';
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { delay } from '@/utils';
+import { getBannerSource } from '@/utils/banner';
 import { filterCountry } from '@/utils/filterHelper';
 import { Country } from '@/types';
 import { Image } from 'expo-image';
@@ -12,6 +12,7 @@ import { debounce } from 'lodash';
 import LoadingOverlay from '@/components/LoadingOverlay';
 import NavHeader from '@/components/NavHeader';
 import { useCurrency } from '@/hooks/useCurrency';
+import {useGlobalDataContext} from '@/hooks/useGlobalDataContext';
 
 const DisplayAllScreen = () => {
   const router = useRouter();
@@ -32,7 +33,7 @@ const DisplayAllScreen = () => {
 
   const handlePress = useCallback((id: number) => router.push(`/detail/${id}`), [router]);
 
-  const fetchData = useCallback(
+  const filterData = useCallback(
     async (searchTerm?: string) => {
       if (searchTerm) {
         setLoading(true);
@@ -45,11 +46,11 @@ const DisplayAllScreen = () => {
     [countryAndRegion]
   );
 
-  const debouncedSearch = debounce(fetchData, 500);
+  const debouncedSearch = debounce(filterData, 500);
 
   const handleSearch = (value: string) => {
     if (!value) {
-      fetchData();
+      filterData();
       return;
     }
     const trimmed = value.trim().toLocaleLowerCase();
@@ -59,7 +60,7 @@ const DisplayAllScreen = () => {
   const handleClearInput = () => {
     if (!inputRef.current || !inputRef.current.value) return;
     inputRef.current.clear();
-    fetchData();
+    filterData();
     inputRef.current.focus();
   };
 
@@ -70,7 +71,7 @@ const DisplayAllScreen = () => {
       const name = isEnglish ? item.nameLocation : item.nameVi;
       const price = isEnglish ? item.fromPriceUsd : item.fromPrice;
       const formatted = format(price);
-      const img = item.icon;
+      const img = getBannerSource(item.banner);
 
       return (
         <Pressable
@@ -97,8 +98,8 @@ const DisplayAllScreen = () => {
 
   useEffect(() => {
     inputRef.current.focus();
-    fetchData();
-  }, [fetchData]);
+    filterData();
+  }, [filterData]);
 
   return (
     <View className="flex-1">

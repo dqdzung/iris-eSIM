@@ -1,5 +1,6 @@
 import { ActivityIndicator, View } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
+import { Colors } from '@/constants/theme';
 
 type Props = {
   isVisible: boolean;
@@ -29,8 +30,8 @@ const LoadingOverlay = ({ isVisible }: Props) => {
 
   if (!shown) return null;
   return (
-    <View className="absolute inset-0 z-50 items-center justify-center bg-black/40">
-      <ActivityIndicator size="large" color="#fff" />
+    <View className="absolute inset-0 z-50 items-center justify-center bg-gray-200">
+      <ActivityIndicator size="large" color={Colors.primary} />
     </View>
   );
 };

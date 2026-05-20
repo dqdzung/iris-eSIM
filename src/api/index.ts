@@ -1,13 +1,7 @@
-import fakePackData from '@/api/fakeData/pack.json';
-import { Country, CountryData } from '@/types';
+import { Country, Package } from '@/types';
 import { PARTNER } from '@/constants';
 import ApiService from './apiService';
-import {
-  AuthenticateResponseData,
-  HttpError,
-  TypeLocation,
-  VerifySessionResponseData,
-} from './type';
+import { AuthenticateResponse, HttpError, TypeLocation, VerifySessionResponse } from './type';
 import { API_PATH } from './apiPath';
 
 type RegionsApiItem = Omit<Country, 'fromPrice' | 'fromPriceUsd'> & {
@@ -17,22 +11,21 @@ type RegionsApiItem = Omit<Country, 'fromPrice' | 'fromPriceUsd'> & {
 
 const apiService = new ApiService();
 
-export const fetchCountryData = async (id: string): Promise<CountryData> => {
-  // Simulate API delay
-  // await new Promise((resolve) => setTimeout(resolve, 500));
-
-  // TODO: Replace with actual API call
-  console.log('Fetching data for country:', id);
-  return fakePackData as unknown as CountryData;
+export const fetchPackages = async (id: string): Promise<Package[]> => {
+  const res = await apiService.post<{ data: Package[] }>(API_PATH.packs, {
+    locationId: Number(id),
+    partner: PARTNER,
+  });
+  return res.data ?? [];
 };
 
 export const authenticate = async (): Promise<{
   success: boolean;
   message?: string;
-  data: AuthenticateResponseData | null;
+  data: AuthenticateResponse | null;
 }> => {
   try {
-    const res = await apiService.post<AuthenticateResponseData>(API_PATH.login, {
+    const res = await apiService.post<AuthenticateResponse>(API_PATH.login, {
       customerId: 'TEST_CUST_001',
       name: 'Test User',
       mobile: '0901234567',
@@ -67,10 +60,10 @@ export const verifySession = async (
 ): Promise<{
   success: boolean;
   message?: string;
-  data: VerifySessionResponseData | null;
+  data: VerifySessionResponse | null;
 }> => {
   try {
-    const res = await apiService.post<VerifySessionResponseData>(API_PATH.verify, {
+    const res = await apiService.post<VerifySessionResponse>(API_PATH.verify, {
       loginToken,
     });
 
@@ -100,10 +93,10 @@ export const verifySession = async (
 export const verifyInfo = async (): Promise<{
   success: boolean;
   message?: string;
-  data: VerifySessionResponseData | null;
+  data: VerifySessionResponse | null;
 }> => {
   try {
-    const res = await apiService.get<VerifySessionResponseData>(API_PATH.info);
+    const res = await apiService.get<VerifySessionResponse>(API_PATH.info);
 
     if (res) {
       return {

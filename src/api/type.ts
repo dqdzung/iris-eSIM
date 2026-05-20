@@ -19,8 +19,8 @@ export type ApiResponse = {
   message?: string;
 };
 
-export type AuthenticateResponseData = { loginToken: string };
-export type VerifySessionResponseData = {
+export type AuthenticateResponse = { loginToken: string };
+export type VerifySessionResponse = {
   customer: any;
   expireInMinutes: number;
   sessionToken: string;

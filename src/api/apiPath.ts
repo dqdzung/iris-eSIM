@@ -3,4 +3,5 @@ export const API_PATH = {
   verify: 'session/verify',
   info: 'session/me',
   regions: 'esim/regions',
+  packs: 'esim/packs',
 };
