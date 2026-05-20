@@ -2,24 +2,23 @@ import { Stack, useLocalSearchParams, usePathname } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { CountryData } from '@/types';
+import { Package } from '@/types';
 import DaySelector from '@/components/detail/DaySelector';
 import DataSelector from '@/components/detail/DataSelector';
 import { capitalize } from 'lodash';
 import { dataSortFunc, convertDataObjToString, convertDataStringToObj } from '@/utils';
-import { useCurrency } from '@/hooks/useCurrency';
-import { fetchCountryData } from '@/api';
+import { fetchPackages } from '@/api';
 import { PurchaseActionSheet } from '@/components/detail/PurchaseActionSheet';
 import { SearchActionSheet } from '@/components/SearchActionSheet';
 import CompatibilityButton from '@/components/CompatibilityButton';
 import { Image } from 'expo-image';
+import LoadingOverlay from '@/components/LoadingOverlay';
 import NavHeader from '@/components/NavHeader';
 import PrimaryButton from '@/components/PrimaryButton';
 import { useToast } from '@/components/Toast';
 
 export default function DetailScreen() {
   const { t } = useTranslation();
-  const { isEnglish } = useCurrency();
   const toast = useToast();
   const { id: countryId } = useLocalSearchParams<{ id: string }>();
   const path = usePathname();
@@ -27,7 +26,8 @@ export default function DetailScreen() {
   const scrollViewRef = useRef<ScrollView>(null);
 
   const [tab, setTab] = useState('spec');
-  const [data, setData] = useState<CountryData>();
+  const [packages, setPackages] = useState<Package[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selection, setSelection] = useState({
     selectedDay: 0,
     selectedData: '',
@@ -38,17 +38,13 @@ export default function DetailScreen() {
 
   const { selectedDay, selectedData, isTiktokSupported } = selection;
 
-  const regionInfo = data?.region_info;
-
-  const packages = useMemo(() => data?.packages || [], [data]);
-
-  const name = useMemo(() => {
-    if (!regionInfo) return '';
-    return isEnglish ? regionInfo?.name : regionInfo?.name_vi;
-  }, [regionInfo, isEnglish]);
+  const first = packages[0];
+  // English-only — backend doesn't return VN region name in the packs endpoint.
+  const name = first?.regionName ?? '';
+  const flag = first?.flag ?? '';
 
   const dayOptions = useMemo(() => {
-    const days = packages.map((p) => p.validity_days);
+    const days = packages.map((p) => p.timeLimitDays);
     return [...new Set(days)].sort((a, b) => a - b);
   }, [packages]);
 
@@ -57,27 +53,13 @@ export default function DetailScreen() {
     return [...new Set(dataStrings)].sort((a, b) => dataSortFunc(a, b, t));
   }, [packages, t]);
 
-  const validDayOptions = useMemo(() => {
-    if (!selectedData) return dayOptions;
-    const { amount, unit, isDaily } = convertDataStringToObj(selectedData, t);
-    const filteredPackages = packages.filter(
-      (p) =>
-        p.data_amount === amount &&
-        p.data_unit === unit &&
-        (isDaily ? p.type === 'DAILY' : p.type !== 'DAILY') &&
-        (isTiktokSupported ? p.tiktok === 'ENABLE' : true)
-    );
-    const days = filteredPackages.map((p) => p.validity_days);
-    return [...new Set(days)];
-  }, [packages, selectedData, dayOptions, isTiktokSupported, t]);
-
   const validDataOptions = useMemo(() => {
     if (!selectedDay) return dataOptions;
     const filteredPackages = packages.filter(
-      (p) => p.validity_days === selectedDay && (isTiktokSupported ? p.tiktok === 'ENABLE' : true)
+      (p) => p.timeLimitDays === selectedDay && (isTiktokSupported ? p.tiktok === 'ENABLE' : true)
     );
     const dataStrings = filteredPackages.map((p) => convertDataObjToString(p, t));
-    return [...new Set(dataStrings)];
+    return [...new Set(dataStrings)].sort((a, b) => dataSortFunc(a, b, t));
   }, [packages, selectedDay, dataOptions, isTiktokSupported, t]);
 
   const selectedPackage = useMemo(() => {
@@ -85,10 +67,10 @@ export default function DetailScreen() {
     const { amount, unit, isDaily } = convertDataStringToObj(selectedData, t);
     const pkg = packages.find(
       (p) =>
-        p.validity_days === selectedDay &&
-        p.data_amount === amount &&
-        p.data_unit === unit &&
-        (isDaily ? p.type === 'DAILY' : p.type !== 'DAILY') &&
+        p.timeLimitDays === selectedDay &&
+        Number(p.dataVolume) === amount &&
+        p.dataUnit === unit &&
+        (isDaily ? p.variantType === 'DAILY' : p.variantType !== 'DAILY') &&
         (isTiktokSupported ? p.tiktok === 'ENABLE' : true)
     );
     return pkg;
@@ -98,33 +80,17 @@ export default function DetailScreen() {
     setSelection((prev) => ({ ...prev, isTiktokSupported: !prev.isTiktokSupported }));
   };
 
-  const handleSelectDay = useCallback(
-    (day: number) => {
-      setSelection((prev) => ({
-        ...prev,
-        selectedDay: day === prev.selectedDay ? 0 : day,
-        selectedData:
-          day !== prev.selectedDay && prev.selectedData && !validDayOptions.includes(day)
-            ? ''
-            : prev.selectedData,
-      }));
-    },
-    [validDayOptions]
-  );
+  const handleSelectDay = useCallback((day: number) => {
+    setSelection((prev) => ({
+      ...prev,
+      selectedDay: day,
+      selectedData: day !== prev.selectedDay ? '' : prev.selectedData,
+    }));
+  }, []);
 
-  const handleSelectData = useCallback(
-    (data: string) => {
-      setSelection((prev) => ({
-        ...prev,
-        selectedData: data === prev.selectedData ? '' : data,
-        selectedDay:
-          data !== prev.selectedData && prev.selectedDay && !validDataOptions.includes(data)
-            ? 0
-            : prev.selectedDay,
-      }));
-    },
-    [validDataOptions]
-  );
+  const handleSelectData = useCallback((data: string) => {
+    setSelection((prev) => ({ ...prev, selectedData: data }));
+  }, []);
 
   const handleChangeTab = (type: string) => {
     setTab(type);
@@ -132,11 +98,40 @@ export default function DetailScreen() {
 
   useEffect(() => {
     if (!countryId) return;
-    fetchCountryData(countryId)
-      .then(setData)
-      .catch(() => toast.error(t('toast.load_country_failed')));
+    let cancelled = false;
+    setLoading(true);
+    fetchPackages(countryId)
+      .then((res) => !cancelled && setPackages(res))
+      .catch(() => !cancelled && toast.error(t('toast.load_country_failed')))
+      .finally(() => !cancelled && setLoading(false));
+    return () => {
+      cancelled = true;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [countryId, t]);
+  }, [countryId]);
+
+  // Reset selections when packages change (e.g., navigating between countries).
+  useEffect(() => {
+    setSelection((prev) => ({ ...prev, selectedDay: 0, selectedData: '' }));
+  }, [packages]);
+
+  // Default-select the first day when options arrive.
+  useEffect(() => {
+    if (dayOptions.length === 0) return;
+    setSelection((prev) => {
+      if (prev.selectedDay && dayOptions.includes(prev.selectedDay)) return prev;
+      return { ...prev, selectedDay: dayOptions[0] };
+    });
+  }, [dayOptions]);
+
+  // Reconcile selectedData against the valid set for the current day.
+  useEffect(() => {
+    if (validDataOptions.length === 0) return;
+    setSelection((prev) => {
+      if (prev.selectedData && validDataOptions.includes(prev.selectedData)) return prev;
+      return { ...prev, selectedData: validDataOptions[0] };
+    });
+  }, [validDataOptions]);
 
   // open action sheet when select package
   // useEffect(() => {
@@ -160,8 +155,6 @@ export default function DetailScreen() {
     }
   }, [selectedPackage]);
 
-  if (!data || !regionInfo) return null;
-
   return (
     <View className="flex-1">
       <Stack.Screen
@@ -179,91 +172,80 @@ export default function DetailScreen() {
         <Text className="text-[16px] font-semibold capitalize text-white ">{t('nav.detail')}</Text>
       </NavHeader>
 
-      {/* <DetailHeader
-        banner={regionInfo.banner}
-        flag={regionInfo.flag}
-        lowestPrice={lowestPrice}
-        highestPrice={highestPrice}
-        carriers={carriers}
-        coverage={regionInfo?.coverage_area}
-      /> */}
-
-      <ScrollView ref={scrollViewRef} contentContainerClassName="gap-5 p-4">
-        {/* header */}
-        <View className="flex-row items-center justify-between rounded-xl bg-white px-3 py-2 drop-shadow-sm">
-          <View className="flex-row items-center gap-2">
-            <View className="h-10 w-10 overflow-hidden rounded-full border-2 border-gray-100">
-              <Image source={regionInfo.flag} className="h-full w-full" />
+      <View className="relative flex-1">
+        <ScrollView ref={scrollViewRef} contentContainerClassName="gap-5 p-4 h-full">
+          {/* header */}
+          <View className="flex-row items-center justify-between rounded-xl bg-white px-3 py-2 drop-shadow-sm">
+            <View className="flex-row items-center gap-2">
+              <View className="h-10 w-10 overflow-hidden rounded-full border-2 border-gray-100">
+                <Image source={flag} className="h-full w-full" />
+              </View>
+              <Text className="text-lg font-medium">{name}</Text>
             </View>
-            <Text className="text-lg font-medium">{name}</Text>
+
+            <CompatibilityButton />
           </View>
 
-          <CompatibilityButton />
-        </View>
+          <DaySelector
+            dayOptions={dayOptions}
+            selectedDay={selectedDay}
+            handleSelectDay={handleSelectDay}
+          />
 
-        <DaySelector
-          dayOptions={dayOptions}
-          selectedDay={selectedDay}
-          validDayOptions={validDayOptions}
-          handleSelectDay={handleSelectDay}
-          isTiktokSupported={isTiktokSupported}
-          packages={packages}
-          selectedData={selectedData}
-        />
+          <DataSelector
+            selectedData={selectedData}
+            validDataOptions={validDataOptions}
+            handleSelectData={handleSelectData}
+            isTiktokSupported={isTiktokSupported}
+            handleToggle={handleToggle}
+            selectedDay={selectedDay}
+          />
 
-        <DataSelector
-          dataOptions={dataOptions}
-          selectedData={selectedData}
-          validDataOptions={validDataOptions}
-          handleSelectData={handleSelectData}
-          isTiktokSupported={isTiktokSupported}
-          handleToggle={handleToggle}
-          packages={packages}
-          selectedDay={selectedDay}
-        />
+          {/* info */}
+          {selectedPackage && (
+            <>
+              <View className="gap-2 flex-1">
+                <View className="w-full flex-row justify-center gap-2">
+                  {Object.keys(mock).map((key) => (
+                    <View key={key} className="flex-1">
+                      <Text
+                        onPress={() => handleChangeTab(key)}
+                        className={`pb-2 text-center text-gray-400 ${tab === key ? 'font-semibold text-primary' : ''}`}>
+                        {key === 'spec' ? 'Thông số kỹ thuật' : 'Lưu ý'}
+                      </Text>
+                      <View className={`h-1 rounded-t-lg ${tab === key ? 'bg-primary' : ''}`} />
+                    </View>
+                  ))}
+                </View>
 
-        {/* info */}
-        {selectedPackage && (
-          <>
-            <View className="gap-2">
-              <View className="w-full flex-row justify-center gap-2">
-                {Object.keys(mock).map((key) => (
-                  <View key={key} className="flex-1">
-                    <Text
-                      onPress={() => handleChangeTab(key)}
-                      className={`pb-2 text-center text-gray-400 ${tab === key ? 'font-semibold text-primary' : ''}`}>
-                      {key === 'spec' ? 'Thông số kỹ thuật' : 'Lưu ý'}
-                    </Text>
-                    <View className={`h-1 rounded-t-lg ${tab === key ? 'bg-primary' : ''}`} />
-                  </View>
-                ))}
+                {/* <View className="p-2">{(mock as any)?.[tab]}</View> */}
+                <ScrollView className="h-[250px]">{(mock as any)?.[tab]}</ScrollView>
               </View>
 
-              {/* <View className="p-2">{(mock as any)?.[tab]}</View> */}
-              <ScrollView className="h-[250px]">{(mock as any)?.[tab]}</ScrollView>
-            </View>
+              {/* pay button */}
+              <PrimaryButton
+                onPress={() => setPurchaseSheetVisible(true)}
+                label={capitalize(t('buy_now'))}
+              />
 
-            {/* pay button */}
-            <PrimaryButton
-              onPress={() => setPurchaseSheetVisible(true)}
-              label={capitalize(t('buy_now'))}
+              <PurchaseActionSheet
+                selectedPackage={selectedPackage}
+                visible={isPurchaseSheetVisible}
+                onClose={() => setPurchaseSheetVisible(false)}
+              />
+            </>
+          )}
+
+          {isSearchSheetVisible && (
+            <SearchActionSheet
+              visible={isSearchSheetVisible}
+              onClose={() => setSearchSheetVisible(false)}
             />
+          )}
+        </ScrollView>
 
-            <PurchaseActionSheet
-              selectedPackage={selectedPackage}
-              visible={isPurchaseSheetVisible}
-              onClose={() => setPurchaseSheetVisible(false)}
-            />
-          </>
-        )}
-
-        {isSearchSheetVisible && (
-          <SearchActionSheet
-            visible={isSearchSheetVisible}
-            onClose={() => setSearchSheetVisible(false)}
-          />
-        )}
-      </ScrollView>
+        <LoadingOverlay isVisible={loading} />
+      </View>
     </View>
   );
 }

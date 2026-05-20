@@ -12,7 +12,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'expo-router';
-import { useCurrency } from '@/hooks/useCurrency';
+import { formatVnd } from '@/utils';
 
 type Form = {
   email: string;
@@ -21,7 +21,6 @@ type Form = {
 
 const PurchaseSection = ({ selectedPackage }: { selectedPackage: Package }) => {
   const router = useRouter();
-  const { format, isEnglish } = useCurrency();
 
   const [amount, setAmount] = useState(1);
   const [isSheetVisible, setSheetVisible] = useState(false);
@@ -61,18 +60,12 @@ const PurchaseSection = ({ selectedPackage }: { selectedPackage: Package }) => {
     });
   };
 
-  const packagePrice = useMemo(() => {
-    const price: number = isEnglish
-      ? selectedPackage.selling_price_usd
-      : selectedPackage.selling_price;
-    return price;
-  }, [isEnglish, selectedPackage.selling_price, selectedPackage.selling_price_usd]);
+  const totalCost = useMemo(
+    () => selectedPackage.amount * amount,
+    [selectedPackage.amount, amount]
+  );
 
-  const totalCost = useMemo(() => {
-    return packagePrice * amount;
-  }, [packagePrice, amount]);
-
-  const formattedTotal = useMemo(() => format(totalCost), [format, totalCost]);
+  const formattedTotal = useMemo(() => formatVnd(totalCost), [totalCost]);
 
   const handleAdd = () => {
     if (amount >= 10) return;

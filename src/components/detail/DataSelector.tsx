@@ -4,23 +4,28 @@ import { capitalize } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { Image } from 'expo-image';
 import { Colors } from '@/constants/theme';
-import { Package } from '@/types';
 import DataButton from './DataButton';
 
 interface DataSelectorProps {
-  dataOptions: string[];
   selectedData: string;
   validDataOptions: string[];
   handleSelectData: (data: string) => void;
   isTiktokSupported: boolean;
   handleToggle: () => void;
-  packages: Package[];
   selectedDay: number;
 }
 
-const DataSelector = (props: DataSelectorProps) => {
+const DataSelector = ({
+  selectedData,
+  validDataOptions,
+  handleSelectData,
+  isTiktokSupported,
+  handleToggle,
+  selectedDay,
+}: DataSelectorProps) => {
   const { t } = useTranslation();
-  const { dataOptions, isTiktokSupported, handleToggle } = props;
+
+  if (!selectedDay) return null;
 
   return (
     <View className="gap-3">
@@ -45,17 +50,15 @@ const DataSelector = (props: DataSelectorProps) => {
       </View>
 
       <View className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
-        {dataOptions?.map((amount: string) => (
-          <DataButton key={amount} amount={amount} {...props} />
+        {validDataOptions.map((amount) => (
+          <DataButton
+            key={amount}
+            amount={amount}
+            selectedData={selectedData}
+            handleSelectData={handleSelectData}
+          />
         ))}
       </View>
-
-      {/* for testing */}
-      {/* {selectedPackage && (
-        <View className="gap-4 rounded-lg border-2 border-gray-200 px-6 py-3 drop-shadow-sm">
-          <Text>{JSON.stringify(selectedPackage)}</Text>
-        </View>
-      )} */}
     </View>
   );
 };

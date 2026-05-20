@@ -6,8 +6,8 @@ import { CheckoutForm, createCheckoutSchema } from '@/components/checkout/form';
 import { capitalize } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useMemo, useState } from 'react';
-import { fetchCountryData } from '@/api';
-import { CountryData } from '@/types';
+import { fetchPackages } from '@/api';
+import { Package } from '@/types';
 import FormCheckbox from '@/components/checkout/FormCheckbox';
 import FormInput from '@/components/checkout/FormInput';
 import FormRadioGroup from '@/components/checkout/FormRadioGroup';
@@ -23,12 +23,11 @@ import { CompatibilityActionSheet } from '@/components/CompatibilityActionSheet'
 import LoadingOverlay from '@/components/LoadingOverlay';
 import PrimaryButton from '@/components/PrimaryButton';
 import { useToast } from '@/components/Toast';
-import { useCurrency } from '@/hooks/useCurrency';
+import { formatVnd } from '@/utils';
 
 export default function CheckoutScreen() {
   const { t } = useTranslation();
   const toast = useToast();
-  const { format } = useCurrency();
 
   const { countryId, variantId, amount, total } = useLocalSearchParams<{
     countryId?: string;
@@ -41,16 +40,15 @@ export default function CheckoutScreen() {
   const parsedVariantId = variantId ? parseInt(variantId) : 0;
   const parsedAmount = amount ? parseInt(amount) : 0;
   const parsedTotal = total ? parseInt(total) : 0;
-  const formattedTotal = format(parsedTotal);
+  const formattedTotal = formatVnd(parsedTotal);
 
-  const [data, setData] = useState<CountryData>();
+  const [packages, setPackages] = useState<Package[]>([]);
   const [isSheetVisible, setSheetVisible] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const packageData = useMemo(() => {
-    // filter with country id
-    return data?.packages.find((e) => e.variant_id === parsedVariantId);
-  }, [data?.packages, parsedVariantId]);
+    return packages.find((p) => p.packId === parsedVariantId);
+  }, [packages, parsedVariantId]);
 
   const {
     control,
@@ -102,8 +100,8 @@ export default function CheckoutScreen() {
 
   useEffect(() => {
     if (!countryId) return;
-    fetchCountryData(countryId)
-      .then(setData)
+    fetchPackages(countryId)
+      .then(setPackages)
       .catch(() => toast.error(t('toast.load_country_failed')));
   }, [countryId, t, toast]);
 
@@ -152,16 +150,16 @@ export default function CheckoutScreen() {
 
           <View className="flex-row items-end justify-between">
             <View className="flex-col gap-2">
-              <Text className="text-[14px] font-semibold">eSIM {packageData?.name_vi}</Text>
+              <Text className="text-[14px] font-semibold">eSIM {packageData?.packName}</Text>
 
               <View className="flex-row items-center gap-1.5">
                 <Text className="text-[12px] text-gray-500">
-                  {packageData?.type === 'UNLIMITED'
+                  {packageData?.variantType === 'UNLIMITED'
                     ? capitalize(t('unlimited'))
-                    : `${packageData?.data_amount}${packageData?.data_unit}${packageData?.type === 'DAILY' ? t('per_day') : ''}`}
+                    : `${packageData?.dataVolume}${packageData?.dataUnit}${packageData?.variantType === 'DAILY' ? t('per_day') : ''}`}
                 </Text>
                 <Text className="text-gray-500">-</Text>
-                <Text className="text-[12px] text-gray-500">{`${packageData?.validity_days} ${t('day')}`}</Text>
+                <Text className="text-[12px] text-gray-500">{`${packageData?.timeLimitDays} ${t('day')}`}</Text>
                 <DotDivider />
                 <Text className="text-[12px] text-gray-500">{`x${parsedAmount}`}</Text>
                 <DotDivider />
@@ -256,17 +254,17 @@ export default function CheckoutScreen() {
             </View>
             <View className="flex-1 flex-row justify-between">
               <Text className="capitalize text-gray-400">{t('checkout_form.discount')}</Text>
-              <Text className="font-semibold text-primary">-{format(discountAmount)}</Text>
+              <Text className="font-semibold text-primary">-{formatVnd(discountAmount)}</Text>
             </View>
             <View className="flex-1 flex-row justify-between">
               <Text className="capitalize text-gray-400">{t('checkout_form.voucher')}</Text>
-              <Text className="font-semibold text-primary">-{format(voucherAmount)}</Text>
+              <Text className="font-semibold text-primary">-{formatVnd(voucherAmount)}</Text>
             </View>
 
             <View className="flex-1 flex-row items-center justify-between border-t border-gray-200 pt-4">
               <Text className="font-bold capitalize">{t('checkout_form.total_short')}</Text>
               <Text className="text-lg font-bold">
-                {format(parsedTotal - discountAmount - voucherAmount)}
+                {formatVnd(parsedTotal - discountAmount - voucherAmount)}
               </Text>
             </View>
           </View>

@@ -10,6 +10,8 @@ const formatCurrency = (value: number, locale = 'en-US', currency = 'USD') => {
   }).format(value);
 };
 
+const formatVnd = (value: number) => formatCurrency(value, 'vi-VN', 'VND');
+
 // This function converts the string to lowercase, then perform the conversion
 const toLowerCaseNonAccentVietnamese = (str: string) => {
   str = str.toLowerCase();
@@ -83,8 +85,8 @@ const convertDataStringToObj = (item: string, t: TFunction) => {
 };
 
 const convertDataObjToString = (item: Package, t: TFunction) => {
-  const isDaily = item.type === 'DAILY';
-  return `${item.data_amount}${item.data_unit}${isDaily ? t('per_day') : ''}`;
+  const isDaily = item.variantType === 'DAILY';
+  return `${Number(item.dataVolume)}${item.dataUnit}${isDaily ? t('per_day') : ''}`;
 };
 
 const shuffleArray = <T>(array: T[]): T[] => {
@@ -99,6 +101,7 @@ const shuffleArray = <T>(array: T[]): T[] => {
 export {
   delay,
   formatCurrency,
+  formatVnd,
   toLowerCaseNonAccentVietnamese,
   toNonAccentVietnamese,
   dataSortFunc,

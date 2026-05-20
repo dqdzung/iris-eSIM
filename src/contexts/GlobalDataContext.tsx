@@ -49,8 +49,7 @@ export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
 
   const popularRegions = useMemo(() => sortedRegions.filter((r) => r.isPopular), [sortedRegions]);
 
-  const initializeData = (data: GlobalDataResult, cancelled = false) => {
-    if (cancelled) return;
+  const initializeData = (data: GlobalDataResult) => {
     switch (data.result) {
       case 'ok':
         setUniqueCountries(data.countries || []);
@@ -60,6 +59,7 @@ export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
         toast.error(t('toast.load_country_failed'));
         return;
       case 'auth_failed':
+        // TODO: navigate error screen
         return;
     }
   };
@@ -68,7 +68,7 @@ export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
     // flag to prevent phantom loading state
     let cancelled = false;
     fetchGlobalData()
-      .then((data) => initializeData(data, cancelled))
+      .then((data) => !cancelled && initializeData(data))
       .finally(() => !cancelled && setLoading(false));
     return () => {
       cancelled = true;

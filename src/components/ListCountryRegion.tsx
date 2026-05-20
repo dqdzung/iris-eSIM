@@ -1,5 +1,6 @@
 import { Country } from '@/types';
 import { useCurrency } from '@/hooks/useCurrency';
+import { getBannerSource } from '@/utils/banner';
 import { Image } from 'expo-image';
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -30,7 +31,7 @@ const ListCountryRegion = ({
       const name = isEnglish ? item.nameLocation : item.nameVi;
       const price = isEnglish ? item.fromPriceUsd : item.fromPrice;
       const formatted = format(price);
-      const img = item.icon;
+      const img = getBannerSource(item.banner);
 
       return (
         <Pressable
