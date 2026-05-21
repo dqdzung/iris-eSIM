@@ -150,8 +150,8 @@ export default function TransactionDetailScreen() {
 
       <NavHeader>
         <View className="flex-1 flex-row items-center justify-between">
-          <Text className="text-[16px] font-medium capitalize text-white">
-            {t('history_screen.detail_title')}
+          <Text className="text-[16px] font-medium text-white">
+            {capitalize(t('history_screen.detail_title'))}
           </Text>
 
           <Pressable onPress={handleGoHome}>

@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { Stack, useRouter } from 'expo-router';
 import { filterCountry } from '@/utils/filterHelper';
 import {
-  ArrowPathIcon,
   BookOpenIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -12,6 +11,7 @@ import {
 } from '@heroicons/react/24/outline';
 import ListCountryRegion from '@/components/ListCountryRegion';
 import CompatibilityButton from '@/components/CompatibilityButton';
+import HistoryButton from '@/components/HistoryButton';
 import { Image } from 'expo-image';
 import headerImg from '@assets/header.jpg';
 import LoadingOverlay from '@/components/LoadingOverlay';
@@ -59,12 +59,7 @@ export default function HomeScreen() {
           <Text className="text-[16px] font-semibold text-white">{t('home_screen.app_title')}</Text>
         </View>
 
-        <Pressable
-          onPress={() => router.push('/history')}
-          className="flex-row items-center gap-2">
-          <Text className="font-semibold capitalize text-white">{t('nav.history')}</Text>
-          <ArrowPathIcon className="h-5 w-5 stroke-2 text-white" />
-        </Pressable>
+        <HistoryButton />
       </NavHeader>
 
       <View className="relative flex-1 gap-2 p-4">

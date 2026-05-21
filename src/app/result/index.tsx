@@ -32,8 +32,8 @@ const ResultScreen = () => {
       <Stack.Screen options={{ headerShown: false }} />
 
       <NavHeader>
-        <Text className="text-[16px] font-semibold capitalize text-white ">
-          {t('nav.transaction_result')}
+        <Text className="text-[16px] font-semibold text-white ">
+          {capitalize(t('nav.transaction_result'))}
         </Text>
       </NavHeader>
 
