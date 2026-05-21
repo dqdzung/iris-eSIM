@@ -1,4 +1,4 @@
-import { Stack, useLocalSearchParams, usePathname } from 'expo-router';
+import { Stack, useLocalSearchParams, usePathname, useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
@@ -20,6 +20,7 @@ import { useToast } from '@/components/Toast';
 export default function DetailScreen() {
   const { t } = useTranslation();
   const toast = useToast();
+  const router = useRouter();
   const { id: countryId } = useLocalSearchParams<{ id: string }>();
   const path = usePathname();
 
@@ -137,12 +138,12 @@ export default function DetailScreen() {
   }, [validDataOptions]);
 
   // reopen action sheet when backing from checkout
-  useEffect(() => {
-    if (!isPurchaseSheetVisible && selectedPackage && path === `/detail/${countryId}`) {
-      setPurchaseSheetVisible(true);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [path]);
+  // useEffect(() => {
+  //   if (!isPurchaseSheetVisible && selectedPackage && path === `/detail/${countryId}`) {
+  //     setPurchaseSheetVisible(true);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [path]);
 
   useEffect(() => {
     if (scrollViewRef && selectedPackage) {
@@ -159,7 +160,9 @@ export default function DetailScreen() {
           <Text className="text-[16px] font-semibold capitalize text-white">{t('nav.detail')}</Text>
         </View>
 
-        <Pressable className="flex-row items-center gap-2">
+        <Pressable
+          onPress={() => router.push('/history')}
+          className="flex-row items-center gap-2">
           <Text className="font-semibold capitalize text-white">{t('nav.history')}</Text>
           <ArrowPathIcon className="h-5 w-5 stroke-2 text-white" />
         </Pressable>

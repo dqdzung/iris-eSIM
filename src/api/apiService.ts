@@ -205,10 +205,15 @@ class ApiService {
    * @param {string} url - The URL to send the GET request to.
    * @returns {Promise<T>} A promise that resolves with the response data.
    */
-  public async get<T>(url: string): Promise<T> {
-    return this.fetchData<T>(url, {
-      method: 'GET',
-    });
+  public async get<T>(url: string, params?: Record<string, string | number>): Promise<T> {
+    let finalUrl = url;
+    if (params) {
+      const search = new URLSearchParams(
+        Object.fromEntries(Object.entries(params).map(([k, v]) => [k, String(v)]))
+      ).toString();
+      if (search) finalUrl = `${url}?${search}`;
+    }
+    return this.fetchData<T>(finalUrl, { method: 'GET' });
   }
 
   /**

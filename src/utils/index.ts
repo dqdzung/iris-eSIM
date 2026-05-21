@@ -12,6 +12,16 @@ const formatCurrency = (value: number, locale = 'en-US', currency = 'USD') => {
 
 const formatVnd = (value: number) => formatCurrency(value, 'vi-VN', 'VND');
 
+const formatDateTime = (iso: string, locale = 'en-US') =>
+  new Intl.DateTimeFormat(locale, {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(new Date(iso));
+
 // This function converts the string to lowercase, then perform the conversion
 const toLowerCaseNonAccentVietnamese = (str: string) => {
   str = str.toLowerCase();
@@ -102,6 +112,7 @@ export {
   delay,
   formatCurrency,
   formatVnd,
+  formatDateTime,
   toLowerCaseNonAccentVietnamese,
   toNonAccentVietnamese,
   dataSortFunc,

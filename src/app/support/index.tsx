@@ -61,33 +61,33 @@ const SupportScreen = () => {
       </NavHeader>
 
       <View className="relative flex-1 items-center p-4">
-        <View className="mt-5 w-full items-center gap-2">
+        <View className="mt-5 w-full items-center gap-3">
           <View className="absolute -top-5 z-10 h-10 w-10 items-center justify-center rounded-full bg-primary">
             <ClipboardDocumentIcon className="h-5 w-5 stroke-2 text-white" />
           </View>
 
           <View className="w-full rounded-lg bg-white p-4 text-gray-400">
             <View className="flex-row justify-between pb-4">
-              <Text className="capitalize text-inherit">{t('support_screen.transaction_id')}</Text>
+              <Text className="text-inherit">{capitalize(t('support_screen.transaction_id'))}</Text>
               <Text className="text-inherit">EW3E911444e</Text>
             </View>
             <View className="flex-row justify-between border-b-2 border-t-2 border-gray-100/50 py-4">
-              <Text className="capitalize text-inherit">{t('time')}</Text>
+              <Text className="text-inherit">{capitalize(t('time'))}</Text>
               <Text className="text-inherit">{new Date().toLocaleString()}</Text>
             </View>
             <View className="flex-row justify-between pt-4">
-              <Text className="capitalize text-inherit">{t('checkout_form.email')}</Text>
+              <Text className="text-inherit">{capitalize(t('checkout_form.email'))}</Text>
               <Text className="text-inherit">user@example.com</Text>
             </View>
           </View>
 
           <View className="w-full flex-row justify-between rounded-lg bg-white p-4 text-gray-400">
-            <Text className="capitalize text-inherit">{t('support_screen.contact_phone')}</Text>
+            <Text className="text-inherit">{capitalize(t('support_screen.contact_phone'))}</Text>
             <Text className="text-black">0123456789</Text>
           </View>
 
           <View className="w-full justify-between gap-1 rounded-lg bg-white p-4 text-gray-400">
-            <Text className="capitalize text-inherit">{t('support_screen.content')}</Text>
+            <Text className="text-inherit">{capitalize(t('support_screen.content'))}</Text>
 
             <TextInput
               className="text-black outline-none"

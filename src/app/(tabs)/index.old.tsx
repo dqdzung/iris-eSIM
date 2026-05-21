@@ -1,7 +1,7 @@
 import { Pressable, Text, View } from 'react-native';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { debounce, capitalize } from 'lodash';
+import { capitalize } from 'lodash';
 import { delay } from '@/utils';
 import { Stack, useRouter } from 'expo-router';
 import { Country } from '@/types';
@@ -11,7 +11,7 @@ import MagnifyingGlassIcon from '@heroicons/react/24/outline/MagnifyingGlassIcon
 import { SearchActionSheet } from '@/components/SearchActionSheet';
 import NoResult from '@/components/home/NoResult';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
-import { useGlobalDataContext } from '../_layout';
+import { useGlobalDataContext } from '@/hooks/useGlobalDataContext';
 import ListCountryRegion from '@/components/ListCountryRegion';
 
 export default function HomeScreen() {

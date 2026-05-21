@@ -4,4 +4,5 @@ export const API_PATH = {
   info: 'session/me',
   regions: 'esim/regions',
   packs: 'esim/packs',
+  transactions: 'esim/transactions',
 };

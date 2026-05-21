@@ -47,6 +47,34 @@
   "all_screen": {
     "search_result": "kết quả tìm kiếm"
   },
+  "history_screen": {
+    "title": "lịch sử giao dịch",
+    "empty": "không có giao dịch",
+    "new_transaction": "giao dịch mới",
+    "month_label": "tháng {{month}}/{{year}}",
+    "product_label": "eSIM du lịch {{name}}",
+    "detail_title": "chi tiết giao dịch",
+    "detail": {
+      "transaction_code": "mã giao dịch",
+      "service": "dịch vụ",
+      "email": "email",
+      "time": "thời gian",
+      "status": "trạng thái",
+      "amount": "số tiền",
+      "quantity": "số lượng",
+      "discount": "giảm giá",
+      "total": "tổng tiền",
+      "view_esim": "xem thông tin eSIM",
+      "support_request": "yêu cầu hỗ trợ",
+      "failed_refund_notice": "các giao dịch thất bại được xử lý và hoàn tiền trong 05 ngày làm việc.",
+      "pending_processing_notice": "giao dịch đang được xử lý, vui lòng chờ hệ thống cập nhật kết quả"
+    },
+    "status": {
+      "success": "thành công",
+      "pending": "đang xử lý",
+      "failed": "thất bại"
+    }
+  },
   "result_screen": {
     "success_title": "Thanh toán thành công!",
     "success_body": "Chúc mừng Quý khách đã thanh toán thành công",
@@ -101,6 +129,7 @@
   },
   "toast": {
     "load_country_failed": "Không thể tải thông tin gói. Vui lòng thử lại.",
+    "load_transactions_failed": "Không thể tải lịch sử giao dịch. Vui lòng thử lại.",
     "checkout_submitted": "Đã nhận đơn hàng! Đang chuyển đến thanh toán…",
     "checkout_failed": "Không thể gửi đơn hàng. Vui lòng thử lại.",
     "support_submitted": "Đã gửi yêu cầu hỗ trợ. Chúng tôi sẽ liên hệ sớm.",

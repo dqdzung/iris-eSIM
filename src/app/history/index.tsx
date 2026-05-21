@@ -1,0 +1,165 @@
+import { Stack, useRouter } from 'expo-router';
+import { useEffect, useMemo, useState } from 'react';
+import { Pressable, ScrollView, Text, View } from 'react-native';
+import { capitalize } from 'lodash';
+import { useTranslation } from 'react-i18next';
+import { fetchTransactions } from '@/api';
+import { Country, Transaction } from '@/types';
+import { useToast } from '@/components/Toast';
+import { useGlobalDataContext } from '@/hooks/useGlobalDataContext';
+import { formatDateTime, formatVnd } from '@/utils';
+import LoadingOverlay from '@/components/LoadingOverlay';
+import NavHeader from '@/components/NavHeader';
+import PrimaryButton from '@/components/PrimaryButton';
+
+type Section = { title: string; sortKey: number; data: Transaction[] };
+
+const STATUS_STYLE: Record<number, { key: string; className: string }> = {
+  0: { key: 'history_screen.status.pending', className: 'text-yellow-600' },
+  7: { key: 'history_screen.status.failed', className: 'text-red-600' },
+  9: { key: 'history_screen.status.success', className: 'text-green-600' },
+};
+const DEFAULT_STATUS = { key: 'history_screen.status.pending', className: 'text-gray-500' };
+
+export default function HistoryScreen() {
+  const { t, i18n } = useTranslation();
+  const toast = useToast();
+  const router = useRouter();
+  const { countryAndRegion } = useGlobalDataContext();
+
+  const isEnglish = i18n.language === 'en-US';
+
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const hasHistory = transactions.length > 0;
+
+  const countryByCode = useMemo(() => {
+    const map = new Map<string, Country>();
+    for (const c of countryAndRegion) {
+      if (c.code) map.set(c.code, c);
+    }
+    return map;
+  }, [countryAndRegion]);
+
+  const sections: Section[] = useMemo(() => {
+    const groups = new Map<number, Transaction[]>();
+    for (const item of transactions) {
+      const d = new Date(item.createdTime);
+      const key = d.getFullYear() * 12 + d.getMonth();
+      const bucket = groups.get(key);
+      if (bucket) bucket.push(item);
+      else groups.set(key, [item]);
+    }
+    return Array.from(groups.entries())
+      .map(([sortKey, data]) => {
+        const year = Math.floor(sortKey / 12);
+        const month = sortKey % 12;
+        const title = t('history_screen.month_label', { month: month + 1, year });
+        return { title, sortKey, data };
+      })
+      .sort((a, b) => b.sortKey - a.sortKey);
+  }, [transactions, t]);
+
+  const getDisplayName = (packCode: string): string => {
+    const code = packCode.split('-')[0];
+    const country = countryByCode.get(code);
+    if (!country) return packCode;
+    const name = isEnglish ? country.nameLocation : country.nameVi;
+    return t('history_screen.product_label', { name });
+  };
+
+  const handleGoBackHome = () => {
+    router.dismissTo('/');
+  };
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    fetchTransactions()
+      .then((res) => {
+        if (cancelled) return;
+        if (res.success) setTransactions(res.data);
+        else toast.error(t('toast.load_transactions_failed'));
+      })
+      .finally(() => !cancelled && setLoading(false));
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <View className="flex-1">
+      <Stack.Screen options={{ headerShown: false }} />
+
+      <NavHeader>
+        <Text className="text-[16px] font-semibold text-white">
+          {capitalize(t('history_screen.title'))}
+        </Text>
+      </NavHeader>
+
+      <View className="relative flex-1">
+        <ScrollView className="flex-1" contentContainerClassName="flex-grow gap-4 p-4">
+          {hasHistory
+            ? sections.map((section) => (
+                <View key={section.sortKey} className="gap-2">
+                  <Text className="text-sm font-semibold text-primary">
+                    {capitalize(section.title)}
+                  </Text>
+
+                  <View className="rounded-lg bg-white drop-shadow-sm">
+                    {section.data.map((item, idx) => {
+                      const status = STATUS_STYLE[item.status] ?? DEFAULT_STATUS;
+                      return (
+                        <Pressable
+                          key={item.id}
+                          onPress={() => router.push(`/transaction/${item.id}`)}
+                          className={`flex-row items-center gap-3 p-3 ${
+                            idx > 0 ? 'border-t border-gray-100' : ''
+                          }`}>
+                          {/* Icon placeholder — swap in real icon later */}
+                          {/* <View className="h-10 w-10 rounded-md bg-orange-200" /> */}
+
+                          <View className="flex-1 gap-1.5">
+                            <Text className="font-semibold" numberOfLines={1}>
+                              {getDisplayName(item.packCode)}
+                            </Text>
+                            <Text className="text-xs text-gray-400">
+                              {formatDateTime(item.createdTime, i18n.language)}
+                            </Text>
+                          </View>
+
+                          <View className="items-end gap-1.5">
+                            <Text className="font-semibold">{formatVnd(item.actualAmount)}</Text>
+                            <Text className={`text-xs ${status.className}`}>
+                              {capitalize(t(status.key))}
+                            </Text>
+                          </View>
+                        </Pressable>
+                      );
+                    })}
+                  </View>
+                </View>
+              ))
+            : !loading && (
+                <View className="flex-1 items-center justify-center gap-4">
+                  <View className="flex-1 items-center justify-center">
+                    <Text className="text-gray-500">{capitalize(t('history_screen.empty'))}</Text>
+                  </View>
+
+                  <View className="w-full">
+                    <PrimaryButton
+                      onPress={handleGoBackHome}
+                      label={capitalize(t('history_screen.new_transaction'))}
+                    />
+                  </View>
+                </View>
+              )}
+        </ScrollView>
+
+        <LoadingOverlay isVisible={loading} />
+      </View>
+    </View>
+  );
+}

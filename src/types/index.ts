@@ -30,3 +30,17 @@ export type Package = {
   variantType: 'DAILY' | 'UNLIMITED' | 'FIXED';
   tiktok?: 'ENABLE' | 'DISABLE'; // backend hasn't shipped yet
 };
+
+export type Transaction = {
+  id: string;
+  trackingId: string;
+  partner: string;
+  billingCode: string;
+  packCode: string;
+  actualAmount: number;
+  serviceId: string;
+  productCode: string;
+  createdTime: string;
+  status: number;
+  totalRows: number;
+};

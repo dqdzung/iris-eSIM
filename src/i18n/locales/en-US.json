@@ -47,6 +47,34 @@
   "all_screen": {
     "search_result": "search results"
   },
+  "history_screen": {
+    "title": "transaction history",
+    "empty": "no transactions",
+    "new_transaction": "new transaction",
+    "month_label": "month {{month}}/{{year}}",
+    "product_label": "Travel eSIM {{name}}",
+    "detail_title": "transaction detail",
+    "detail": {
+      "transaction_code": "transaction code",
+      "service": "service",
+      "email": "email",
+      "time": "time",
+      "status": "status",
+      "amount": "amount",
+      "quantity": "quantity",
+      "discount": "discount",
+      "total": "total",
+      "view_esim": "view eSIM info",
+      "support_request": "request support",
+      "failed_refund_notice": "failed transactions are processed and refunded within 5 business days.",
+      "pending_processing_notice": "transaction is being processed, please wait for the system to update the result"
+    },
+    "status": {
+      "success": "successful",
+      "pending": "processing",
+      "failed": "failed"
+    }
+  },
   "result_screen": {
     "success_title": "Payment successful!",
     "success_body": "Thank you, your payment was processed successfully.",
@@ -101,6 +129,7 @@
   },
   "toast": {
     "load_country_failed": "Couldn't load package details. Please try again.",
+    "load_transactions_failed": "Couldn't load your transaction history. Please try again.",
     "checkout_submitted": "Order received! Redirecting to payment…",
     "checkout_failed": "We couldn't submit your order. Please try again.",
     "support_submitted": "Support request sent. We'll be in touch soon.",
