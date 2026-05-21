@@ -12,7 +12,7 @@ import { debounce } from 'lodash';
 import LoadingOverlay from '@/components/LoadingOverlay';
 import NavHeader from '@/components/NavHeader';
 import { useCurrency } from '@/hooks/useCurrency';
-import {useGlobalDataContext} from '@/hooks/useGlobalDataContext';
+import { useGlobalDataContext } from '@/hooks/useGlobalDataContext';
 
 const DisplayAllScreen = () => {
   const router = useRouter();

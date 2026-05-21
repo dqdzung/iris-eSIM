@@ -5,7 +5,7 @@ import { XMarkIcon } from '@heroicons/react/24/solid';
 import { capitalize, debounce } from 'lodash';
 import { delay } from '@/utils';
 import { filterDevice } from '@/utils/filterHelper';
-import { useGlobalDataContext } from '@/app/_layout';
+import { useGlobalDataContext } from '@/hooks/useGlobalDataContext';
 import { DevicePhoneMobileIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { Image } from 'expo-image';
 

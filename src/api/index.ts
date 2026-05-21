@@ -1,4 +1,4 @@
-import { Country, Package } from '@/types';
+import { Country, Package, Transaction } from '@/types';
 import { PARTNER } from '@/constants';
 import ApiService from './apiService';
 import {
@@ -89,6 +89,27 @@ export const fetchPackages = async (id: string): Promise<ApiResponse<Package[]>>
     const res = await apiService.post<{ data: Package[] }>(API_PATH.packs, {
       locationId: Number(id),
       partner: PARTNER,
+    });
+    return { success: true, data: res.data ?? [] };
+  } catch (error) {
+    const err = error as HttpError;
+    return {
+      success: false,
+      message: err.cause?.detail?.error,
+      data: [],
+    };
+  }
+};
+
+export const fetchTransactions = async (
+  page: number = 1,
+  size: number = 20
+): Promise<ApiResponse<Transaction[]>> => {
+  try {
+    const res = await apiService.get<{ data: Transaction[] }>(API_PATH.transactions, {
+      partner: PARTNER,
+      page,
+      size,
     });
     return { success: true, data: res.data ?? [] };
   } catch (error) {

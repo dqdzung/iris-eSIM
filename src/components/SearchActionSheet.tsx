@@ -6,7 +6,7 @@ import { capitalize, debounce } from 'lodash';
 import { delay } from '@/utils';
 import { filterCountry } from '@/utils/filterHelper';
 import { Country } from '@/types';
-import { useGlobalDataContext } from '@/app/_layout';
+import { useGlobalDataContext } from '@/hooks/useGlobalDataContext';
 import { useRouter } from 'expo-router';
 import { Image } from 'expo-image';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';

@@ -59,7 +59,9 @@ export default function HomeScreen() {
           <Text className="text-[16px] font-semibold text-white">{t('home_screen.app_title')}</Text>
         </View>
 
-        <Pressable className="flex-row items-center gap-2">
+        <Pressable
+          onPress={() => router.push('/history')}
+          className="flex-row items-center gap-2">
           <Text className="font-semibold capitalize text-white">{t('nav.history')}</Text>
           <ArrowPathIcon className="h-5 w-5 stroke-2 text-white" />
         </Pressable>
