@@ -51,8 +51,6 @@ export default function HomeScreen() {
     router.push(`/guide`);
   };
 
-  console.log('render home', listData.find((item) => item.locationId === 107));
-
   return (
     <View className="flex-1">
       <Stack.Screen options={{ headerShown: false }} />

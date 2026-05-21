@@ -62,7 +62,7 @@ export const PurchaseActionSheet = ({
   });
 
   const onSubmit: SubmitHandler<Form> = (data: Form) => {
-    console.log(data);
+    // console.log(data);
 
     // TODO: handle checkout logic
 
@@ -179,7 +179,7 @@ export const PurchaseActionSheet = ({
 
           <View className="flex-row items-center justify-between rounded-xl border-2 border-primary bg-primary/10 p-2.5">
             <View>
-              <Text className="text-xs capitalize text-gray-500">{t('purchase.total_price')}</Text>
+              <Text className="text-xs text-gray-500">{capitalize(t('purchase.total_price'))}</Text>            
               <Text className="text-center text-xl font-semibold">{formattedTotal}</Text>
             </View>
 

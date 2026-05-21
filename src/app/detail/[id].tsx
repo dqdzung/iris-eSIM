@@ -6,10 +6,9 @@ import { Package } from '@/types';
 import DaySelector from '@/components/detail/DaySelector';
 import DataSelector from '@/components/detail/DataSelector';
 import { capitalize } from 'lodash';
-import { dataSortFunc, convertDataObjToString, convertDataStringToObj } from '@/utils';
+import { dataSortFunc, convertDataObjToString, convertDataStringToObj, formatVnd } from '@/utils';
 import { fetchPackages } from '@/api';
 import { PurchaseActionSheet } from '@/components/detail/PurchaseActionSheet';
-import { SearchActionSheet } from '@/components/SearchActionSheet';
 import CompatibilityButton from '@/components/CompatibilityButton';
 import { Image } from 'expo-image';
 import LoadingOverlay from '@/components/LoadingOverlay';
@@ -34,12 +33,10 @@ export default function DetailScreen() {
     isTiktokSupported: false,
   });
   const [isPurchaseSheetVisible, setPurchaseSheetVisible] = useState(false);
-  const [isSearchSheetVisible, setSearchSheetVisible] = useState(false);
 
   const { selectedDay, selectedData, isTiktokSupported } = selection;
 
   const first = packages[0];
-  // English-only — backend doesn't return VN region name in the packs endpoint.
   const name = first?.regionName ?? '';
   const flag = first?.flag ?? '';
 
@@ -75,6 +72,8 @@ export default function DetailScreen() {
     );
     return pkg;
   }, [packages, selectedDay, selectedData, isTiktokSupported, t]);
+
+  const formattedTotal = useMemo(() => formatVnd(selectedPackage?.amount || 0), [selectedPackage]);
 
   const handleToggle = () => {
     setSelection((prev) => ({ ...prev, isTiktokSupported: !prev.isTiktokSupported }));
@@ -133,14 +132,6 @@ export default function DetailScreen() {
     });
   }, [validDataOptions]);
 
-  // open action sheet when select package
-  // useEffect(() => {
-  //   if (selectedPackage && !isPurchaseSheetVisible) {
-  //     setPurchaseSheetVisible(true);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [selectedPackage]);
-
   // reopen action sheet when backing from checkout
   useEffect(() => {
     if (!isPurchaseSheetVisible && selectedPackage && path === `/detail/${countryId}`) {
@@ -157,23 +148,14 @@ export default function DetailScreen() {
 
   return (
     <View className="flex-1">
-      <Stack.Screen
-        options={{
-          headerShown: false,
-          // headerRight: () => (
-          //   <Pressable onPress={() => setSearchSheetVisible(true)}>
-          //     <MagnifyingGlassIcon className="mr-4 h-6 w-6 text-white" />
-          //   </Pressable>
-          // ),
-        }}
-      />
+      <Stack.Screen options={{ headerShown: false }} />
 
       <NavHeader>
         <Text className="text-[16px] font-semibold capitalize text-white ">{t('nav.detail')}</Text>
       </NavHeader>
 
       <View className="relative flex-1">
-        <ScrollView ref={scrollViewRef} contentContainerClassName="gap-5 p-4 h-full">
+        <ScrollView ref={scrollViewRef} contentContainerClassName="gap-5 p-4 pb-2 h-full">
           {/* header */}
           <View className="flex-row items-center justify-between rounded-xl bg-white px-3 py-2 drop-shadow-sm">
             <View className="flex-row items-center gap-2">
@@ -204,7 +186,7 @@ export default function DetailScreen() {
           {/* info */}
           {selectedPackage && (
             <>
-              <View className="gap-2 flex-1">
+              <View className="flex-1 gap-2">
                 <View className="w-full flex-row justify-center gap-2">
                   {Object.keys(mock).map((key) => (
                     <View key={key} className="flex-1">
@@ -218,15 +200,8 @@ export default function DetailScreen() {
                   ))}
                 </View>
 
-                {/* <View className="p-2">{(mock as any)?.[tab]}</View> */}
-                <ScrollView className="h-[250px]">{(mock as any)?.[tab]}</ScrollView>
+                <ScrollView>{(mock as any)?.[tab]}</ScrollView>
               </View>
-
-              {/* pay button */}
-              <PrimaryButton
-                onPress={() => setPurchaseSheetVisible(true)}
-                label={capitalize(t('buy_now'))}
-              />
 
               <PurchaseActionSheet
                 selectedPackage={selectedPackage}
@@ -236,13 +211,25 @@ export default function DetailScreen() {
             </>
           )}
 
-          {isSearchSheetVisible && (
-            <SearchActionSheet
-              visible={isSearchSheetVisible}
-              onClose={() => setSearchSheetVisible(false)}
-            />
-          )}
         </ScrollView>
+
+        {selectedPackage && !isPurchaseSheetVisible && (
+          <View className="rounded-xl bg-white p-4 shadow-md">
+            <View className="flex-row items-center justify-between rounded-xl border-2 border-primary bg-primary/10 p-2.5">
+              <View>
+                <Text className="text-xs text-gray-500">
+                  {capitalize(t('purchase.total_price'))}
+                </Text>
+                <Text className="text-center text-xl font-semibold">{formattedTotal}</Text>
+              </View>
+
+              <PrimaryButton
+                onPress={() => setPurchaseSheetVisible(true)}
+                label={capitalize(t('buy_now'))}
+              />
+            </View>
+          </View>
+        )}
 
         <LoadingOverlay isVisible={loading} />
       </View>

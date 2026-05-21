@@ -51,7 +51,7 @@ const PurchaseSection = ({ selectedPackage }: { selectedPackage: Package }) => {
   });
 
   const onSubmit: SubmitHandler<Form> = (data: Form) => {
-    console.log(data);
+    // console.log(data);
 
     // TODO: handle checkout logic
     router.push({
