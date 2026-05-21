@@ -70,7 +70,7 @@ const DisplayAllScreen = () => {
 
       const name = isEnglish ? item.nameLocation : item.nameVi;
       const price = isEnglish ? item.fromPriceUsd : item.fromPrice;
-      const formatted = format(price);
+      const formatted = format(Number(price));
       const img = getBannerSource(item.banner);
 
       return (
