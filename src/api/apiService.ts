@@ -1,3 +1,4 @@
+import { API_PATH } from './apiPath';
 import { HttpError } from './type';
 
 const baseUrl = process.env.EXPO_PUBLIC_API_URL;
@@ -6,8 +7,22 @@ if (!baseUrl) throw new Error('EXPO_BASE_URL environment variable is not set');
 
 const buildUrl = (endpoint: string) => `${baseUrl}/api/v1/${endpoint}`;
 
+const isAuthEndpoint = (url: string) => url === API_PATH.login || url === API_PATH.verify;
+
 class ApiService {
   private controllers: Map<string, AbortController> = new Map();
+  private authRefreshHandler: (() => Promise<boolean>) | null = null;
+  private authRefreshInFlight: Promise<boolean> | null = null;
+
+  /**
+   * Registers a handler that re-establishes the session after a 401. When a
+   * non-auth request fails with 401, the service calls this handler once,
+   * deduping concurrent failures, then retries the original request.
+   */
+  public setAuthRefreshHandler(handler: (() => Promise<boolean>) | null) {
+    this.authRefreshHandler = handler;
+  }
+
   /**
    * Fetches data from the specified URL.
    * @template T The expected type of the response data.
@@ -16,6 +31,30 @@ class ApiService {
    * @returns {Promise<T>} A promise that resolves with the fetched data or rejects with an error.
    */
   public async fetchData<T>(
+    url: string,
+    options: RequestInit & { requestId?: string }
+  ): Promise<T> {
+    try {
+      return await this.doFetch<T>(url, options);
+    } catch (error: any) {
+      const status = error?.cause?.status;
+      if (status !== 401 || isAuthEndpoint(url) || !this.authRefreshHandler) {
+        throw error;
+      }
+
+      if (!this.authRefreshInFlight) {
+        this.authRefreshInFlight = this.authRefreshHandler().finally(() => {
+          this.authRefreshInFlight = null;
+        });
+      }
+      const refreshed = await this.authRefreshInFlight;
+      if (!refreshed) throw error;
+
+      return this.doFetch<T>(url, options);
+    }
+  }
+
+  private async doFetch<T>(
     url: string,
     {
       requestId = url,
@@ -103,7 +142,7 @@ class ApiService {
     if (controller) {
       controller.abort();
       this.controllers.delete(requestId);
-      console.log(`Request ${requestId} aborted.`);
+      // console.log(`Request ${requestId} aborted.`);
     }
   }
 
@@ -113,7 +152,7 @@ class ApiService {
   public abortAllRequests(): void {
     this.controllers.forEach((controller, requestId) => {
       controller.abort();
-      console.log(`Request ${requestId} aborted.`);
+      // console.log(`Request ${requestId} aborted.`);
     });
     this.controllers.clear();
   }

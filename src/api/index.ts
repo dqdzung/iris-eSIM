@@ -11,6 +11,15 @@ type RegionsApiItem = Omit<Country, 'fromPrice' | 'fromPriceUsd'> & {
 
 const apiService = new ApiService();
 
+const refreshAuth = async (): Promise<boolean> => {
+  const auth = await authenticate();
+  if (!auth.success || !auth.data?.loginToken) return false;
+  const verify = await verifySession(auth.data.loginToken);
+  return verify.success;
+};
+
+apiService.setAuthRefreshHandler(refreshAuth);
+
 export const fetchPackages = async (id: string): Promise<Package[]> => {
   const res = await apiService.post<{ data: Package[] }>(API_PATH.packs, {
     locationId: Number(id),
