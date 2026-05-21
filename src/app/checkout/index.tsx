@@ -100,9 +100,10 @@ export default function CheckoutScreen() {
 
   useEffect(() => {
     if (!countryId) return;
-    fetchPackages(countryId)
-      .then(setPackages)
-      .catch(() => toast.error(t('toast.load_country_failed')));
+    fetchPackages(countryId).then((res) => {
+      if (res.success) setPackages(res.data);
+      else toast.error(t('toast.load_country_failed'));
+    });
   }, [countryId, t, toast]);
 
   return (

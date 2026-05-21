@@ -13,13 +13,14 @@ export class HttpError extends Error {
   }
 }
 
-export type ApiResponse = {
-  data: any;
-  success?: boolean;
+export type ApiResponse<T> = {
+  success: boolean;
   message?: string;
+  data: T;
 };
 
 export type AuthenticateResponse = { loginToken: string };
+
 export type VerifySessionResponse = {
   customer: any;
   expireInMinutes: number;

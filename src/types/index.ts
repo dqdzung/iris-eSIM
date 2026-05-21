@@ -6,8 +6,8 @@ export type Country = {
   typeLocation: 'COUNTRY' | 'REGION';
   icon: string;
   banner: string;
-  fromPrice: number;
-  fromPriceUsd: number;
+  fromPrice: string;
+  fromPriceUsd: string;
   isPopular?: boolean;
 };
 

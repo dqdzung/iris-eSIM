@@ -1,7 +1,8 @@
 import { Stack, useLocalSearchParams, usePathname } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { Package } from '@/types';
 import DaySelector from '@/components/detail/DaySelector';
 import DataSelector from '@/components/detail/DataSelector';
@@ -100,8 +101,11 @@ export default function DetailScreen() {
     let cancelled = false;
     setLoading(true);
     fetchPackages(countryId)
-      .then((res) => !cancelled && setPackages(res))
-      .catch(() => !cancelled && toast.error(t('toast.load_country_failed')))
+      .then((res) => {
+        if (cancelled) return;
+        if (res.success) setPackages(res.data);
+        else toast.error(t('toast.load_country_failed'));
+      })
       .finally(() => !cancelled && setLoading(false));
     return () => {
       cancelled = true;
@@ -151,7 +155,14 @@ export default function DetailScreen() {
       <Stack.Screen options={{ headerShown: false }} />
 
       <NavHeader>
-        <Text className="text-[16px] font-semibold capitalize text-white ">{t('nav.detail')}</Text>
+        <View className="flex-1 flex-row items-center justify-between">
+          <Text className="text-[16px] font-semibold capitalize text-white">{t('nav.detail')}</Text>
+        </View>
+
+        <Pressable className="flex-row items-center gap-2">
+          <Text className="font-semibold capitalize text-white">{t('nav.history')}</Text>
+          <ArrowPathIcon className="h-5 w-5 stroke-2 text-white" />
+        </Pressable>
       </NavHeader>
 
       <View className="relative flex-1">
