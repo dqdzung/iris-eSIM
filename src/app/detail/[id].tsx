@@ -1,8 +1,7 @@
-import { Stack, useLocalSearchParams, usePathname, useRouter } from 'expo-router';
+import { Stack, useLocalSearchParams, usePathname } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { Package } from '@/types';
 import DaySelector from '@/components/detail/DaySelector';
 import DataSelector from '@/components/detail/DataSelector';
@@ -11,6 +10,7 @@ import { dataSortFunc, convertDataObjToString, convertDataStringToObj, formatVnd
 import { fetchPackages } from '@/api';
 import { PurchaseActionSheet } from '@/components/detail/PurchaseActionSheet';
 import CompatibilityButton from '@/components/CompatibilityButton';
+import HistoryButton from '@/components/HistoryButton';
 import { Image } from 'expo-image';
 import LoadingOverlay from '@/components/LoadingOverlay';
 import NavHeader from '@/components/NavHeader';
@@ -20,7 +20,6 @@ import { useToast } from '@/components/Toast';
 export default function DetailScreen() {
   const { t } = useTranslation();
   const toast = useToast();
-  const router = useRouter();
   const { id: countryId } = useLocalSearchParams<{ id: string }>();
   const path = usePathname();
 
@@ -157,15 +156,10 @@ export default function DetailScreen() {
 
       <NavHeader>
         <View className="flex-1 flex-row items-center justify-between">
-          <Text className="text-[16px] font-semibold capitalize text-white">{t('nav.detail')}</Text>
+          <Text className="text-[16px] font-semibold text-white">{capitalize(t('nav.detail'))}</Text>
         </View>
 
-        <Pressable
-          onPress={() => router.push('/history')}
-          className="flex-row items-center gap-2">
-          <Text className="font-semibold capitalize text-white">{t('nav.history')}</Text>
-          <ArrowPathIcon className="h-5 w-5 stroke-2 text-white" />
-        </Pressable>
+        <HistoryButton />
       </NavHeader>
 
       <View className="relative flex-1">

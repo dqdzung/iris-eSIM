@@ -50,8 +50,8 @@ const SupportScreen = () => {
 
       <NavHeader>
         <View className="flex-1 flex-row items-center justify-between">
-          <Text className="text-[16px] font-medium capitalize text-white ">
-            {t('nav.support_transaction')}
+          <Text className="text-[16px] font-medium text-white ">
+            {capitalize(t('nav.support_transaction'))}
           </Text>
 
           <Pressable onPress={handleGoHome}>
