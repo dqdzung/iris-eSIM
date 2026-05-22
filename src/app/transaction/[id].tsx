@@ -1,29 +1,27 @@
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { capitalize } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import {
   ChevronRightIcon,
-  DevicePhoneMobileIcon,
   DocumentMagnifyingGlassIcon,
   ExclamationCircleIcon,
   HomeIcon,
   QuestionMarkCircleIcon,
 } from '@heroicons/react/24/outline';
-import { fetchTransactions } from '@/api';
-import { Country, Transaction } from '@/types';
+import { fetchTransactionResult } from '@/api';
+import { TransactionResult, TransactionStatus } from '@/types';
 import { useToast } from '@/components/Toast';
-import { useGlobalDataContext } from '@/hooks/useGlobalDataContext';
-import { formatDateTime, formatVnd } from '@/utils';
+import { formatDateTime } from '@/utils';
 import LoadingOverlay from '@/components/LoadingOverlay';
 import NavHeader from '@/components/NavHeader';
 import PrimaryButton from '@/components/PrimaryButton';
 
-const STATUS_STYLE: Record<number, { key: string; className: string }> = {
-  0: { key: 'history_screen.status.pending', className: 'text-yellow-600' },
-  7: { key: 'history_screen.status.failed', className: 'text-red-600' },
-  9: { key: 'history_screen.status.success', className: 'text-green-600' },
+const STATUS_STYLE: Record<TransactionStatus, { key: string; className: string }> = {
+  PENDING: { key: 'history_screen.status.pending', className: 'text-yellow-600' },
+  FAILED: { key: 'history_screen.status.failed', className: 'text-red-600' },
+  SUCCESS: { key: 'history_screen.status.success', className: 'text-green-600' },
 };
 const DEFAULT_STATUS = { key: 'history_screen.status.pending', className: 'text-gray-500' };
 
@@ -33,57 +31,31 @@ export default function TransactionDetailScreen() {
   const { t, i18n } = useTranslation();
   const router = useRouter();
   const toast = useToast();
-  const { id } = useLocalSearchParams<{ id: string }>();
-  const { countryAndRegion } = useGlobalDataContext();
+  const { id: trackingId } = useLocalSearchParams<{ id: string }>();
 
-  const isEnglish = i18n.language === 'en-US';
-
-  const [transaction, setTransaction] = useState<Transaction | null>(null);
+  const [transaction, setTransaction] = useState<TransactionResult | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const countryByCode = useMemo(() => {
-    const map = new Map<string, Country>();
-    for (const c of countryAndRegion) {
-      if (c.code) map.set(c.code, c);
-    }
-    return map;
-  }, [countryAndRegion]);
-
-  const getDisplayName = (packCode: string): string => {
-    const code = packCode.split('-')[0];
-    const country = countryByCode.get(code);
-    if (!country) return packCode;
-    const name = isEnglish ? country.nameLocation : country.nameVi;
-    return t('history_screen.product_label', { name });
-  };
-
   useEffect(() => {
-    if (!id) return;
+    if (!trackingId) return;
     let cancelled = false;
     setLoading(true);
-    fetchTransactions()
+    fetchTransactionResult(trackingId)
       .then((res) => {
         if (cancelled) return;
-        if (res.success) {
-          const found = res.data.find((x) => x.id === id);
-          if (found) setTransaction(found);
-        } else {
-          toast.error(t('toast.load_transactions_failed'));
-        }
+        if (res.success) setTransaction(res.data);
+        else toast.error(t('toast.load_transactions_failed'));
       })
       .finally(() => !cancelled && setLoading(false));
     return () => {
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [trackingId]);
 
   const status = transaction ? (STATUS_STYLE[transaction.status] ?? DEFAULT_STATUS) : null;
-
-  // TODO: backend doesn't return these yet — using placeholders.
-  const quantity = 1;
-  const discount = 0;
-  const total = transaction ? transaction.actualAmount - discount : 0;
+  const firstItem = transaction?.items?.[0];
+  const serviceLabel = firstItem ? `${firstItem.regionName} - ${firstItem.productName}` : '';
 
   const infoRows: RowData[] =
     transaction && status
@@ -91,22 +63,20 @@ export default function TransactionDetailScreen() {
           {
             label: t('history_screen.detail.transaction_code'),
             value: transaction.trackingId,
-            valueClassName: 'text-black',
           },
           {
             label: t('history_screen.detail.service'),
-            value: getDisplayName(transaction.packCode),
-            valueClassName: 'text-black',
+            value: serviceLabel,
           },
           {
             label: t('history_screen.detail.email'),
-            value: transaction.billingCode,
-            valueClassName: 'text-black',
+            value: transaction.email,
           },
           {
             label: t('history_screen.detail.time'),
-            value: formatDateTime(transaction.createdTime, i18n.language),
-            valueClassName: 'text-black',
+            value: transaction.createDate
+              ? formatDateTime(transaction.createDate, i18n.language)
+              : '',
           },
           {
             label: t('history_screen.detail.status'),
@@ -116,27 +86,24 @@ export default function TransactionDetailScreen() {
         ]
       : [];
 
+  // TODO: backend doesn't return these yet — using placeholders.
   const amountRows: RowData[] = transaction
     ? [
         {
           label: t('history_screen.detail.amount'),
-          value: formatVnd(transaction.actualAmount),
-          valueClassName: 'text-black',
+          value: '—',
         },
         {
           label: t('history_screen.detail.quantity'),
-          value: String(quantity),
-          valueClassName: 'text-black',
+          value: '—',
         },
         {
           label: t('history_screen.detail.discount'),
-          value: `-${formatVnd(discount)}`,
-          valueClassName: 'text-black',
+          value: '—',
         },
         {
           label: t('history_screen.detail.total'),
-          value: formatVnd(total),
-          valueClassName: 'font-bold text-primary',
+          value: '—',
         },
       ]
     : [];
@@ -170,13 +137,13 @@ export default function TransactionDetailScreen() {
             <CardRows rows={infoRows} />
             <CardRows rows={amountRows} />
 
-            {transaction.status === 7 || transaction.status === 0 ? (
+            {transaction.status === 'FAILED' || transaction.status === 'PENDING' ? (
               <View className="mt-5 w-full flex-row items-center gap-2 rounded-xl bg-white px-3 py-2 drop-shadow-sm">
                 <ExclamationCircleIcon className="h-6 w-6 stroke-2 text-orange-500" />
                 <Text className="flex-1 text-[10px] text-gray-500">
                   {capitalize(
                     t(
-                      transaction.status === 7
+                      transaction.status === 'FAILED'
                         ? 'history_screen.detail.failed_refund_notice'
                         : 'history_screen.detail.pending_processing_notice'
                     )
@@ -231,7 +198,7 @@ const CardRows = ({ rows }: { rows: RowData[] }) => (
       return (
         <View key={idx} className={`flex-row justify-between ${padding}`}>
           <Text className="text-inherit">{capitalize(row.label)}</Text>
-          <Text className={`text-inherit ${row.valueClassName ?? ''}`}>{row.value}</Text>
+          <Text className={row.valueClassName ?? ''}>{row.value}</Text>
         </View>
       );
     })}

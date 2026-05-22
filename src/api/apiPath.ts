@@ -5,4 +5,5 @@ export const API_PATH = {
   regions: 'esim/regions',
   packs: 'esim/packs',
   transactions: 'esim/transactions',
+  result: 'esim/result',
 };

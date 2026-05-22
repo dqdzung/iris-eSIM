@@ -44,3 +44,35 @@ export type Transaction = {
   status: number;
   totalRows: number;
 };
+
+export type TransactionStatus = 'PENDING' | 'SUCCESS' | 'FAILED';
+
+export type EsimInfo = {
+  iccid: string;
+  esimCode: string;
+  qrCode: string;
+  activationURL: string;
+  expiryDate: string;
+};
+
+export type TransactionResultItem = {
+  quantity: number;
+  discountAmount: number;
+  regionName: string;
+  productName: string;
+  status: string;
+  esims: EsimInfo[];
+};
+
+export type TransactionResult = {
+  trackingId: string;
+  status: TransactionStatus;
+  errorMessage: string | null;
+  wellzoneOrderId: string;
+  orderCode: string;
+  email: string;
+  orderStatus: string;
+  transactionId: string;
+  createDate: string;
+  items: TransactionResultItem[];
+};
