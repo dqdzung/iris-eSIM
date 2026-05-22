@@ -1,4 +1,4 @@
-import { Country, Package, Transaction } from '@/types';
+import { Country, Package, Transaction, TransactionResult } from '@/types';
 import { PARTNER } from '@/constants';
 import ApiService from './apiService';
 import {
@@ -118,6 +118,25 @@ export const fetchTransactions = async (
       success: false,
       message: err.cause?.detail?.error,
       data: [],
+    };
+  }
+};
+
+export const fetchTransactionResult = async (
+  trackingId: string
+): Promise<ApiResponse<TransactionResult | null>> => {
+  try {
+    const res = await apiService.get<{ data: TransactionResult }>(
+      `${API_PATH.result}/${trackingId}`,
+      { partner: PARTNER }
+    );
+    return { success: true, data: res.data ?? null };
+  } catch (error) {
+    const err = error as HttpError;
+    return {
+      success: false,
+      message: err.cause?.detail?.error,
+      data: null,
     };
   }
 };

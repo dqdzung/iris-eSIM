@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { capitalize } from 'lodash';
 import { useTranslation } from 'react-i18next';
+import { FunnelIcon } from '@heroicons/react/24/outline';
 import { fetchTransactions } from '@/api';
 import { Country, Transaction } from '@/types';
 import { useToast } from '@/components/Toast';
@@ -94,9 +95,15 @@ export default function HistoryScreen() {
       <Stack.Screen options={{ headerShown: false }} />
 
       <NavHeader>
-        <Text className="text-[16px] font-semibold text-white">
-          {capitalize(t('history_screen.title'))}
-        </Text>
+        <View className="flex-1 flex-row items-center justify-between">
+          <Text className="text-[16px] font-semibold text-white">
+            {capitalize(t('history_screen.title'))}
+          </Text>
+
+          <Pressable onPress={() => {}}>
+            <FunnelIcon className="h-5 w-5 stroke-2 text-white" />
+          </Pressable>
+        </View>
       </NavHeader>
 
       <View className="relative flex-1">
@@ -114,7 +121,7 @@ export default function HistoryScreen() {
                       return (
                         <Pressable
                           key={item.id}
-                          onPress={() => router.push(`/transaction/${item.id}`)}
+                          onPress={() => router.push(`/transaction/${item.trackingId}`)}
                           className={`flex-row items-center gap-3 p-3 ${
                             idx > 0 ? 'border-t border-gray-100' : ''
                           }`}>
