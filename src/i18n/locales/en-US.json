@@ -55,7 +55,9 @@
     "email_label": "registered email",
     "country_label": "eSIM {{name}}",
     "sim_label": "SIM {{index}}",
-    "view_qr": "QR code"
+    "view_qr": "QR code",
+    "scan_to_activate": "scan QR to activate",
+    "iccid_copied": "ICCID copied"
   },
   "compatibility_sheet": {
     "instruction": "to check whether your device supports eSIM, dial *#06# on the keypad and press call:",

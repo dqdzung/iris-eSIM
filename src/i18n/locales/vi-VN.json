@@ -55,7 +55,9 @@
     "email_label": "email đã đăng ký",
     "country_label": "eSIM {{name}}",
     "sim_label": "SIM {{index}}",
-    "view_qr": "mã QR"
+    "view_qr": "mã QR",
+    "scan_to_activate": "Quét mã QR để kích hoạt",
+    "iccid_copied": "đã sao chép ICCID"
   },
   "compatibility_sheet": {
     "instruction": "để kiểm tra thiết bị có hỗ trợ eSIM không, ấn *#06# trên bàn phím, ấn gọi:",

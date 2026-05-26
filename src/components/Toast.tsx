@@ -13,6 +13,7 @@ import {
   useRef,
   useState,
 } from 'react';
+import { createPortal } from 'react-dom';
 import { Animated, Pressable, Text, View } from 'react-native';
 
 type ToastVariant = 'success' | 'error' | 'info';
@@ -64,14 +65,23 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
     info: (m) => show(m, 'info'),
   };
 
+  const toastContainer = (
+    <View
+      pointerEvents="box-none"
+      className="absolute top-0 w-full items-center"
+      style={{ zIndex: 10000 }}>
+      {toasts.map((t) => (
+        <ToastRow key={t.id} item={t} onDismiss={() => dismiss(t.id)} />
+      ))}
+    </View>
+  );
+
   return (
     <ToastContext value={value}>
       {children}
-      <View pointerEvents="box-none" className="absolute top-0 z-50 w-full items-center">
-        {toasts.map((t) => (
-          <ToastRow key={t.id} item={t} onDismiss={() => dismiss(t.id)} />
-        ))}
-      </View>
+      {typeof document !== 'undefined'
+        ? createPortal(toastContainer, document.body)
+        : toastContainer}
     </ToastContext>
   );
 };
