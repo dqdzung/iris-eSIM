@@ -8,7 +8,7 @@ import { filterCountry } from '@/utils/filterHelper';
 import { Country } from '@/types';
 import { Image } from 'expo-image';
 import { useTranslation } from 'react-i18next';
-import { debounce } from 'lodash';
+import { capitalize, debounce } from 'lodash';
 import LoadingOverlay from '@/components/LoadingOverlay';
 import NavHeader from '@/components/NavHeader';
 import { useCurrency } from '@/hooks/useCurrency';
@@ -26,7 +26,7 @@ const DisplayAllScreen = () => {
     loading: bootLoading,
   } = useGlobalDataContext();
 
-  const inputRef = useRef<any>(null);
+  const inputRef = useRef<TextInput & { value?: string }>(null);
 
   const [loading, setLoading] = useState(false);
   const [listData, setListData] = useState<Country[]>([]);
@@ -97,7 +97,7 @@ const DisplayAllScreen = () => {
   );
 
   useEffect(() => {
-    inputRef.current.focus();
+    inputRef.current?.focus();
     filterData();
   }, [filterData]);
 
@@ -141,9 +141,9 @@ const DisplayAllScreen = () => {
                 {listData.length === 0 ? (
                   <View className="flex-1">
                     <Text className="">
-                      Không có kết quả nào phù hợp với từ khoá &quot;
-                      <Text className="font-semibold">{inputRef.current.value}</Text>&quot;. Vui
-                      lòng thử với từ khoá khác.
+                      {capitalize(t('all_screen.no_result_prefix'))} &quot;
+                      <Text className="font-semibold">{inputRef.current?.value}</Text>&quot;
+                      {t('all_screen.no_result_suffix')}
                     </Text>
                   </View>
                 ) : (

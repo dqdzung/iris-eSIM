@@ -31,3 +31,5 @@ expo-env.d.ts
 .idea
 .env*
 !.env.example
+
+PROD_DEPLOY_NOTES.txt

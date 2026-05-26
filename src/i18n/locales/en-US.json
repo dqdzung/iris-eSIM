@@ -45,7 +45,23 @@
     "view_guide": "view guide"
   },
   "all_screen": {
-    "search_result": "search results"
+    "search_result": "search results",
+    "no_result_prefix": "no results matched the keyword",
+    "no_result_suffix": ". please try a different keyword."
+  },
+  "esim_info_sheet": {
+    "title": "eSIM info",
+    "email_notice_prefix": "you can review your eSIM details in your",
+    "email_label": "registered email"
+  },
+  "compatibility_sheet": {
+    "instruction": "to check whether your device supports eSIM, dial *#06# on the keypad and press call:",
+    "eid_yes": "if the screen shows EID: the device supports eSIM",
+    "eid_no": "if the screen does not show EID: the device does not support eSIM.",
+    "search_placeholder": "search devices",
+    "warning": "note: please make sure your device supports eSIM before purchasing. the information below is for reference only.",
+    "not_supported": "{{name}} does not support eSIM",
+    "other_brand": "other"
   },
   "history_screen": {
     "title": "transaction history",

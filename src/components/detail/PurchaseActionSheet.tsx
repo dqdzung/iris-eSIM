@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Modal, Pressable, Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { capitalize } from 'lodash';
 import { Package } from '@/types';
 import { formatVnd } from '@/utils';
@@ -8,6 +8,7 @@ import { InformationCircleIcon, MinusIcon, PlusIcon } from '@heroicons/react/24/
 import { useRouter } from 'expo-router';
 import FormCheckbox from '../checkout/FormCheckbox';
 import { CompatibilityActionSheet } from '../CompatibilityActionSheet';
+import { ActionSheet } from '../ActionSheet';
 import PrimaryButton from '../PrimaryButton';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -32,7 +33,6 @@ export const PurchaseActionSheet = ({
   const router = useRouter();
   // const { id: countryId } = useLocalSearchParams<{ id: string }>();
 
-  const [isAnimating, setIsAnimating] = useState(false);
   const [amount, setAmount] = useState(1);
   const [isSheetVisible, setSheetVisible] = useState(false);
 
@@ -98,99 +98,79 @@ export const PurchaseActionSheet = ({
   // };
 
   useEffect(() => {
-    if (visible) {
-      // Small delay to trigger animation
-      setTimeout(() => setIsAnimating(true), 10);
-    } else {
-      setIsAnimating(false);
-      setAmount(1);
-    }
+    if (!visible) setAmount(1);
   }, [visible]);
 
-  if (!visible) return null;
-
   return (
-    <Modal transparent visible={visible} animationType="none">
-      {/* opaque overlay */}
-      <View
-        className={`flex-1 items-center bg-black/30 transition-opacity duration-300 ${isAnimating ? 'opacity-100' : 'opacity-0'}`}>
-        {/* touch overlay to close */}
-        <TouchableOpacity onPress={onClose} className="w-full flex-1" />
-        {/* modal */}
-        <View
-          className={`flex w-full flex-col gap-5 rounded-t-2xl bg-white p-4 shadow-lg transition-transform duration-300 ease-out ${
-            isAnimating ? 'translate-y-0' : 'translate-y-full'
-          }`}>
-          <FormInput
-            placeholder="Email"
-            fieldName="email"
-            control={control}
-            error={errors.email}
-            required={false}
-            autoFocus
-          />
+    <ActionSheet
+      visible={visible}
+      onClose={onClose}
+      overlayClassName="bg-black/30 items-center"
+      panelClassName="w-full gap-5 rounded-t-2xl p-4">
+      <FormInput
+        placeholder="Email"
+        fieldName="email"
+        control={control}
+        error={errors.email}
+        required={false}
+        autoFocus
+      />
 
-          <View className="relative w-full flex-row items-center justify-between">
-            <Text className="text-lg font-semibold capitalize text-primary">
-              {t('purchase.quantity')}
-            </Text>
-            <View className="flex-row items-center gap-3">
-              <Pressable
-                onPress={handleMinus}
-                className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/50">
-                <MinusIcon className="h-5 w-5 text-white" />
-              </Pressable>
+      <View className="relative w-full flex-row items-center justify-between">
+        <Text className="text-lg font-semibold capitalize text-primary">
+          {t('purchase.quantity')}
+        </Text>
+        <View className="flex-row items-center gap-3">
+          <Pressable
+            onPress={handleMinus}
+            className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/50">
+            <MinusIcon className="h-5 w-5 text-white" />
+          </Pressable>
 
-              <View className="w-6">
-                <Text className="text-center text-xl font-semibold">{amount}</Text>
-              </View>
-
-              <Pressable
-                onPress={handleAdd}
-                className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
-                <PlusIcon className="h-5 w-5 text-white" />
-              </Pressable>
-            </View>
-
-            {/* <Pressable onPress={onClose}>
-              <XMarkIcon className="h-6 w-6" />
-            </Pressable> */}
+          <View className="w-6">
+            <Text className="text-center text-xl font-semibold">{amount}</Text>
           </View>
 
-          <FormCheckbox
-            label={
-              <View className="flex-row items-center gap-1">
-                <Text>{t('checkout_form.deviceCompatibility')}</Text>
-                <Pressable onPress={() => setSheetVisible(true)}>
-                  <InformationCircleIcon className="h-6 w-6 text-primary" />
-                </Pressable>
-
-                {isSheetVisible && (
-                  <CompatibilityActionSheet
-                    visible={isSheetVisible}
-                    onClose={() => setSheetVisible(false)}
-                  />
-                )}
-              </View>
-            }
-            fieldName="deviceCompatibility"
-            control={control}
-          />
-
-          <View className="flex-row items-center justify-between rounded-xl border-2 border-primary bg-primary/10 p-2.5">
-            <View>
-              <Text className="text-xs text-gray-500">{capitalize(t('purchase.total_price'))}</Text>            
-              <Text className="text-center text-xl font-semibold">{formattedTotal}</Text>
-            </View>
-
-            <PrimaryButton
-              disabled={!isValid}
-              onPress={handleSubmit(onSubmit)}
-              label={capitalize(t('checkout_form.pay'))}
-            />
-          </View>
+          <Pressable
+            onPress={handleAdd}
+            className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
+            <PlusIcon className="h-5 w-5 text-white" />
+          </Pressable>
         </View>
       </View>
-    </Modal>
+
+      <FormCheckbox
+        label={
+          <View className="flex-row items-center gap-1">
+            <Text>{t('checkout_form.deviceCompatibility')}</Text>
+            <Pressable onPress={() => setSheetVisible(true)}>
+              <InformationCircleIcon className="h-6 w-6 text-primary" />
+            </Pressable>
+
+            {isSheetVisible && (
+              <CompatibilityActionSheet
+                visible={isSheetVisible}
+                onClose={() => setSheetVisible(false)}
+              />
+            )}
+          </View>
+        }
+        fieldName="deviceCompatibility"
+        control={control}
+      />
+
+      <View className="flex-row items-center justify-between rounded-xl border-2 border-primary bg-primary/10 p-2.5">
+        <View>
+          <Text className="text-xs text-gray-500">{capitalize(t('purchase.total_price'))}</Text>
+          <Text className="text-center text-xl font-semibold">{formattedTotal}</Text>
+        </View>
+
+        <PrimaryButton
+          disabled={!isValid}
+          onPress={handleSubmit(onSubmit)}
+          label={capitalize(t('checkout_form.pay'))}
+        />
+      </View>
+    </ActionSheet>
   );
 };
