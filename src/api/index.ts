@@ -5,6 +5,7 @@ import {
   ApiResponse,
   AuthenticateResponse,
   HttpError,
+  TransactionsFilter,
   TypeLocation,
   VerifySessionResponse,
 } from './type';
@@ -27,6 +28,7 @@ async function toApiResponse<T>(apiCall: () => Promise<T>, fallback: T): Promise
 export const authenticate = (): Promise<ApiResponse<AuthenticateResponse | null>> =>
   toApiResponse<AuthenticateResponse | null>(
     () =>
+      // TODO: Replace with real authentication data from url params
       apiService.post<AuthenticateResponse>(API_PATH.login, {
         customerId: 'TEST_CUST_001',
         name: 'Test User',
@@ -80,19 +82,21 @@ export const fetchPackages = (id: string): Promise<ApiResponse<Package[]>> =>
 
 export const fetchTransactions = (
   page: number = 1,
-  size: number = 20
+  size: number = 20,
+  filter: TransactionsFilter = {}
 ): Promise<ApiResponse<Transaction[]>> =>
-  toApiResponse<Transaction[]>(
-    async () =>
-      (
-        await apiService.get<{ data: Transaction[] }>(API_PATH.transactions, {
-          partner: PARTNER,
-          page,
-          size,
-        })
-      ).data ?? [],
-    []
-  );
+  toApiResponse<Transaction[]>(async () => {
+    const params: Record<string, string | number> = {
+      partner: PARTNER,
+      page,
+      size,
+    };
+    if (filter.fromDate) params.fromDate = filter.fromDate;
+    if (filter.toDate) params.toDate = filter.toDate;
+    return (
+      (await apiService.get<{ data: Transaction[] }>(API_PATH.transactions, params)).data ?? []
+    );
+  }, []);
 
 export const fetchTransactionResult = (
   trackingId: string

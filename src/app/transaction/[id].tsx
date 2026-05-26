@@ -142,18 +142,6 @@ export default function TransactionDetailScreen() {
             <CardRows rows={infoRows} />
             <CardRows rows={amountRows} />
 
-            <PrimaryButton
-              onPress={handleClickInfo}
-              className="mt-5 w-full rounded-xl drop-shadow-md"
-              pressableClassName="py-3">
-              <View className="flex-row items-center justify-center gap-2">
-                {/* <DevicePhoneMobileIcon className="h-5 w-5 text-white" /> */}
-                <Text className="font-semibold capitalize text-white">
-                  {t('history_screen.detail.view_esim')}
-                </Text>
-              </View>
-            </PrimaryButton>
-
             {transaction.status === 'FAILED' || transaction.status === 'PENDING' ? (
               <View className="mt-5 w-full flex-row items-center gap-2 rounded-xl bg-white px-3 py-2 drop-shadow-sm">
                 <ExclamationCircleIcon className="h-6 w-6 stroke-2 text-orange-500" />
@@ -169,7 +157,7 @@ export default function TransactionDetailScreen() {
               </View>
             ) : (
               <PrimaryButton
-                onPress={() => {}}
+                onPress={handleClickInfo}
                 className="mt-5 w-full rounded-xl drop-shadow-md"
                 pressableClassName="py-3">
                 <View className="flex-row items-center justify-center gap-2">
@@ -196,7 +184,12 @@ export default function TransactionDetailScreen() {
           </View>
         )}
 
-        <EsimInfoActionSheet visible={visible} onClose={() => setVisible(false)} />
+        <EsimInfoActionSheet
+          visible={visible}
+          onClose={() => setVisible(false)}
+          items={transaction?.items ?? []}
+          createDate={transaction?.createDate}
+        />
         <LoadingOverlay isVisible={loading} />
       </View>
     </View>

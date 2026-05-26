@@ -8,7 +8,7 @@ import { filterCountry } from '@/utils/filterHelper';
 import { Country } from '@/types';
 import { useGlobalDataContext } from '@/hooks/useGlobalDataContext';
 import { useRouter } from 'expo-router';
-import { Image } from 'expo-image';
+import { FlagImage } from './FlagImage';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { useCurrency } from '@/hooks/useCurrency';
 import { ActionSheet } from './ActionSheet';
@@ -70,7 +70,6 @@ export const SearchActionSheet = ({
       const name = isEnglish ? item.nameLocation : item.nameVi;
       const price = isEnglish ? item.fromPriceUsd : item.fromPrice;
       const formatted = format(Number(price));
-      const img = item.icon;
 
       return (
         <Pressable
@@ -79,7 +78,7 @@ export const SearchActionSheet = ({
           <View className="flex-1 flex-row items-center justify-between">
             <View className="flex-row items-center gap-2">
               <View className="h-5 w-5 overflow-hidden rounded-full border-2 border-gray-100">
-                <Image source={img} className="h-full w-full" />
+                <FlagImage country={item} className="h-full w-full" />
               </View>
 
               <Text className="text-inherit">{name}</Text>

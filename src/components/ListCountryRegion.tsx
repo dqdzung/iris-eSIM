@@ -1,7 +1,6 @@
 import { Country } from '@/types';
 import { useCurrency } from '@/hooks/useCurrency';
-import { getBannerSource } from '@/utils/banner';
-import { Image } from 'expo-image';
+import { FlagImage } from './FlagImage';
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DimensionValue, FlatList, Pressable, Text, useWindowDimensions, View } from 'react-native';
@@ -31,7 +30,6 @@ const ListCountryRegion = ({
       const name = isEnglish ? item.nameLocation : item.nameVi;
       const price = isEnglish ? item.fromPriceUsd : item.fromPrice;
       const formatted = format(Number(price));
-      const img = getBannerSource(item.banner);
 
       return (
         <Pressable
@@ -46,7 +44,7 @@ const ListCountryRegion = ({
             </Text>
           </View>
           <View className="absolute -bottom-2 -right-2 h-12 w-12 overflow-hidden rounded-full border-2 border-gray-100">
-            <Image source={img} className="h-full w-full" />
+            <FlagImage country={item} className="h-full w-full" />
           </View>
         </Pressable>
       );

@@ -52,7 +52,10 @@
   "esim_info_sheet": {
     "title": "eSIM info",
     "email_notice_prefix": "you can review your eSIM details in your",
-    "email_label": "registered email"
+    "email_label": "registered email",
+    "country_label": "eSIM {{name}}",
+    "sim_label": "SIM {{index}}",
+    "view_qr": "QR code"
   },
   "compatibility_sheet": {
     "instruction": "to check whether your device supports eSIM, dial *#06# on the keypad and press call:",
@@ -89,6 +92,14 @@
       "success": "successful",
       "pending": "processing",
       "failed": "failed"
+    },
+    "filter": {
+      "title": "filter",
+      "from_date": "from date",
+      "to_date": "to date",
+      "apply": "apply",
+      "clear": "clear",
+      "invalid_range": "start date must be before end date"
     }
   },
   "result_screen": {
