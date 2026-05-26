@@ -1,4 +1,4 @@
-import { Stack, useLocalSearchParams, usePathname } from 'expo-router';
+import { Stack, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
@@ -21,7 +21,6 @@ export default function DetailScreen() {
   const { t } = useTranslation();
   const toast = useToast();
   const { id: countryId } = useLocalSearchParams<{ id: string }>();
-  const path = usePathname();
 
   const scrollViewRef = useRef<ScrollView>(null);
 

@@ -54,7 +54,6 @@ export default function CheckoutScreen() {
     control,
     handleSubmit,
     formState: { errors },
-    setValue,
     watch,
   } = useForm<CheckoutForm>({
     mode: 'onChange',
@@ -79,9 +78,6 @@ export default function CheckoutScreen() {
   const isAllowPayment = useMemo(() => {
     return checkboxWatcher.every((e) => e === true);
   }, [checkboxWatcher]);
-
-  const onAcceptAgreement = () =>
-    setValue('termAndCondition', true, { shouldDirty: true, shouldTouch: true });
 
   const onSubmit: SubmitHandler<CheckoutForm> = async (data: CheckoutForm) => {
     if (submitting) return;

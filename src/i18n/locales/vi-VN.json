@@ -45,7 +45,23 @@
     "view_guide": "xem hướng dẫn"
   },
   "all_screen": {
-    "search_result": "kết quả tìm kiếm"
+    "search_result": "kết quả tìm kiếm",
+    "no_result_prefix": "không có kết quả nào phù hợp với từ khoá",
+    "no_result_suffix": ". vui lòng thử với từ khoá khác."
+  },
+  "esim_info_sheet": {
+    "title": "thông tin eSIM",
+    "email_notice_prefix": "quý khách có thể xem lại thông tin eSIM trong",
+    "email_label": "email đã đăng ký"
+  },
+  "compatibility_sheet": {
+    "instruction": "để kiểm tra thiết bị có hỗ trợ eSIM không, ấn *#06# trên bàn phím, ấn gọi:",
+    "eid_yes": "màn hình hiện EID: thiết bị có hỗ trợ eSIM",
+    "eid_no": "màn hình không hiện EID: thiết bị không hỗ trợ eSIM.",
+    "search_placeholder": "tìm kiếm thiết bị",
+    "warning": "lưu ý: vui lòng đảm bảo thiết bị của Quý khách hỗ trợ eSIM trước khi mua. các thông tin để kiểm tra dưới đây chỉ mang tính chất tham khảo.",
+    "not_supported": "{{name}} không hỗ trợ eSIM",
+    "other_brand": "khác"
   },
   "history_screen": {
     "title": "lịch sử giao dịch",

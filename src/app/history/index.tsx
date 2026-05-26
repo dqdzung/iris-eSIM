@@ -1,6 +1,14 @@
 import { Stack, useRouter } from 'expo-router';
-import { useEffect, useMemo, useState } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  ActivityIndicator,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from 'react-native';
 import { capitalize } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { FunnelIcon } from '@heroicons/react/24/outline';
@@ -14,6 +22,8 @@ import NavHeader from '@/components/NavHeader';
 import PrimaryButton from '@/components/PrimaryButton';
 
 type Section = { title: string; sortKey: number; data: Transaction[] };
+
+const PAGE_SIZE = 20;
 
 const STATUS_STYLE: Record<number, { key: string; className: string }> = {
   0: { key: 'history_screen.status.pending', className: 'text-yellow-600' },
@@ -32,6 +42,10 @@ export default function HistoryScreen() {
 
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const fetchingRef = useRef(false);
 
   const hasHistory = transactions.length > 0;
 
@@ -76,19 +90,50 @@ export default function HistoryScreen() {
 
   useEffect(() => {
     let cancelled = false;
+    fetchingRef.current = true;
     setLoading(true);
-    fetchTransactions()
+    fetchTransactions(1, PAGE_SIZE)
       .then((res) => {
         if (cancelled) return;
-        if (res.success) setTransactions(res.data);
-        else toast.error(t('toast.load_transactions_failed'));
+        if (res.success) {
+          setTransactions(res.data);
+          setHasMore(res.data.length >= PAGE_SIZE);
+        } else {
+          toast.error(t('toast.load_transactions_failed'));
+        }
       })
-      .finally(() => !cancelled && setLoading(false));
+      .finally(() => {
+        fetchingRef.current = false;
+        if (!cancelled) setLoading(false);
+      });
     return () => {
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const loadMore = useCallback(async () => {
+    if (fetchingRef.current || !hasMore) return;
+    fetchingRef.current = true;
+    setLoadingMore(true);
+    const nextPage = page + 1;
+    const res = await fetchTransactions(nextPage, PAGE_SIZE);
+    if (res.success) {
+      setTransactions((prev) => [...prev, ...res.data]);
+      setPage(nextPage);
+      setHasMore(res.data.length >= PAGE_SIZE);
+    } else {
+      toast.error(t('toast.load_transactions_failed'));
+    }
+    fetchingRef.current = false;
+    setLoadingMore(false);
+  }, [page, hasMore, toast, t]);
+
+  const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const { layoutMeasurement, contentOffset, contentSize } = e.nativeEvent;
+    const distanceFromBottom = contentSize.height - (contentOffset.y + layoutMeasurement.height);
+    if (distanceFromBottom <= PAGE_SIZE) loadMore();
+  };
 
   return (
     <View className="flex-1">
@@ -107,7 +152,11 @@ export default function HistoryScreen() {
       </NavHeader>
 
       <View className="relative flex-1">
-        <ScrollView className="flex-1" contentContainerClassName="flex-grow gap-4 p-4">
+        <ScrollView
+          className="flex-1"
+          contentContainerClassName="flex-grow gap-4 p-4"
+          onScroll={handleScroll}
+          scrollEventThrottle={16}>
           {hasHistory
             ? sections.map((section) => (
                 <View key={section.sortKey} className="gap-2">
@@ -163,6 +212,12 @@ export default function HistoryScreen() {
                   </View>
                 </View>
               )}
+
+          {hasHistory && loadingMore && (
+            <View className="items-center py-4">
+              <ActivityIndicator color="#5850e8" />
+            </View>
+          )}
         </ScrollView>
 
         <LoadingOverlay isVisible={loading} />

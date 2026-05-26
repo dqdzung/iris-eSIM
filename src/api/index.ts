@@ -12,134 +12,100 @@ import { API_PATH } from './apiPath';
 
 const apiService = new ApiService();
 
-export const authenticate = async (): Promise<ApiResponse<AuthenticateResponse | null>> => {
+async function toApiResponse<T>(apiCall: () => Promise<T>, fallback: T): Promise<ApiResponse<T>> {
   try {
-    const res = await apiService.post<AuthenticateResponse>(API_PATH.login, {
-      customerId: 'TEST_CUST_001',
-      name: 'Test User',
-      mobile: '0901234567',
-      email: 'test@example.com',
-    });
-    return { success: true, data: res };
+    return { success: true, data: await apiCall() };
   } catch (error) {
-    const err = error as HttpError;
     return {
       success: false,
-      message: err.cause?.detail?.error,
-      data: null,
+      message: (error as HttpError).cause?.detail?.error,
+      data: fallback,
     };
   }
-};
+}
 
-export const verifySession = async (
+export const authenticate = (): Promise<ApiResponse<AuthenticateResponse | null>> =>
+  toApiResponse<AuthenticateResponse | null>(
+    () =>
+      apiService.post<AuthenticateResponse>(API_PATH.login, {
+        customerId: 'TEST_CUST_001',
+        name: 'Test User',
+        mobile: '0901234567',
+        email: 'test@example.com',
+      }),
+    null
+  );
+
+export const verifySession = (
   loginToken: string
-): Promise<ApiResponse<VerifySessionResponse | null>> => {
-  try {
-    const res = await apiService.post<VerifySessionResponse>(API_PATH.verify, {
-      loginToken,
-    });
-    return { success: true, data: res };
-  } catch (error) {
-    const err = error as HttpError;
-    return {
-      success: false,
-      message: err.cause?.detail?.error,
-      data: null,
-    };
-  }
-};
+): Promise<ApiResponse<VerifySessionResponse | null>> =>
+  toApiResponse<VerifySessionResponse | null>(
+    () => apiService.post<VerifySessionResponse>(API_PATH.verify, { loginToken }),
+    null
+  );
 
-export const verifyInfo = async (): Promise<ApiResponse<VerifySessionResponse | null>> => {
-  try {
-    const res = await apiService.get<VerifySessionResponse>(API_PATH.info);
-    return { success: true, data: res };
-  } catch (error) {
-    const err = error as HttpError;
-    return {
-      success: false,
-      message: err.cause?.detail?.error,
-      data: null,
-    };
-  }
-};
+export const verifyInfo = (): Promise<ApiResponse<VerifySessionResponse | null>> =>
+  toApiResponse<VerifySessionResponse | null>(
+    () => apiService.get<VerifySessionResponse>(API_PATH.info),
+    null
+  );
 
-export const fetchRegions = async (
+export const fetchRegions = (
   typeLocation: TypeLocation | '' = '',
   keyword: string = ''
-): Promise<ApiResponse<Country[]>> => {
-  try {
-    const res = await apiService.post<{ data: Country[] }>(API_PATH.regions, {
-      typeLocation,
-      partner: PARTNER,
-      keyword,
-    });
-    return { success: true, data: res.data ?? [] };
-  } catch (error) {
-    const err = error as HttpError;
-    return {
-      success: false,
-      message: err.cause?.detail?.error,
-      data: [],
-    };
-  }
-};
+): Promise<ApiResponse<Country[]>> =>
+  toApiResponse<Country[]>(
+    async () =>
+      (
+        await apiService.post<{ data: Country[] }>(API_PATH.regions, {
+          typeLocation,
+          partner: PARTNER,
+          keyword,
+        })
+      ).data ?? [],
+    []
+  );
 
-export const fetchPackages = async (id: string): Promise<ApiResponse<Package[]>> => {
-  try {
-    const res = await apiService.post<{ data: Package[] }>(API_PATH.packs, {
-      locationId: Number(id),
-      partner: PARTNER,
-    });
-    return { success: true, data: res.data ?? [] };
-  } catch (error) {
-    const err = error as HttpError;
-    return {
-      success: false,
-      message: err.cause?.detail?.error,
-      data: [],
-    };
-  }
-};
+export const fetchPackages = (id: string): Promise<ApiResponse<Package[]>> =>
+  toApiResponse<Package[]>(
+    async () =>
+      (
+        await apiService.post<{ data: Package[] }>(API_PATH.packs, {
+          locationId: Number(id),
+          partner: PARTNER,
+        })
+      ).data ?? [],
+    []
+  );
 
-export const fetchTransactions = async (
+export const fetchTransactions = (
   page: number = 1,
   size: number = 20
-): Promise<ApiResponse<Transaction[]>> => {
-  try {
-    const res = await apiService.get<{ data: Transaction[] }>(API_PATH.transactions, {
-      partner: PARTNER,
-      page,
-      size,
-    });
-    return { success: true, data: res.data ?? [] };
-  } catch (error) {
-    const err = error as HttpError;
-    return {
-      success: false,
-      message: err.cause?.detail?.error,
-      data: [],
-    };
-  }
-};
+): Promise<ApiResponse<Transaction[]>> =>
+  toApiResponse<Transaction[]>(
+    async () =>
+      (
+        await apiService.get<{ data: Transaction[] }>(API_PATH.transactions, {
+          partner: PARTNER,
+          page,
+          size,
+        })
+      ).data ?? [],
+    []
+  );
 
-export const fetchTransactionResult = async (
+export const fetchTransactionResult = (
   trackingId: string
-): Promise<ApiResponse<TransactionResult | null>> => {
-  try {
-    const res = await apiService.get<{ data: TransactionResult }>(
-      `${API_PATH.result}/${trackingId}`,
-      { partner: PARTNER }
-    );
-    return { success: true, data: res.data ?? null };
-  } catch (error) {
-    const err = error as HttpError;
-    return {
-      success: false,
-      message: err.cause?.detail?.error,
-      data: null,
-    };
-  }
-};
+): Promise<ApiResponse<TransactionResult | null>> =>
+  toApiResponse<TransactionResult | null>(
+    async () =>
+      (
+        await apiService.get<{ data: TransactionResult }>(`${API_PATH.result}/${trackingId}`, {
+          partner: PARTNER,
+        })
+      ).data ?? null,
+    null
+  );
 
 const refreshAuth = async (): Promise<boolean> => {
   const auth = await authenticate();

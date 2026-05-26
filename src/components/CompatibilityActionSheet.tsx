@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FlatList, Modal, Pressable, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { FlatList, Pressable, Text, TextInput, View } from 'react-native';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import { capitalize, debounce } from 'lodash';
 import { delay } from '@/utils';
@@ -8,6 +8,7 @@ import { filterDevice } from '@/utils/filterHelper';
 import { useGlobalDataContext } from '@/hooks/useGlobalDataContext';
 import { DevicePhoneMobileIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { Image } from 'expo-image';
+import { ActionSheet } from './ActionSheet';
 
 export const CompatibilityActionSheet = ({
   visible,
@@ -20,12 +21,11 @@ export const CompatibilityActionSheet = ({
 
   const { listDevice } = useGlobalDataContext();
 
-  const [isAnimating, setIsAnimating] = useState(false);
   // const [loading, setLoading] = useState(false);
   const [listData, setListData] = useState<any[]>([]);
   const [filter, setFilter] = useState<string | null>(null);
 
-  const inputRef = useRef<any>(null);
+  const inputRef = useRef<TextInput & { value?: string }>(null);
 
   const getListCompatibleDevice = useCallback(
     async (searchTerm?: string) => {
@@ -70,7 +70,7 @@ export const CompatibilityActionSheet = ({
   };
 
   const handleFilter = (brand: string) => {
-    if (inputRef.current.value) inputRef.current.clear();
+    if (inputRef.current?.value) inputRef.current.clear();
     setFilter(brand);
   };
 
@@ -91,109 +91,101 @@ export const CompatibilityActionSheet = ({
 
   useEffect(() => {
     if (visible) {
-      setTimeout(() => setIsAnimating(true), 10); // Small delay to trigger animation
-      inputRef.current.focus(); // Focus on the input field when the modal opens
+      inputRef.current?.focus();
       getListCompatibleDevice();
-    } else setIsAnimating(false);
+    }
   }, [getListCompatibleDevice, visible]);
 
-  if (!visible) return null;
-
   return (
-    <Modal transparent visible={visible} animationType="none">
-      {/* opaque overlay */}
-      <View
-        className={`flex-1 items-center bg-black/30 transition-opacity duration-300 ${isAnimating ? 'opacity-100' : 'opacity-0'}`}>
-        {/* touch overlay to close */}
-        <TouchableOpacity onPress={onClose} className="w-full flex-1" />
-        {/* modal */}
-        <View
-          className={`flex w-full flex-col gap-5 rounded-t-2xl bg-white px-5 py-4 shadow-lg transition-transform duration-300 ease-out ${
-            isAnimating ? 'translate-y-0' : 'translate-y-full'
-          }`}>
-          <View className="relative w-full flex-row items-center justify-between">
-            <View />
+    <ActionSheet
+      visible={visible}
+      onClose={onClose}
+      overlayClassName="bg-black/30 items-center"
+      panelClassName="w-full gap-5 rounded-t-2xl px-5 py-4">
+      <View className="relative w-full flex-row items-center justify-between">
+        <View />
 
-            <Text className="px-20 text-center text-[16px] font-semibold capitalize leading-6">
-              {t('nav.compatibility_devices')}
-            </Text>
+        <Text className="px-20 text-center text-[16px] font-semibold capitalize leading-6">
+          {t('nav.compatibility_devices')}
+        </Text>
 
-            <Pressable onPress={onClose}>
-              <XMarkIcon className="h-6 w-6" />
+        <Pressable onPress={onClose}>
+          <XMarkIcon className="h-6 w-6" />
+        </Pressable>
+      </View>
+
+      <View className="gap-5">
+        <Text className="font-semibold">{capitalize(t('compatibility_sheet.instruction'))}</Text>
+
+        <View>
+          <Text>- {capitalize(t('compatibility_sheet.eid_yes'))}</Text>
+          <Text>- {capitalize(t('compatibility_sheet.eid_no'))}</Text>
+        </View>
+
+        <View className="flex-row flex-wrap items-center gap-1">
+          {['Apple', 'Samsung', 'Google', 'Khác'].map((brand) => (
+            <Pressable
+              key={brand}
+              onPress={() => handleFilter(brand)}
+              className={`flex-1 rounded-full py-2 ${filter === brand ? 'bg-primary' : 'bg-white'} border border-gray-200`}>
+              <Text className={`text-center ${filter === brand ? 'text-white' : ''}`}>
+                {brand === 'Khác' ? capitalize(t('compatibility_sheet.other_brand')) : brand}
+              </Text>
             </Pressable>
-          </View>
-
-          <View className="gap-5">
-            <Text className="font-semibold">
-              Để kiểm tra thiết bị có hỗ trợ eSIM không, ấn *#06# trên bàn phím, ấn gọi:
-            </Text>
-
-            <View>
-              <Text>- Màn hình hiện EID: Thiết bị có hỗ trợ eSIM</Text>
-              <Text>- Màn hình không hiện EID: Thiết bị không hỗ trợ eSIM.</Text>
-            </View>
-
-            <View className="flex-row flex-wrap items-center gap-1">
-              {['Apple', 'Samsung', 'Google', 'Khác'].map((brand) => (
-                <Pressable
-                  key={brand}
-                  onPress={() => handleFilter(brand)}
-                  className={`flex-1 rounded-full py-2 ${filter === brand ? 'bg-primary' : 'bg-white'} border border-gray-200`}>
-                  <Text className={`text-center ${filter === brand ? 'text-white' : ''}`}>
-                    {brand}
-                  </Text>
-                </Pressable>
-              ))}
-            </View>
-          </View>
-
-          <View className="">
-            <View className="-top-8 items-center">
-              <Image
-                source={require('@assets/device.png')}
-                className="-bottom-8 h-[120px] w-[120px]"
-              />
-              <View className="w-full flex-row items-center justify-between rounded-full bg-white px-4 py-3 shadow-md shadow-primary/50">
-                <View className="flex-row gap-2">
-                  <MagnifyingGlassIcon className="h-5 w-5 stroke-2 text-primary" />
-                  <TextInput
-                    ref={inputRef}
-                    keyboardType="web-search"
-                    className="text-md w-full px-1 outline-none"
-                    placeholder={`${capitalize(t('search'))} thiết bị`}
-                    onChangeText={handleSearch}
-                  />
-                </View>
-                {inputRef.current?.value ? (
-                  <Pressable onPress={handleClearInput} className="flex-row items-center gap-2">
-                    <XMarkIcon className="h-5 w-5 text-red-500" />
-                  </Pressable>
-                ) : null}
-              </View>
-            </View>
-
-            <Text className="-mt-3 mb-4 text-xs italic text-primary">
-              Lưu ý: Vui lòng đảm bảo thiết bị của Quý khách hỗ trợ eSIM trước khi mua. Các thông
-              tin để kiểm tra dưới đây chỉ mang tính chất tham khảo.
-            </Text>
-
-            {inputRef.current?.value && listData.length === 0 ? (
-              <View className="h-96 items-center py-10">
-                <Text className="italic">{`"${inputRef.current.value}" không hỗ trợ eSIM`}</Text>
-              </View>
-            ) : (
-              <FlatList
-                className="h-96"
-                contentContainerClassName="gap-2.5"
-                keyExtractor={(item) => item.name}
-                numColumns={1}
-                data={listData}
-                renderItem={renderListItem}
-              />
-            )}
-          </View>
+          ))}
         </View>
       </View>
-    </Modal>
+
+      <View className="">
+        <View className="-top-8 items-center">
+          <Image
+            source={require('@assets/device.png')}
+            className="-bottom-8 h-[120px] w-[120px]"
+          />
+          <View className="w-full flex-row items-center justify-between rounded-full bg-white px-4 py-3 shadow-md shadow-primary/50">
+            <View className="flex-row gap-2">
+              <MagnifyingGlassIcon className="h-5 w-5 stroke-2 text-primary" />
+              <TextInput
+                ref={inputRef}
+                keyboardType="web-search"
+                className="text-md w-full px-1 outline-none"
+                placeholder={capitalize(t('compatibility_sheet.search_placeholder'))}
+                onChangeText={handleSearch}
+              />
+            </View>
+            {inputRef.current?.value ? (
+              <Pressable onPress={handleClearInput} className="flex-row items-center gap-2">
+                <XMarkIcon className="h-5 w-5 text-red-500" />
+              </Pressable>
+            ) : null}
+          </View>
+        </View>
+
+        <Text className="-mt-3 mb-4 text-xs italic text-primary">
+          {capitalize(t('compatibility_sheet.warning'))}
+        </Text>
+
+        {inputRef.current?.value && listData.length === 0 ? (
+          <View className="h-96 items-center py-10">
+            <Text className="italic">
+              {capitalize(
+                t('compatibility_sheet.not_supported', {
+                  name: `"${inputRef.current.value}"`,
+                })
+              )}
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            className="h-96"
+            contentContainerClassName="gap-2.5"
+            keyExtractor={(item) => item.name}
+            numColumns={1}
+            data={listData}
+            renderItem={renderListItem}
+          />
+        )}
+      </View>
+    </ActionSheet>
   );
 };

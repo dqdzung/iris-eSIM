@@ -1,6 +1,5 @@
 import { View, Text, Pressable } from 'react-native';
 import { Image, ImageBackground } from 'expo-image';
-import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import { InformationCircleIcon } from '@heroicons/react/24/solid';
 import { capitalize } from 'lodash';
 import { useTranslation } from 'react-i18next';

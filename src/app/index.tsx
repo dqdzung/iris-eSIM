@@ -1,5 +1,5 @@
 import { Pressable, Text, View } from 'react-native';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Stack, useRouter } from 'expo-router';
 import { filterCountry } from '@/utils/filterHelper';
@@ -24,8 +24,6 @@ export default function HomeScreen() {
 
   const { popularCountries, popularRegions, loading: bootLoading } = useGlobalDataContext();
 
-  const inputRef = useRef<any>(null);
-
   const [filterType, setFilterType] = useState<'country' | 'region'>('country');
 
   const listData = useMemo(() => {
@@ -36,11 +34,7 @@ export default function HomeScreen() {
   const handlePress = useCallback((id: number) => router.push(`/detail/${id}`), [router]);
 
   const handleChangeFilter = (type: string) => {
-    if (inputRef.current?.value) {
-      inputRef.current?.blur?.();
-      inputRef.current.value = '';
-    }
-    setFilterType(type as any);
+    setFilterType(type as 'country' | 'region');
   };
 
   const handleClickAll = () => {
