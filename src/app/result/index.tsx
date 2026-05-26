@@ -1,4 +1,8 @@
-import { ChevronRightIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
+import {
+  BookOpenIcon,
+  ChevronRightIcon,
+  QuestionMarkCircleIcon,
+} from '@heroicons/react/24/outline';
 import { Image } from 'expo-image';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
@@ -24,6 +28,7 @@ const ResultScreen = () => {
   };
 
   const handleClickSupport = () => router.push('/support');
+  const handleClickHowToUse = () => router.push('/guide/how-to-use');
 
   const imgPath = isPaymentSuccessful ? successImg : failureImg;
 
@@ -57,6 +62,21 @@ const ResultScreen = () => {
             t(isPaymentSuccessful ? 'result_screen.transaction_detail' : 'result_screen.go_back')
           )}
         />
+
+        {isPaymentSuccessful ? (
+          <Pressable
+            onPress={handleClickHowToUse}
+            className="flex-row items-center justify-between gap-2 rounded-xl bg-white px-3 py-2 drop-shadow-sm">
+            <View className="flex-row items-center gap-2">
+              <BookOpenIcon className="h-6 w-6 stroke-2 text-primary" />
+              <Text className="text-[10px] font-semibold capitalize text-primary">
+                {t('guide_screen.topics.how-to-use.title')}
+              </Text>
+            </View>
+
+            <ChevronRightIcon className="h-5 w-5 stroke-2 text-primary" />
+          </Pressable>
+        ) : null}
 
         <Pressable
           onPress={handleClickSupport}

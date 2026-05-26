@@ -38,7 +38,10 @@ export const EsimInfoActionSheet = ({ visible, onClose, items, createDate }: Pro
 
   const lookupCountry = (regionName: string) => countryByName.get(regionName.toLowerCase()) ?? null;
 
-  const handleClickGuide = () => router.push(`/guide`);
+  const handleClickGuide = () => {
+    onClose();
+    router.push(`/guide/how-to-use`);
+  };
 
   const dateLabel = createDate ? formatDateTime(createDate, i18n.language) : '';
 

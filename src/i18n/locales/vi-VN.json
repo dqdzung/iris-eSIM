@@ -119,6 +119,18 @@
     "content": "nội dung",
     "send_request": "gửi yêu cầu"
   },
+  "guide_screen": {
+    "topics": {
+      "what-is-esim": {
+        "title": "eSIM du lịch là gì?",
+        "body": "eSIM (embedded SIM) là loại SIM được tích hợp sẵn vào thiết bị, không cần thẻ vật lý.\n\neSIM du lịch của IRIS cho phép Quý khách sử dụng dữ liệu di động ở nước ngoài chỉ bằng cách quét mã QR — không cần đổi SIM hay liên hệ nhà mạng địa phương.\n\nLưu ý: thiết bị của Quý khách cần hỗ trợ eSIM. Vui lòng kiểm tra trước khi mua."
+      },
+      "how-to-use": {
+        "title": "Cách sử dụng eSIM",
+        "body": "1. Đảm bảo thiết bị có kết nối Internet (Wi-Fi).\n\n2. Mở Cài đặt → Di động → Thêm gói cước → Quét mã QR (mã được gửi qua email sau khi thanh toán).\n\n3. Sau khi cài đặt thành công, bật Data Roaming cho eSIM IRIS.\n\n4. Khi đến nơi, chuyển dữ liệu di động sang eSIM IRIS để bắt đầu sử dụng."
+      }
+    }
+  },
   "purchase": {
     "quantity": "số lượng",
     "total_price": "tổng tiền"
