@@ -20,6 +20,8 @@ import { formatDateTime, formatVnd } from '@/utils';
 import LoadingOverlay from '@/components/LoadingOverlay';
 import NavHeader from '@/components/NavHeader';
 import PrimaryButton from '@/components/PrimaryButton';
+import { HistoryFilterSheet } from '@/components/HistoryFilterSheet';
+import { TransactionsFilter } from '@/api/type';
 
 type Section = { title: string; sortKey: number; data: Transaction[] };
 
@@ -45,8 +47,11 @@ export default function HistoryScreen() {
   const [loadingMore, setLoadingMore] = useState(false);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [filter, setFilter] = useState<TransactionsFilter>({});
+  const [filterSheetVisible, setFilterSheetVisible] = useState(false);
   const fetchingRef = useRef(false);
 
+  const hasFilter = Boolean(filter.fromDate || filter.toDate);
   const hasHistory = transactions.length > 0;
 
   const countryByCode = useMemo(() => {
@@ -92,7 +97,8 @@ export default function HistoryScreen() {
     let cancelled = false;
     fetchingRef.current = true;
     setLoading(true);
-    fetchTransactions(1, PAGE_SIZE)
+    setPage(1);
+    fetchTransactions(1, PAGE_SIZE, filter)
       .then((res) => {
         if (cancelled) return;
         if (res.success) {
@@ -110,14 +116,14 @@ export default function HistoryScreen() {
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [filter]);
 
   const loadMore = useCallback(async () => {
     if (fetchingRef.current || !hasMore) return;
     fetchingRef.current = true;
     setLoadingMore(true);
     const nextPage = page + 1;
-    const res = await fetchTransactions(nextPage, PAGE_SIZE);
+    const res = await fetchTransactions(nextPage, PAGE_SIZE, filter);
     if (res.success) {
       setTransactions((prev) => [...prev, ...res.data]);
       setPage(nextPage);
@@ -127,7 +133,7 @@ export default function HistoryScreen() {
     }
     fetchingRef.current = false;
     setLoadingMore(false);
-  }, [page, hasMore, toast, t]);
+  }, [page, hasMore, toast, t, filter]);
 
   const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     const { layoutMeasurement, contentOffset, contentSize } = e.nativeEvent;
@@ -145,8 +151,11 @@ export default function HistoryScreen() {
             {capitalize(t('history_screen.title'))}
           </Text>
 
-          <Pressable onPress={() => {}}>
+          <Pressable onPress={() => setFilterSheetVisible(true)} className="relative">
             <FunnelIcon className="h-5 w-5 stroke-2 text-white" />
+            {hasFilter && (
+              <View className="absolute right-0 top-0 h-2 w-2 rounded-full bg-red-500" />
+            )}
           </Pressable>
         </View>
       </NavHeader>
@@ -222,6 +231,13 @@ export default function HistoryScreen() {
 
         <LoadingOverlay isVisible={loading} />
       </View>
+
+      <HistoryFilterSheet
+        visible={filterSheetVisible}
+        onClose={() => setFilterSheetVisible(false)}
+        value={filter}
+        onApply={setFilter}
+      />
     </View>
   );
 }

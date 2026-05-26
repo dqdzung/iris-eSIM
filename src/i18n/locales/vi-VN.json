@@ -52,7 +52,10 @@
   "esim_info_sheet": {
     "title": "thông tin eSIM",
     "email_notice_prefix": "quý khách có thể xem lại thông tin eSIM trong",
-    "email_label": "email đã đăng ký"
+    "email_label": "email đã đăng ký",
+    "country_label": "eSIM {{name}}",
+    "sim_label": "SIM {{index}}",
+    "view_qr": "mã QR"
   },
   "compatibility_sheet": {
     "instruction": "để kiểm tra thiết bị có hỗ trợ eSIM không, ấn *#06# trên bàn phím, ấn gọi:",
@@ -89,6 +92,14 @@
       "success": "thành công",
       "pending": "đang xử lý",
       "failed": "thất bại"
+    },
+    "filter": {
+      "title": "bộ lọc",
+      "from_date": "từ ngày",
+      "to_date": "đến ngày",
+      "apply": "áp dụng",
+      "clear": "xoá",
+      "invalid_range": "ngày bắt đầu phải trước ngày kết thúc"
     }
   },
   "result_screen": {

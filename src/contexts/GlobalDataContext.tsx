@@ -1,5 +1,5 @@
 import { authenticate, verifySession, fetchRegions } from '@/api';
-import fakeData from '@/api/fakeData/data';
+import { allDevices } from '@/constants/devices';
 import { useToast } from '@/components/Toast';
 import { Country } from '@/types';
 import { orderBy } from 'lodash';
@@ -84,7 +84,7 @@ export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
         countryAndRegion: sortedCountryAndRegion,
         popularCountries,
         popularRegions,
-        listDevice: fakeData.allDevices,
+        listDevice: allDevices,
         loading,
       }}>
       <SafeAreaView className="h-full">{children}</SafeAreaView>
@@ -123,6 +123,6 @@ type GlobalData = {
   countryAndRegion: Country[];
   popularCountries: Country[];
   popularRegions: Country[];
-  listDevice: typeof fakeData.allDevices;
+  listDevice: typeof allDevices;
   loading: boolean;
 };

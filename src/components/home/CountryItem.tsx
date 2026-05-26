@@ -1,6 +1,6 @@
 import { Country } from '@/types';
 import { useCurrency } from '@/hooks/useCurrency';
-import { Image } from 'expo-image';
+import { FlagImage } from '../FlagImage';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, View, Text, DimensionValue } from 'react-native';
@@ -20,7 +20,6 @@ const CountryItem = ({
   const name = isEnglish ? item.nameLocation : item.nameVi;
   const price = isEnglish ? item.fromPriceUsd : item.fromPrice;
   const formatted = format(Number(price));
-  const img = item.icon;
 
   return (
     <Pressable
@@ -35,7 +34,7 @@ const CountryItem = ({
         </Text>
       </View>
       <View className="absolute -bottom-2 -right-2 h-12 w-12 overflow-hidden rounded-full border-2 border-gray-100">
-        <Image source={img} className="h-full w-full" />
+        <FlagImage country={item} className="h-full w-full" />
       </View>
     </Pressable>
   );

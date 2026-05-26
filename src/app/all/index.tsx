@@ -3,10 +3,9 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FlatList, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { delay } from '@/utils';
-import { getBannerSource } from '@/utils/banner';
 import { filterCountry } from '@/utils/filterHelper';
 import { Country } from '@/types';
-import { Image } from 'expo-image';
+import { FlagImage } from '@/components/FlagImage';
 import { useTranslation } from 'react-i18next';
 import { capitalize, debounce } from 'lodash';
 import LoadingOverlay from '@/components/LoadingOverlay';
@@ -71,7 +70,6 @@ const DisplayAllScreen = () => {
       const name = isEnglish ? item.nameLocation : item.nameVi;
       const price = isEnglish ? item.fromPriceUsd : item.fromPrice;
       const formatted = format(Number(price));
-      const img = getBannerSource(item.banner);
 
       return (
         <Pressable
@@ -79,8 +77,8 @@ const DisplayAllScreen = () => {
           className="w-full flex-row overflow-hidden rounded-lg p-1 hover:text-primary hover:drop-shadow-md">
           <View className="flex-1 flex-row items-center justify-between">
             <View className="flex-row items-center gap-2">
-              <View className="h-5 w-5 overflow-hidden rounded-full border-2 border-gray-100">
-                <Image source={img} className="h-full w-full" />
+              <View className="h-5 w-5 overflow-hidden rounded-full border-2 border-gray-100 bg-white">
+                <FlagImage country={item} className="h-full w-full" />
               </View>
 
               <Text className="font-medium text-inherit">{name}</Text>
