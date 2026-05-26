@@ -119,6 +119,18 @@
     "content": "content",
     "send_request": "send request"
   },
+  "guide": {
+    "topics": {
+      "what-is-esim": {
+        "title": "What is a travel eSIM?",
+        "body": "An eSIM (embedded SIM) is built directly into the device — no physical card required.\n\nIRIS travel eSIMs let you use mobile data abroad just by scanning a QR code. No need to swap SIM cards or sign up with a local carrier.\n\nNote: your device must support eSIM. Please verify before purchasing."
+      },
+      "how-to-use": {
+        "title": "How to use your eSIM",
+        "body": "1. Make sure your device has an internet connection (Wi-Fi).\n\n2. Open Settings → Mobile → Add Plan → Scan the QR code (the code is sent to your email after payment).\n\n3. After installation succeeds, enable Data Roaming for the IRIS eSIM.\n\n4. On arrival, switch mobile data to the IRIS eSIM to start using it."
+      }
+    }
+  },
   "purchase": {
     "quantity": "quantity",
     "total_price": "total price"
