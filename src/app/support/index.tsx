@@ -2,12 +2,12 @@ import LoadingOverlay from '@/components/LoadingOverlay';
 import NavHeader from '@/components/NavHeader';
 import PrimaryButton from '@/components/PrimaryButton';
 import { useToast } from '@/components/Toast';
-import { ClipboardDocumentIcon, HomeIcon } from '@heroicons/react/24/outline';
 import { Stack, useRouter } from 'expo-router';
 import { capitalize } from 'lodash';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, Text, TextInput, View } from 'react-native';
+import { ClipboardCopy, House } from 'lucide-react';
 
 const SupportScreen = () => {
   const router = useRouter();
@@ -50,12 +50,12 @@ const SupportScreen = () => {
 
       <NavHeader>
         <View className="flex-1 flex-row items-center justify-between">
-          <Text className="text-[16px] font-medium text-white ">
+          <Text className="text-base font-medium text-white ">
             {capitalize(t('nav.support_transaction'))}
           </Text>
 
           <Pressable onPress={handleGoHome}>
-            <HomeIcon className="h-5 w-5 stroke-2 font-bold text-white" />
+            <House className="h-5 w-5 stroke-2 font-bold text-white" />
           </Pressable>
         </View>
       </NavHeader>
@@ -63,7 +63,7 @@ const SupportScreen = () => {
       <View className="relative flex-1 items-center p-4">
         <View className="mt-5 w-full items-center gap-3">
           <View className="absolute -top-5 z-10 h-10 w-10 items-center justify-center rounded-full bg-primary">
-            <ClipboardDocumentIcon className="h-5 w-5 stroke-2 text-white" />
+            <ClipboardCopy className="h-5 w-5 stroke-2 text-white" />
           </View>
 
           <View className="w-full rounded-lg bg-white p-4 text-gray-400">
@@ -99,7 +99,7 @@ const SupportScreen = () => {
               value={value}
             />
 
-            <Text className="text-right text-[10px] text-gray-400">
+            <Text className="text-right text-xxs text-gray-400">
               {value.length}/{MAX_CONTENT_LENGTH}
             </Text>
           </View>

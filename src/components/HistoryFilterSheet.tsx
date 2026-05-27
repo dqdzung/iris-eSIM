@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { capitalize } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { XMarkIcon } from '@heroicons/react/24/outline';
 import { ActionSheet } from './ActionSheet';
 import { NativeDatePicker } from './NativeDatePicker';
 import PrimaryButton from './PrimaryButton';
+import { X } from 'lucide-react';
 
 export type DateRange = { fromDate?: string; toDate?: string };
 
@@ -55,20 +55,20 @@ export const HistoryFilterSheet = ({ visible, onClose, value, onApply }: Props) 
       overlayClassName="bg-black/30 items-center"
       panelClassName="w-full gap-5 rounded-t-2xl px-5 py-4">
       <View className="w-full flex-row items-center justify-between">
-        <Text className="text-[16px] font-semibold capitalize leading-6">
+        <Text className="text-base font-semibold leading-6">
           {capitalize(t('history_screen.filter.title'))}
         </Text>
 
         <Pressable onPress={onClose}>
-          <XMarkIcon className="h-6 w-6" />
+          <X className="h-6 w-6" />
         </Pressable>
       </View>
 
       <View className="gap-3">
         <View className="flex-row gap-3">
           <View className="flex-1">
-            <Text className="text-[10px] capitalize text-gray-500">
-              {t('history_screen.filter.from_date')}
+            <Text className="text-xxs text-gray-500">
+              {capitalize(t('history_screen.filter.from_date'))}
             </Text>
             <NativeDatePicker
               value={fromDate}
@@ -79,8 +79,8 @@ export const HistoryFilterSheet = ({ visible, onClose, value, onApply }: Props) 
           </View>
 
           <View className="flex-1">
-            <Text className="text-[10px] capitalize text-gray-500">
-              {t('history_screen.filter.to_date')}
+            <Text className="text-xxs text-gray-500">
+              {capitalize(t('history_screen.filter.to_date'))}
             </Text>
             <NativeDatePicker
               value={toDate}

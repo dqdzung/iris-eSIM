@@ -3,6 +3,7 @@ import { useCurrency } from '@/hooks/useCurrency';
 import { FlagImage } from '../FlagImage';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { capitalize } from 'lodash';
 import { Pressable, View, Text, DimensionValue } from 'react-native';
 
 const CountryItem = ({
@@ -28,8 +29,8 @@ const CountryItem = ({
       className="h-24 flex-1 flex-row overflow-hidden rounded-lg bg-white px-3 py-3.5 drop-shadow-md">
       <View className="flex-1 justify-between">
         <Text className="font-semibold text-primary">{name}</Text>
-        <Text className="capitalize">
-          {`${t('from')}: `}
+        <Text>
+          {`${capitalize(t('from'))}: `}
           <Text className="text-lg font-bold">{formatted}</Text>
         </Text>
       </View>

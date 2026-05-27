@@ -16,6 +16,7 @@ import LoadingOverlay from '@/components/LoadingOverlay';
 import NavHeader from '@/components/NavHeader';
 import PrimaryButton from '@/components/PrimaryButton';
 import { useToast } from '@/components/Toast';
+import DotStrip from '@/components/DotStrip';
 
 export default function DetailScreen() {
   const { t } = useTranslation();
@@ -155,10 +156,14 @@ export default function DetailScreen() {
 
       <NavHeader>
         <View className="flex-1 flex-row items-center justify-between">
-          <Text className="text-[16px] font-semibold text-white">{capitalize(t('nav.detail'))}</Text>
+          <Text className="text-base font-semibold text-white">
+            {capitalize(t('nav.detail'))}
+          </Text>
         </View>
-
-        <HistoryButton />
+        <View className="flex-row items-center gap-3">
+          <DotStrip />
+          <HistoryButton />
+        </View>
       </NavHeader>
 
       <View className="relative flex-1">
@@ -217,7 +222,6 @@ export default function DetailScreen() {
               />
             </>
           )}
-
         </ScrollView>
 
         {selectedPackage && !isPurchaseSheetVisible && (

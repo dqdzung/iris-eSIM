@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Pressable, Text } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { capitalize } from 'lodash';
 import { AgreementActionSheet } from './AgreementActionSheet';
 
 const AgreementButton = ({ onAccept }: { onAccept?: () => void }) => {
@@ -22,8 +23,8 @@ const AgreementButton = ({ onAccept }: { onAccept?: () => void }) => {
 
   return (
     <Pressable onPress={handlePress}>
-      <Text className="font-semibold capitalize text-primary underline">
-        {t('terms_of_service')}
+      <Text className="font-semibold text-primary underline">
+        {capitalize(t('terms_of_service'))}
       </Text>
       <AgreementActionSheet
         visible={isSheetVisible}

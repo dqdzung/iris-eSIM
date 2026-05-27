@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { View, Pressable, Text } from 'react-native';
 import { CompatibilityActionSheet } from './CompatibilityActionSheet';
-import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import { LinearGradient } from 'expo-linear-gradient';
 import { capitalize } from 'lodash';
 import { useTranslation } from 'node_modules/react-i18next';
+import { Info } from 'lucide-react';
 
 const CompatibilityButton = () => {
   const { t } = useTranslation();
@@ -19,7 +19,7 @@ const CompatibilityButton = () => {
         <Pressable
           className="flex-row items-center gap-1 px-2.5 py-1.5"
           onPress={() => setSheetVisible(true)}>
-          <InformationCircleIcon className="h-4 w-4 stroke-2 text-primary" />
+          <Info className="h-4 w-4 stroke-2 text-primary" />
           <Text className="text-xs font-medium text-primary">
             {capitalize(t('check_compatibility'))}
           </Text>

@@ -1,10 +1,10 @@
 import { View, Text, Switch } from 'react-native';
-import { CircleStackIcon } from '@heroicons/react/24/outline';
 import { capitalize } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { Image } from 'expo-image';
 import { Colors } from '@/constants/theme';
 import DataButton from './DataButton';
+import { Database } from 'lucide-react';
 
 interface DataSelectorProps {
   selectedData: string;
@@ -31,8 +31,8 @@ const DataSelector = ({
     <View className="gap-3">
       <View className="flex-row items-center justify-between">
         <View className="flex-row items-center gap-2">
-          <CircleStackIcon className="h-5 w-5 text-primary" />
-          <Text className="font-semibold capitalize text-primary">{t('data')}</Text>
+          {/* <Database className="h-5 w-5 text-primary" /> */}
+          <Text className="font-semibold text-primary">{capitalize(t('data'))}</Text>
         </View>
 
         <View className="flex-row items-center gap-2">
@@ -40,7 +40,7 @@ const DataSelector = ({
           <Image className="h-5 w-5" source={require('@assets/tiktok-logo.png')} />
 
           <Switch
-            //@ts-expect-error
+            // @ts-expect-error
             activeThumbColor="white"
             trackColor={{ false: 'gray', true: Colors.primary }}
             value={isTiktokSupported}

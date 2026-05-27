@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useTranslation } from 'react-i18next';
+import { capitalize } from 'lodash';
 import localization from '@/i18n';
 import i18next from 'i18next';
 import { Modal, Pressable, Text, TouchableOpacity, View } from 'react-native';
-import { CheckIcon } from '@heroicons/react/16/solid';
 import { Image } from 'expo-image';
+import { Check, X } from 'lucide-react';
 
 export const LanguageActionSheet = ({
   visible,
@@ -57,12 +57,12 @@ export const LanguageActionSheet = ({
                     />
                   </View>
 
-                  <Text className="text-xs font-medium capitalize text-inherit">
-                    {t(lang.name)}
+                  <Text className="text-xs font-medium text-inherit">
+                    {capitalize(t(lang.name))}
                   </Text>
                 </View>
 
-                {currentLocale === lang.code && <CheckIcon className="h-6 w-6 text-primary" />}
+                {currentLocale === lang.code && <Check className="h-6 w-6 text-primary" />}
               </Pressable>
             ))}
           </View>
@@ -70,9 +70,9 @@ export const LanguageActionSheet = ({
           <View className="relative w-full flex-row items-center justify-between border-t border-gray-100 px-4 py-2">
             <View className="h-1 w-1" />
 
-            <Text className="text-center font-semibold capitalize">{t('change_language')}</Text>
+            <Text className="text-center font-semibold">{capitalize(t('change_language'))}</Text>
             <Pressable onPress={onClose}>
-              <XMarkIcon className="h-6 w-6" />
+              <X className="h-6 w-6" />
             </Pressable>
           </View>
         </View>

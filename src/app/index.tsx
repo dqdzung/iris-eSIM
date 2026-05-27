@@ -3,20 +3,18 @@ import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Stack, useRouter } from 'expo-router';
 import { filterCountry } from '@/utils/filterHelper';
-import {
-  BookOpenIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  MagnifyingGlassIcon,
-} from '@heroicons/react/24/outline';
 import ListCountryRegion from '@/components/ListCountryRegion';
+import CallButton from '@/components/CallButton';
 import CompatibilityButton from '@/components/CompatibilityButton';
+import DotStrip from '@/components/DotStrip';
 import HistoryButton from '@/components/HistoryButton';
 import { Image } from 'expo-image';
 import headerImg from '@assets/header.jpg';
 import LoadingOverlay from '@/components/LoadingOverlay';
 import NavHeader from '@/components/NavHeader';
 import { useGlobalDataContext } from '@/hooks/useGlobalDataContext';
+import { Bookmark, BookMarked, BookOpen, ChevronLeft, ChevronRight, Search } from 'lucide-react';
+import { capitalize } from 'lodash';
 
 export default function HomeScreen() {
   const { t } = useTranslation();
@@ -50,10 +48,15 @@ export default function HomeScreen() {
       <Stack.Screen options={{ headerShown: false }} />
       <NavHeader>
         <View className="flex-1 flex-row items-center justify-between">
-          <Text className="text-[16px] font-semibold text-white">{t('home_screen.app_title')}</Text>
+          <Text className="text-base font-semibold text-white">{t('home_screen.app_title')}</Text>
         </View>
 
-        <HistoryButton />
+        <View className="flex-row items-center gap-3">
+          <DotStrip />
+          <CallButton />
+          <View className="h-5 w-px bg-white" />
+          <HistoryButton showLabel={false} />
+        </View>
       </NavHeader>
 
       <View className="relative flex-1 gap-2 p-4">
@@ -66,7 +69,7 @@ export default function HomeScreen() {
             {/* <SearchCountryInput /> */}
             <View className="flex-1 flex-row items-center justify-between rounded-full bg-white p-2 drop-shadow">
               <Pressable onPress={handleClickAll} className="flex-1 flex-row items-center gap-2">
-                <MagnifyingGlassIcon className="h-5 w-5 stroke-2 text-primary" />
+                <Search className="h-5 w-5 stroke-2 text-primary" />
                 <Text className="text-xs text-gray-400/80">{t('country_region_placeholder')}</Text>
               </Pressable>
             </View>
@@ -79,8 +82,8 @@ export default function HomeScreen() {
             <View key={type} className="flex-1">
               <Text
                 onPress={() => handleChangeFilter(type)}
-                className={`px-4 py-3 text-center capitalize text-gray-400 ${filterType === type ? 'font-semibold text-primary' : ''}`}>
-                {t(type)}
+                className={`px-4 py-3 text-center text-gray-400 ${filterType === type ? 'font-semibold text-primary' : ''}`}>
+                {capitalize(t(type))}
               </Text>
               <View className={`h-1 rounded-t-lg ${filterType === type ? 'bg-primary' : ''}`} />
             </View>
@@ -88,10 +91,10 @@ export default function HomeScreen() {
         </View>
 
         <View className="mt-3 flex-row justify-between">
-          <Text className="font-semibold capitalize text-primary">{t('home_screen.popular')}</Text>
+          <Text className="font-semibold text-primary">{capitalize(t('home_screen.popular'))}</Text>
           <Pressable className="flex-row items-center gap-1" onPress={handleClickAll}>
-            <Text className="text-xs capitalize text-primary">{t('home_screen.see_all')}</Text>
-            <ChevronLeftIcon className="h-3 w-3 rotate-180 stroke-2 text-primary" />
+            <Text className="text-xs text-primary">{capitalize(t('home_screen.see_all'))}</Text>
+            <ChevronLeft className="h-3 w-3 rotate-180 stroke-2 text-primary" />
           </Pressable>
         </View>
 
@@ -100,19 +103,19 @@ export default function HomeScreen() {
 
           <View className="flex-row items-center justify-between gap-2 rounded-lg bg-white p-3 drop-shadow-sm">
             <View className="flex-row items-center gap-2">
-              <BookOpenIcon className="h-6 w-6 stroke-2 text-primary" />
-              <Text className="text-[10px] font-semibold capitalize text-primary">
-                {t('home_screen.detailed_guide')}
+              <BookMarked className="h-6 w-6 stroke-2 text-primary" />
+              <Text className="text-xxs font-semibold text-primary">
+                {capitalize(t('home_screen.detailed_guide'))}
               </Text>
             </View>
 
             <Pressable
               onPress={handleClickGuide}
               className="flex-row items-center gap-1 rounded-full border border-primary px-3 py-0.5">
-              <Text className="text-[10px] font-semibold capitalize text-primary">
-                {t('home_screen.view_guide')}
+              <Text className="text-xxs font-semibold text-primary">
+                {capitalize(t('home_screen.view_guide'))}
               </Text>
-              <ChevronRightIcon className="h-5 w-5 stroke-2 text-primary" />
+              <ChevronRight className="h-5 w-5 stroke-2 text-primary" />
             </Pressable>
           </View>
         </View>

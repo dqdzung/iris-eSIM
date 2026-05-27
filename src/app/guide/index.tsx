@@ -2,11 +2,7 @@ import { Stack, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { capitalize } from 'lodash';
-import {
-  ChevronRightIcon,
-  DocumentIcon,
-  InformationCircleIcon,
-} from '@heroicons/react/24/outline';
+import { ChevronRight, FileText, Info } from 'lucide-react';
 
 export default function GuideScreen() {
   const { t } = useTranslation();
@@ -17,7 +13,7 @@ export default function GuideScreen() {
       <Stack.Screen options={{ title: capitalize(t('guide')) }} />
 
       <ScrollView className="flex-1" contentContainerClassName="gap-6 p-4">
-        <Section title={t('guide')} Icon={InformationCircleIcon}>
+        <Section title={t('guide')} Icon={Info}>
           <Button
             title="eSIM du lịch là gì?"
             onPress={() => router.push('/guide/what-is-esim')}
@@ -33,7 +29,7 @@ export default function GuideScreen() {
           />
         </Section>
 
-        <Section title={t('terms_of_service')} Icon={DocumentIcon}>
+        <Section title={t('terms_of_service')} Icon={FileText}>
           <Button
             title="Điều khoản dịch vụ"
             onPress={() => router.push('/guide/terms-of-service')}
@@ -76,7 +72,7 @@ const Section = ({
       <View className="h-8 w-8 items-center justify-center rounded-md bg-primary">
         <Icon className="h-5 w-5 stroke-2 text-white" />
       </View>
-      <Text className="text-lg font-semibold capitalize">{title}</Text>
+      <Text className="text-lg font-semibold">{capitalize(title)}</Text>
     </View>
     {children}
   </View>
@@ -87,6 +83,6 @@ const Button = ({ title, onPress }: { title: string; onPress: () => void }) => (
     onPress={onPress}
     className="flex-row items-center justify-between rounded-lg bg-white p-3 drop-shadow-sm">
     <Text className="text-xs">{title}</Text>
-    <ChevronRightIcon className="h-4 w-4 stroke-2 text-primary" />
+    <ChevronRight className="h-4 w-4 stroke-2 text-primary" />
   </Pressable>
 );

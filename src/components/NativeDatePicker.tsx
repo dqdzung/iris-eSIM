@@ -1,5 +1,5 @@
 import { Text, View } from 'react-native';
-import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import { ChevronDown } from 'lucide-react';
 
 type Props = {
   value: string;
@@ -23,7 +23,7 @@ export const NativeDatePicker = ({ value, onChange, min, max, locale }: Props) =
   <View className="relative w-full">
     <View className="flex-row items-center justify-between border-b border-gray-200 bg-white px-1 py-1.5">
       <Text className="text-base">{formatDate(value, locale)}</Text>
-      <ChevronDownIcon className="h-4 w-4 stroke-2 text-primary" />
+      <ChevronDown className="h-4 w-4 stroke-2 text-primary" />
     </View>
     <input
       type="date"

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { View, Text, Pressable, Animated, LayoutChangeEvent } from 'react-native';
-import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import { ChevronDown } from 'lucide-react';
 
 interface CollapsibleTextProps {
   title: string;
@@ -72,7 +72,7 @@ export const CollapsibleText: React.FC<CollapsibleTextProps> = ({
       <Pressable onPress={toggleExpand} className={`flex-row items-center justify-between ${isExpanded ? 'mb-3' : ''}`}>
         <Text className="flex-1 text-base font-semibold">{title}</Text>
         <Animated.View style={{ transform: [{ rotate: rotateInterpolation }] }}>
-          <ChevronDownIcon className="h-5 w-5 text-gray-500" />
+          <ChevronDown className="h-5 w-5 text-gray-500" />
         </Animated.View>
       </Pressable>
       {contentHeight === null && (

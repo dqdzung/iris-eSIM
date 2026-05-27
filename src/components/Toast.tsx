@@ -1,9 +1,4 @@
-import {
-  CheckCircleIcon,
-  ExclamationTriangleIcon,
-  InformationCircleIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/solid';
+import { CircleCheck, Info, TriangleAlert, X } from 'lucide-react';
 import {
   createContext,
   ReactNode,
@@ -33,10 +28,10 @@ type ToastContextValue = {
 
 const ToastContext = createContext<ToastContextValue | null>(null);
 
-const VARIANT_STYLES: Record<ToastVariant, { bg: string; Icon: typeof CheckCircleIcon }> = {
-  success: { bg: 'bg-emerald-600', Icon: CheckCircleIcon },
-  error: { bg: 'bg-red-600', Icon: ExclamationTriangleIcon },
-  info: { bg: 'bg-slate-700', Icon: InformationCircleIcon },
+const VARIANT_STYLES: Record<ToastVariant, { bg: string; Icon: typeof CircleCheck }> = {
+  success: { bg: 'bg-emerald-600', Icon: CircleCheck },
+  error: { bg: 'bg-red-600', Icon: TriangleAlert },
+  info: { bg: 'bg-slate-700', Icon: Info },
 };
 
 const AUTO_DISMISS_MS = 3500;
@@ -107,7 +102,7 @@ const ToastRow = ({ item, onDismiss }: { item: ToastItem; onDismiss: () => void 
         <Icon className="h-5 w-5 text-white" />
         <Text className="flex-1 text-sm font-medium text-white">{item.message}</Text>
         <Pressable onPress={onDismiss} hitSlop={8}>
-          <XMarkIcon className="h-4 w-4 stroke-2 text-white" />
+          <X className="h-4 w-4 stroke-2 text-white" />
         </Pressable>
       </View>
     </Animated.View>

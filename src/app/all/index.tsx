@@ -1,7 +1,6 @@
 import { Stack, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FlatList, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
-import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { delay } from '@/utils';
 import { filterCountry } from '@/utils/filterHelper';
 import { Country } from '@/types';
@@ -12,6 +11,7 @@ import LoadingOverlay from '@/components/LoadingOverlay';
 import NavHeader from '@/components/NavHeader';
 import { useCurrency } from '@/hooks/useCurrency';
 import { useGlobalDataContext } from '@/hooks/useGlobalDataContext';
+import { Search, X } from 'lucide-react';
 
 const DisplayAllScreen = () => {
   const router = useRouter();
@@ -83,8 +83,8 @@ const DisplayAllScreen = () => {
 
               <Text className="font-medium text-inherit">{name}</Text>
             </View>
-            <Text className="text-[10px] capitalize">
-              {`${t('from')}: `}
+            <Text className="text-xxs">
+              {`${capitalize(t('from'))}: `}
               <Text className="text-sm font-bold">{formatted}</Text>
             </Text>
           </View>
@@ -106,7 +106,7 @@ const DisplayAllScreen = () => {
       <NavHeader>
         <View className="flex-1 flex-row items-center justify-between rounded-full bg-white px-4 py-0.5 shadow-md shadow-primary/50">
           <View className="flex-1 flex-row items-center gap-2">
-            <MagnifyingGlassIcon className="h-5 w-5 stroke-2 font-bold text-primary" />
+            <Search className="h-5 w-5 stroke-2 font-bold text-primary" />
             <TextInput
               ref={inputRef}
               keyboardType="web-search"
@@ -117,7 +117,7 @@ const DisplayAllScreen = () => {
           </View>
           {inputRef.current?.value ? (
             <Pressable onPress={handleClearInput} className="flex-row items-center gap-2">
-              <XMarkIcon className="h-5 w-5 text-red-500" />
+              <X className="h-5 w-5 text-red-500" />
             </Pressable>
           ) : null}
         </View>
@@ -126,14 +126,14 @@ const DisplayAllScreen = () => {
       <View className="relative flex-1">
         {loading ? (
           <View className="flex-1 items-center justify-center">
-            <Text className="capitalize">{t('loading')}...</Text>
+            <Text>{capitalize(t('loading'))}...</Text>
           </View>
         ) : (
           <ScrollView contentContainerClassName="p-4 gap-5">
             {inputRef.current?.value ? (
               <View className="gap-2">
-                <Text className="text-[16px] font-semibold capitalize text-primary">
-                  {t('all_screen.search_result')}
+                <Text className="text-base font-semibold text-primary">
+                  {capitalize(t('all_screen.search_result'))}
                 </Text>
 
                 {listData.length === 0 ? (
@@ -159,8 +159,8 @@ const DisplayAllScreen = () => {
             ) : (
               <>
                 <View className="gap-2">
-                  <Text className="text-[16px] font-semibold capitalize text-primary">
-                    {t('region')}
+                  <Text className="text-base font-semibold text-primary">
+                    {capitalize(t('region'))}
                   </Text>
                   <FlatList
                     className="w-full"
@@ -174,8 +174,8 @@ const DisplayAllScreen = () => {
                 </View>
 
                 <View className="gap-2">
-                  <Text className="text-[16px] font-semibold capitalize text-primary">
-                    {t('country')}
+                  <Text className="text-base font-semibold text-primary">
+                    {capitalize(t('country'))}
                   </Text>
                   <FlatList
                     className="w-full"

@@ -1,6 +1,6 @@
 import { ReactNode, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
-import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import { ChevronDown } from 'lucide-react';
 
 type Props = {
   title: string;
@@ -23,7 +23,7 @@ export const CollapsibleCard = ({
         onPress={() => setOpen((o) => !o)}
         className="flex-row items-center justify-between gap-3 p-3">
         <Text className="flex-1 font-semibold">{title}</Text>
-        <ChevronDownIcon
+        <ChevronDown
           className={`h-5 w-5 stroke-2 text-primary transition-transform duration-200 ${
             open ? 'rotate-180' : ''
           }`}

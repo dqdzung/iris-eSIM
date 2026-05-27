@@ -1,5 +1,6 @@
 import { Stack, useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Funnel } from 'lucide-react';
 import {
   ActivityIndicator,
   NativeScrollEvent,
@@ -11,9 +12,10 @@ import {
 } from 'react-native';
 import { capitalize } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { FunnelIcon } from '@heroicons/react/24/outline';
 import { fetchTransactions } from '@/api';
 import { Country, Transaction } from '@/types';
+import CallButton from '@/components/CallButton';
+import DotStrip from '@/components/DotStrip';
 import { useToast } from '@/components/Toast';
 import { useGlobalDataContext } from '@/hooks/useGlobalDataContext';
 import { formatDateTime, formatVnd } from '@/utils';
@@ -147,16 +149,21 @@ export default function HistoryScreen() {
 
       <NavHeader>
         <View className="flex-1 flex-row items-center justify-between">
-          <Text className="text-[16px] font-semibold text-white">
+          <Text className="text-base font-semibold text-white">
             {capitalize(t('history_screen.title'))}
           </Text>
 
-          <Pressable onPress={() => setFilterSheetVisible(true)} className="relative">
-            <FunnelIcon className="h-5 w-5 stroke-2 text-white" />
-            {hasFilter && (
-              <View className="absolute right-0 top-0 h-2 w-2 rounded-full bg-red-500" />
-            )}
-          </Pressable>
+          <View className="flex-row items-center gap-3">
+            <DotStrip />
+            <CallButton />
+            <View className="h-5 w-px bg-white" />
+            <Pressable onPress={() => setFilterSheetVisible(true)} className="relative">
+              <Funnel className="h-5 w-5 stroke-2 text-white" />
+              {hasFilter && (
+                <View className="absolute right-0 top-0 h-2 w-2 rounded-full bg-red-500" />
+              )}
+            </Pressable>
+          </View>
         </View>
       </NavHeader>
 
