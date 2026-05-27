@@ -119,3 +119,6 @@ const refreshAuth = async (): Promise<boolean> => {
 };
 
 apiService.setAuthRefreshHandler(refreshAuth);
+
+export const onAuthLost = (handler: (() => void) | null) =>
+  apiService.setAuthLostHandler(handler);
