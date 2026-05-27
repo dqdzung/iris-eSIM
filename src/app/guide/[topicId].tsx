@@ -1,7 +1,7 @@
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { capitalize } from 'lodash';
-import { ScrollView, Text } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 
 // Map of topic slug → i18n key bases. Each topic must have two i18n keys:
 // `guide.topics.<slug>.title` and `guide.topics.<slug>.body`.
@@ -11,8 +11,6 @@ import { ScrollView, Text } from 'react-native';
 const TOPICS = new Set<string>([
   'what-is-esim',
   'how-to-buy',
-  'how-to-add-esim',
-  'how-to-use',
   'how-to-check-data',
   'terms-of-service',
   'privacy-policy',
@@ -43,12 +41,14 @@ export default function GuideTopicScreen() {
   return (
     <>
       <Stack.Screen options={{ title }} />
-      <ScrollView className="flex-1" contentContainerClassName="gap-3 p-4">
-        {paragraphs.map((p, i) => (
-          <Text key={i} className="text-sm">
-            {p}
-          </Text>
-        ))}
+      <ScrollView className="flex-1" contentContainerClassName="p-4">
+        <View className="gap-3 rounded-xl bg-white p-4 drop-shadow-sm">
+          {paragraphs.map((p, i) => (
+            <Text key={i} className="text-sm">
+              {p}
+            </Text>
+          ))}
+        </View>
       </ScrollView>
     </>
   );

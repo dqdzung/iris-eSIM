@@ -27,6 +27,7 @@
   "support": "support",
   "duration": "duration",
   "time": "time",
+  "reload": "reload",
   "terms_of_service": "terms of service",
   "agreement_accept": "I've read and agree",
   "country_region_placeholder": "Country - Region",
@@ -119,15 +120,42 @@
     "content": "content",
     "send_request": "send request"
   },
-  "guide": {
+  "guide_screen": {
     "topics": {
       "what-is-esim": {
         "title": "What is a travel eSIM?",
         "body": "An eSIM (embedded SIM) is built directly into the device — no physical card required.\n\nIRIS travel eSIMs let you use mobile data abroad just by scanning a QR code. No need to swap SIM cards or sign up with a local carrier.\n\nNote: your device must support eSIM. Please verify before purchasing."
       },
+      "how-to-buy": {
+        "title": "How to buy a travel eSIM",
+        "body": "1. On the home screen, pick the destination (country or region) you're travelling to.\n\n2. Choose a plan that fits your needs (data volume / duration).\n\n3. Tap Buy Now, fill in your details, and confirm that your device supports eSIM.\n\n4. Select a payment method and complete the purchase.\n\n5. Once payment succeeds, your eSIM QR code is sent to your email and shown immediately in the app."
+      },
       "how-to-use": {
-        "title": "How to use your eSIM",
-        "body": "1. Make sure your device has an internet connection (Wi-Fi).\n\n2. Open Settings → Mobile → Add Plan → Scan the QR code (the code is sent to your email after payment).\n\n3. After installation succeeds, enable Data Roaming for the IRIS eSIM.\n\n4. On arrival, switch mobile data to the IRIS eSIM to start using it."
+        "title": "How to use your eSIM"
+      },
+      "how-to-check-data": {
+        "title": "How to check data usage",
+        "body": "iOS: Open Settings → Mobile → Select your IRIS eSIM → Look at Current Period under Mobile Data to see how much data you've used.\n\nAndroid: Open Settings → Connections → Data usage → Select your IRIS eSIM to see consumed data.\n\nNote: device-reported usage may differ slightly from carrier records. When your balance runs low, top up with another plan to avoid interruptions."
+      },
+      "terms-of-service": {
+        "title": "Terms of service",
+        "body": "By using IRIS eSIM services, you agree to the following:\n\n1. The service may only be used for personal, lawful purposes and in accordance with local regulations of the destination country.\n\n2. eSIMs may not be transferred or resold to third parties.\n\n3. IRIS may suspend the service if it detects abuse, fraud, or unlawful activity.\n\n4. These terms may be updated from time to time; the latest version is published in the app."
+      },
+      "privacy-policy": {
+        "title": "Privacy policy",
+        "body": "IRIS is committed to protecting your personal information:\n\n1. We only collect the data needed to provide the service (name, email, phone, payment details).\n\n2. Your information is not shared with third parties other than direct service partners (payment gateways, carriers).\n\n3. Data is stored and transmitted over secure, encrypted channels.\n\n4. You may request to view, update, or delete your personal data at any time."
+      },
+      "payment-policy": {
+        "title": "Payment policy",
+        "body": "1. IRIS accepts payment via domestic ATM cards, Visa/MasterCard, e-wallets, and bank QR codes.\n\n2. All transactions are processed through PCI-DSS compliant payment gateways.\n\n3. After a successful payment, your eSIM QR code is emailed to your registered address within minutes.\n\n4. If you don't receive the QR code within 30 minutes, please contact support with your transaction ID."
+      },
+      "delivery-policy": {
+        "title": "Delivery policy",
+        "body": "eSIMs are digital products — no physical delivery:\n\n1. After payment succeeds, the eSIM QR code is delivered instantly via email and shown in the Transaction History section of the app.\n\n2. Average delivery time is under 5 minutes. In case of system issues, delivery may take up to 24 hours.\n\n3. Please check your Spam/Promotions folder if you don't see the email in your inbox."
+      },
+      "refund-policy": {
+        "title": "Refund and return policy",
+        "body": "1. eSIMs are fully refundable if not yet activated and the refund request is submitted within 7 days of purchase.\n\n2. Activated eSIMs or eSIMs with consumed data are non-refundable.\n\n3. If a provider-side fault makes the eSIM unusable, IRIS will issue a refund or a replacement QR code.\n\n4. Submit refund requests via the Support section of the app, including your transaction ID and a description of the issue."
       }
     }
   },
@@ -167,6 +195,10 @@
     "email_mismatch": "email doesn't not match",
     "invalid_phone": "phone number is invalid",
     "device_compatibility_required": "please confirm device compatibility"
+  },
+  "error_screen": {
+    "title": "Something went wrong",
+    "body": "Please reload the page to continue."
   },
   "toast": {
     "load_country_failed": "Couldn't load package details. Please try again.",

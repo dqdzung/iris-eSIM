@@ -27,6 +27,7 @@
   "support": "hỗ trợ",
   "duration": "thời gian",
   "time": "thời gian",
+  "reload": "tải lại",
   "terms_of_service": "điều khoản dịch vụ",
   "agreement_accept": "Đã đọc và đồng ý",
   "country_region_placeholder": "Quốc gia - Khu vực",
@@ -125,9 +126,36 @@
         "title": "eSIM du lịch là gì?",
         "body": "eSIM (embedded SIM) là loại SIM được tích hợp sẵn vào thiết bị, không cần thẻ vật lý.\n\neSIM du lịch của IRIS cho phép Quý khách sử dụng dữ liệu di động ở nước ngoài chỉ bằng cách quét mã QR — không cần đổi SIM hay liên hệ nhà mạng địa phương.\n\nLưu ý: thiết bị của Quý khách cần hỗ trợ eSIM. Vui lòng kiểm tra trước khi mua."
       },
+      "how-to-buy": {
+        "title": "Cách mua eSIM du lịch",
+        "body": "1. Tại màn hình chính, chọn điểm đến (quốc gia hoặc khu vực) Quý khách sắp đi.\n\n2. Chọn gói cước phù hợp với nhu cầu sử dụng (dung lượng / số ngày).\n\n3. Nhấn Mua ngay, điền thông tin người mua và xác nhận thiết bị hỗ trợ eSIM.\n\n4. Chọn hình thức thanh toán và hoàn tất giao dịch.\n\n5. Sau khi thanh toán thành công, mã QR eSIM sẽ được gửi qua email và hiển thị ngay trong ứng dụng."
+      },
       "how-to-use": {
-        "title": "Cách sử dụng eSIM",
-        "body": "1. Đảm bảo thiết bị có kết nối Internet (Wi-Fi).\n\n2. Mở Cài đặt → Di động → Thêm gói cước → Quét mã QR (mã được gửi qua email sau khi thanh toán).\n\n3. Sau khi cài đặt thành công, bật Data Roaming cho eSIM IRIS.\n\n4. Khi đến nơi, chuyển dữ liệu di động sang eSIM IRIS để bắt đầu sử dụng."
+        "title": "Cách sử dụng eSIM"
+      },
+      "how-to-check-data": {
+        "title": "Cách kiểm tra dung lượng đã sử dụng",
+        "body": "iOS: Mở Cài đặt → Di động → Chọn eSIM IRIS → Xem mục Dữ liệu di động hiện tại để biết lưu lượng đã dùng trong chu kỳ.\n\nAndroid: Mở Cài đặt → Kết nối → Sử dụng dữ liệu → Chọn eSIM IRIS để xem dung lượng đã tiêu thụ.\n\nLưu ý: Số liệu trên thiết bị có thể chênh lệch nhẹ so với hệ thống của nhà mạng. Khi gần hết dung lượng, Quý khách nên mua thêm gói để tránh gián đoạn kết nối."
+      },
+      "terms-of-service": {
+        "title": "Điều khoản dịch vụ",
+        "body": "Khi sử dụng dịch vụ eSIM của IRIS, Quý khách đồng ý tuân thủ các điều khoản sau:\n\n1. Dịch vụ chỉ được sử dụng cho mục đích cá nhân, hợp pháp và phù hợp với quy định của quốc gia sở tại.\n\n2. eSIM không được chuyển nhượng hoặc bán lại cho bên thứ ba.\n\n3. IRIS có quyền tạm ngừng dịch vụ nếu phát hiện hành vi lạm dụng, gian lận hoặc vi phạm pháp luật.\n\n4. Các điều khoản có thể được cập nhật theo thời gian; phiên bản mới nhất sẽ được công bố trên ứng dụng."
+      },
+      "privacy-policy": {
+        "title": "Chính sách bảo mật",
+        "body": "IRIS cam kết bảo vệ thông tin cá nhân của Quý khách:\n\n1. Chúng tôi chỉ thu thập các thông tin cần thiết để cung cấp dịch vụ (họ tên, email, số điện thoại, thông tin thanh toán).\n\n2. Thông tin của Quý khách không được chia sẻ với bên thứ ba ngoài các đối tác cung cấp dịch vụ trực tiếp (cổng thanh toán, nhà mạng).\n\n3. Dữ liệu được lưu trữ và truyền tải qua kênh mã hoá an toàn.\n\n4. Quý khách có quyền yêu cầu xem, chỉnh sửa hoặc xoá thông tin cá nhân bất kỳ lúc nào."
+      },
+      "payment-policy": {
+        "title": "Chính sách thanh toán",
+        "body": "1. IRIS chấp nhận thanh toán qua thẻ ATM nội địa, thẻ Visa/MasterCard, ví điện tử và mã QR ngân hàng.\n\n2. Mọi giao dịch được xử lý qua cổng thanh toán đạt chuẩn bảo mật PCI-DSS.\n\n3. Sau khi thanh toán thành công, mã QR eSIM sẽ được gửi đến email đã đăng ký trong vòng vài phút.\n\n4. Nếu không nhận được mã QR sau 30 phút, vui lòng liên hệ bộ phận hỗ trợ kèm mã giao dịch."
+      },
+      "delivery-policy": {
+        "title": "Chính sách giao hàng",
+        "body": "eSIM là sản phẩm số, không giao hàng vật lý:\n\n1. Sau khi thanh toán thành công, mã QR eSIM được giao tức thì qua email và hiển thị trong mục Lịch sử giao dịch của ứng dụng.\n\n2. Thời gian giao trung bình dưới 5 phút. Trường hợp có sự cố hệ thống, thời gian giao có thể kéo dài tối đa 24 giờ.\n\n3. Quý khách vui lòng kiểm tra thư mục Spam/Quảng cáo nếu không thấy email trong hộp thư đến."
+      },
+      "refund-policy": {
+        "title": "Chính sách trả hàng và hoàn tiền",
+        "body": "1. eSIM được hoàn tiền 100% nếu chưa được kích hoạt và yêu cầu hoàn được gửi trong vòng 7 ngày kể từ ngày mua.\n\n2. eSIM đã kích hoạt hoặc đã sử dụng dữ liệu sẽ không được hoàn tiền.\n\n3. Trường hợp lỗi từ phía nhà cung cấp khiến eSIM không sử dụng được, IRIS sẽ hoàn tiền hoặc cấp lại mã QR mới.\n\n4. Yêu cầu hoàn tiền vui lòng gửi qua mục Hỗ trợ trong ứng dụng kèm mã giao dịch và mô tả sự cố."
       }
     }
   },
@@ -167,6 +195,10 @@
     "email_mismatch": "địa chỉ email không khớp",
     "invalid_phone": "số điện thoại không hợp lệ",
     "device_compatibility_required": "vui lòng xác nhận thiết bị hỗ trợ eSIM"
+  },
+  "error_screen": {
+    "title": "Đã có lỗi xảy ra",
+    "body": "Vui lòng tải lại trang để tiếp tục."
   },
   "toast": {
     "load_country_failed": "Không thể tải thông tin gói. Vui lòng thử lại.",

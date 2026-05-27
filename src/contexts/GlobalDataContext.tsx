@@ -1,5 +1,6 @@
-import { authenticate, verifySession, fetchRegions } from '@/api';
+import { authenticate, verifySession, fetchRegions, onAuthLost } from '@/api';
 import { allDevices } from '@/constants/devices';
+import { ErrorScreen } from '@/components/ErrorScreen';
 import { useToast } from '@/components/Toast';
 import { Country } from '@/types';
 import { orderBy } from 'lodash';
@@ -24,6 +25,7 @@ export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
   const [regions, setRegions] = useState<Country[]>([]);
   const [uniqueCountries, setUniqueCountries] = useState<Country[]>([]);
   const [loading, setLoading] = useState(true);
+  const [hasFatalError, setHasFatalError] = useState(false);
 
   const sortBy: keyof Country = i18n.language === 'en-US' ? 'nameLocation' : 'nameVi';
 
@@ -59,7 +61,7 @@ export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
         toast.error(t('toast.load_country_failed'));
         return;
       case 'auth_failed':
-        // TODO: navigate error screen
+        setHasFatalError(true);
         return;
     }
   };
@@ -76,6 +78,11 @@ export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    onAuthLost(() => setHasFatalError(true));
+    return () => onAuthLost(null);
+  }, []);
+
   return (
     <GlobalDataContext
       value={{
@@ -87,7 +94,7 @@ export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
         listDevice: allDevices,
         loading,
       }}>
-      <SafeAreaView className="h-full">{children}</SafeAreaView>
+      <SafeAreaView className="h-full">{hasFatalError ? <ErrorScreen /> : children}</SafeAreaView>
     </GlobalDataContext>
   );
 };

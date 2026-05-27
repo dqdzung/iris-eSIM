@@ -13,6 +13,8 @@ class ApiService {
   private controllers: Map<string, AbortController> = new Map();
   private authRefreshHandler: (() => Promise<boolean>) | null = null;
   private authRefreshInFlight: Promise<boolean> | null = null;
+  private authLostHandler: (() => void) | null = null;
+  private authLost = false;
 
   /**
    * Registers a handler that re-establishes the session after a 401. When a
@@ -21,6 +23,21 @@ class ApiService {
    */
   public setAuthRefreshHandler(handler: (() => Promise<boolean>) | null) {
     this.authRefreshHandler = handler;
+  }
+
+  /**
+   * Registers a handler that fires once when the session is unrecoverable:
+   * either the refresh handler fails, or the post-refresh retry still 401s.
+   * Fires at most once per ApiService lifetime.
+   */
+  public setAuthLostHandler(handler: (() => void) | null) {
+    this.authLostHandler = handler;
+  }
+
+  private signalAuthLost() {
+    if (this.authLost) return;
+    this.authLost = true;
+    this.authLostHandler?.();
   }
 
   /**
@@ -48,9 +65,17 @@ class ApiService {
         });
       }
       const refreshed = await this.authRefreshInFlight;
-      if (!refreshed) throw error;
+      if (!refreshed) {
+        this.signalAuthLost();
+        throw error;
+      }
 
-      return this.doFetch<T>(url, options);
+      try {
+        return await this.doFetch<T>(url, options);
+      } catch (retryError: any) {
+        if (retryError?.cause?.status === 401) this.signalAuthLost();
+        throw retryError;
+      }
     }
   }
 

@@ -26,10 +26,6 @@ export default function GuideScreen() {
             title="Cách mua eSIM du lịch"
             onPress={() => router.push('/guide/how-to-buy')}
           />
-          <Button
-            title="Hướng dẫn thêm eSIM vào máy"
-            onPress={() => router.push('/guide/how-to-add-esim')}
-          />
           <Button title="Cách sử dụng eSIM" onPress={() => router.push('/guide/how-to-use')} />
           <Button
             title="Cách kiểm tra dung lượng đã sử dụng"
