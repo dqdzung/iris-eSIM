@@ -1,7 +1,8 @@
 import { Pressable, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { EyeIcon } from '@heroicons/react/24/outline';
+import { capitalize } from 'lodash';
 import { EsimInfo } from '@/types';
+import { Eye } from 'lucide-react';
 
 type Props = {
   esim: EsimInfo;
@@ -23,9 +24,9 @@ export const EsimItemCard = ({ esim, productName, simIdx, dateLabel, onOpenQr }:
           disabled={!esim.qrCode}
           onPress={() => onOpenQr(esim)}
           className="flex-row items-center gap-1">
-          <EyeIcon className="h-4 w-4 stroke-2 text-primary" />
-          <Text className="text-xs capitalize text-primary">
-            {t('esim_info_sheet.view_qr')}
+          <Eye className="h-4 w-4 stroke-2 text-primary" />
+          <Text className="text-xs text-primary">
+            {capitalize(t('esim_info_sheet.view_qr'))}
           </Text>
         </Pressable>
       </View>

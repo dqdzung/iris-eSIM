@@ -11,19 +11,13 @@ import { Package } from '@/types';
 import FormCheckbox from '@/components/checkout/FormCheckbox';
 import FormInput from '@/components/checkout/FormInput';
 import FormRadioGroup from '@/components/checkout/FormRadioGroup';
-import {
-  CreditCardIcon,
-  DevicePhoneMobileIcon,
-  InformationCircleIcon,
-  QrCodeIcon,
-  WalletIcon,
-} from '@heroicons/react/24/outline';
 import { LinearGradient } from 'expo-linear-gradient';
 import { CompatibilityActionSheet } from '@/components/CompatibilityActionSheet';
 import LoadingOverlay from '@/components/LoadingOverlay';
 import PrimaryButton from '@/components/PrimaryButton';
 import { useToast } from '@/components/Toast';
 import { formatVnd } from '@/utils';
+import { CreditCard, Info, QrCode, Smartphone, Wallet } from 'lucide-react';
 
 export default function CheckoutScreen() {
   const { t } = useTranslation();
@@ -147,21 +141,21 @@ export default function CheckoutScreen() {
 
           <View className="flex-row items-end justify-between">
             <View className="flex-col gap-2">
-              <Text className="text-[14px] font-semibold">eSIM {packageData?.packName}</Text>
+              <Text className="text-sm font-semibold">eSIM {packageData?.packName}</Text>
 
               <View className="flex-row items-center gap-1.5">
-                <Text className="text-[12px] text-gray-500">
+                <Text className="text-xs text-gray-500">
                   {packageData?.variantType === 'UNLIMITED'
                     ? capitalize(t('unlimited'))
                     : `${packageData?.dataVolume}${packageData?.dataUnit}${packageData?.variantType === 'DAILY' ? t('per_day') : ''}`}
                 </Text>
                 <Text className="text-gray-500">-</Text>
-                <Text className="text-[12px] text-gray-500">{`${packageData?.timeLimitDays} ${t('day')}`}</Text>
+                <Text className="text-xs text-gray-500">{`${packageData?.timeLimitDays} ${t('day')}`}</Text>
                 <DotDivider />
-                <Text className="text-[12px] text-gray-500">{`x${parsedAmount}`}</Text>
+                <Text className="text-xs text-gray-500">{`x${parsedAmount}`}</Text>
                 <DotDivider />
-                <Text className="rounded-full bg-orange-500 px-3 py-0.5 text-xs capitalize text-white">
-                  tiktok
+                <Text className="rounded-full bg-orange-500 px-3 py-0.5 text-xs text-white">
+                  Tiktok
                 </Text>
               </View>
             </View>
@@ -185,7 +179,7 @@ export default function CheckoutScreen() {
               {
                 label: (
                   <View className="ml-1 flex-row items-center gap-2">
-                    <QrCodeIcon className="h-5 w-5" />
+                    <QrCode className="h-5 w-5" />
                     <Text>{t('checkout_form.qr')}</Text>
                   </View>
                 ),
@@ -194,7 +188,7 @@ export default function CheckoutScreen() {
               {
                 label: (
                   <View className="ml-1 flex-row items-center gap-2">
-                    <DevicePhoneMobileIcon className="h-5 w-5" />
+                    <Smartphone className="h-5 w-5" />
                     <Text>{t('checkout_form.mobile')}</Text>
                   </View>
                 ),
@@ -203,7 +197,7 @@ export default function CheckoutScreen() {
               {
                 label: (
                   <View className="ml-1 flex-row items-center gap-2">
-                    <CreditCardIcon className="h-5 w-5" />
+                    <CreditCard className="h-5 w-5" />
                     <Text>{t('checkout_form.atm')}</Text>
                   </View>
                 ),
@@ -212,7 +206,7 @@ export default function CheckoutScreen() {
               {
                 label: (
                   <View className="ml-1 flex-row items-center gap-2">
-                    <WalletIcon className="h-5 w-5" />
+                    <Wallet className="h-5 w-5" />
                     <Text>{t('checkout_form.wallet')}</Text>
                   </View>
                 ),
@@ -223,7 +217,7 @@ export default function CheckoutScreen() {
         </View>
 
         <View className="flex-col rounded-lg bg-white px-3 py-4 drop-shadow-md">
-          <Text className="text-[16px] font-semibold capitalize">{t('checkout_form.summary')}</Text>
+          <Text className="text-base font-semibold">{capitalize(t('checkout_form.summary'))}</Text>
 
           <View className="mt-3 flex-row items-center gap-2 rounded-lg bg-gray-200 px-1">
             <FormInput
@@ -238,28 +232,28 @@ export default function CheckoutScreen() {
               className="rounded-lg"
               colors={['rgba(58, 89, 237, 1)', 'rgba(125, 68, 225, 1)']}>
               <Pressable className="px-4 py-3">
-                <Text className="capitalize text-white">{t('checkout_form.choose_code')}</Text>
+                <Text className="text-white">{capitalize(t('checkout_form.choose_code'))}</Text>
               </Pressable>
             </LinearGradient>
           </View>
 
-          <Text className="mt-6 font-semibold capitalize">{t('checkout_form.payment_detail')}</Text>
+          <Text className="mt-6 font-semibold">{capitalize(t('checkout_form.payment_detail'))}</Text>
           <View className="mt-3 flex-col gap-3">
             <View className="flex-1 flex-row justify-between">
-              <Text className="capitalize text-gray-400">{t('checkout_form.subtotal')}</Text>
+              <Text className="text-gray-400">{capitalize(t('checkout_form.subtotal'))}</Text>
               <Text className="font-semibold">{formattedTotal}</Text>
             </View>
             <View className="flex-1 flex-row justify-between">
-              <Text className="capitalize text-gray-400">{t('checkout_form.discount')}</Text>
+              <Text className="text-gray-400">{capitalize(t('checkout_form.discount'))}</Text>
               <Text className="font-semibold text-primary">-{formatVnd(discountAmount)}</Text>
             </View>
             <View className="flex-1 flex-row justify-between">
-              <Text className="capitalize text-gray-400">{t('checkout_form.voucher')}</Text>
+              <Text className="text-gray-400">{capitalize(t('checkout_form.voucher'))}</Text>
               <Text className="font-semibold text-primary">-{formatVnd(voucherAmount)}</Text>
             </View>
 
             <View className="flex-1 flex-row items-center justify-between border-t border-gray-200 pt-4">
-              <Text className="font-bold capitalize">{t('checkout_form.total_short')}</Text>
+              <Text className="font-bold">{capitalize(t('checkout_form.total_short'))}</Text>
               <Text className="text-lg font-bold">
                 {formatVnd(parsedTotal - discountAmount - voucherAmount)}
               </Text>
@@ -288,7 +282,7 @@ export default function CheckoutScreen() {
             <View className="flex-row items-center gap-1">
               <Text>{t('checkout_form.deviceCompatibility')}</Text>
               <Pressable onPress={() => setSheetVisible(true)}>
-                <InformationCircleIcon className="h-6 w-6 text-primary" />
+                <Info className="h-6 w-6 text-primary" />
               </Pressable>
             </View>
           }

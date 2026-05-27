@@ -46,7 +46,7 @@ export default function HowToUseScreen() {
             ))}
           </View>
 
-          <Text className="rounded-xl bg-gray-200 p-3 text-[11px]">{TIP}</Text>
+          <Text className="rounded-xl bg-gray-200 p-3 text-xxs">{TIP}</Text>
         </ScrollView>
       </View>
     </>

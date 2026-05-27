@@ -1,9 +1,9 @@
 import { View, Text, Pressable } from 'react-native';
 import { Image, ImageBackground } from 'expo-image';
-import { InformationCircleIcon } from '@heroicons/react/24/solid';
 import { capitalize } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import CompatibilityButton from '../CompatibilityButton';
+import { Info } from 'lucide-react';
 
 interface DetailHeaderProps {
   banner: string;
@@ -35,7 +35,7 @@ const DetailHeader = ({
           <CompatibilityButton />
         </View>
 
-        <Text className="text-[24px] text-white">
+        <Text className="text-xxl text-white">
           {lowestPrice} - {highestPrice}
         </Text>
 
@@ -53,7 +53,7 @@ const DetailHeader = ({
           </View>
 
           <Pressable>
-            <InformationCircleIcon className="h-7 w-7 text-white hover:text-white/90" />
+            <Info className="h-7 w-7 text-white hover:text-white/90" />
           </Pressable>
         </View>
       </View>

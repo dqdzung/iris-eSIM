@@ -3,8 +3,8 @@ import { ActivityIndicator, Modal, Pressable, Text, TouchableOpacity, View } fro
 import { Image } from 'expo-image';
 import { useTranslation } from 'react-i18next';
 import { capitalize } from 'lodash';
-import { DocumentDuplicateIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useToast } from './Toast';
+import { Copy, X } from 'lucide-react';
 
 type Props = {
   visible: boolean;
@@ -61,7 +61,7 @@ export const QrOverlay = ({ visible, qrCode, iccid, onClose }: Props) => {
               onPress={handleCopyIccid}
               className="flex-row items-center gap-2 px-3 py-1">
               <Text className="text-xs text-primary">ICCID{iccid}</Text>
-              <DocumentDuplicateIcon className="h-4 w-4 stroke-2 text-primary" />
+              <Copy className="h-4 w-4 stroke-2 text-primary" />
             </Pressable>
             <View className="absolute -left-0.5 -top-0.5 h-2 w-2 border-l-2 border-t-2 border-primary" />
             <View className="absolute -right-0.5 -top-0.5 h-2 w-2 border-r-2 border-t-2 border-primary" />
@@ -72,7 +72,7 @@ export const QrOverlay = ({ visible, qrCode, iccid, onClose }: Props) => {
           <Pressable
             onPress={onClose}
             className="h-12 w-12 items-center justify-center rounded-full bg-primary drop-shadow-md">
-            <XMarkIcon className="h-6 w-6 stroke-2 text-white" />
+            <X className="h-6 w-6 stroke-2 text-white" />
           </Pressable>
         </View>
       </View>

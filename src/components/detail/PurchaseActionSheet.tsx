@@ -4,7 +4,6 @@ import { Pressable, Text, View } from 'react-native';
 import { capitalize } from 'lodash';
 import { Package } from '@/types';
 import { formatVnd } from '@/utils';
-import { InformationCircleIcon, MinusIcon, PlusIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'expo-router';
 import FormCheckbox from '../checkout/FormCheckbox';
 import { CompatibilityActionSheet } from '../CompatibilityActionSheet';
@@ -14,6 +13,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import FormInput from '../checkout/FormInput';
+import { Info, Minus, Plus } from 'lucide-react';
 
 type Form = {
   email: string;
@@ -117,14 +117,14 @@ export const PurchaseActionSheet = ({
       />
 
       <View className="relative w-full flex-row items-center justify-between">
-        <Text className="text-lg font-semibold capitalize text-primary">
-          {t('purchase.quantity')}
+        <Text className="text-lg font-semibold text-primary">
+          {capitalize(t('purchase.quantity'))}
         </Text>
         <View className="flex-row items-center gap-3">
           <Pressable
             onPress={handleMinus}
             className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/50">
-            <MinusIcon className="h-5 w-5 text-white" />
+            <Minus className="h-5 w-5 text-white" />
           </Pressable>
 
           <View className="w-6">
@@ -134,7 +134,7 @@ export const PurchaseActionSheet = ({
           <Pressable
             onPress={handleAdd}
             className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
-            <PlusIcon className="h-5 w-5 text-white" />
+            <Plus className="h-5 w-5 text-white" />
           </Pressable>
         </View>
       </View>
@@ -144,7 +144,7 @@ export const PurchaseActionSheet = ({
           <View className="flex-row items-center gap-1">
             <Text>{t('checkout_form.deviceCompatibility')}</Text>
             <Pressable onPress={() => setSheetVisible(true)}>
-              <InformationCircleIcon className="h-6 w-6 text-primary" />
+              <Info className="h-6 w-6 text-primary" />
             </Pressable>
 
             {isSheetVisible && (

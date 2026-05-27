@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlatList, Pressable, Text, TextInput, View } from 'react-native';
-import { XMarkIcon } from '@heroicons/react/24/solid';
 import { capitalize, debounce } from 'lodash';
 import { delay } from '@/utils';
 import { filterCountry } from '@/utils/filterHelper';
@@ -9,9 +8,9 @@ import { Country } from '@/types';
 import { useGlobalDataContext } from '@/hooks/useGlobalDataContext';
 import { useRouter } from 'expo-router';
 import { FlagImage } from './FlagImage';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { useCurrency } from '@/hooks/useCurrency';
 import { ActionSheet } from './ActionSheet';
+import { Search, X } from 'lucide-react';
 
 export const SearchActionSheet = ({
   visible,
@@ -83,8 +82,8 @@ export const SearchActionSheet = ({
 
               <Text className="text-inherit">{name}</Text>
             </View>
-            <Text className="text-[10px] capitalize">
-              {`${t('from')}: `}
+            <Text className="text-xxs">
+              {`${capitalize(t('from'))}: `}
               <Text className="text-sm font-bold">{formatted}</Text>
             </Text>
           </View>
@@ -108,13 +107,13 @@ export const SearchActionSheet = ({
       position="top"
       overlayClassName="bg-black/70"
       panelClassName="mx-auto h-[90%] w-[90%] max-w-[500px] items-center gap-2 rounded-b-2xl p-4">
-      <View className="w-full flex-row items-center justify-between capitalize">
+      <View className="w-full flex-row items-center justify-between">
         <View className="flex-row items-center gap-2">
-          <MagnifyingGlassIcon className="h-5 w-5" />
-          <Text className="font-semibold">{t('search')}</Text>
+          <Search className="h-5 w-5" />
+          <Text className="font-semibold">{capitalize(t('search'))}</Text>
         </View>
         <Pressable onPress={onClose}>
-          <XMarkIcon className="h-6 w-6" />
+          <X className="h-6 w-6" />
         </Pressable>
       </View>
 
@@ -128,11 +127,11 @@ export const SearchActionSheet = ({
 
       {loading ? (
         <View className="flex-1 justify-center">
-          <Text className="capitalize">{t('loading')}...</Text>
+          <Text>{capitalize(t('loading'))}...</Text>
         </View>
       ) : listData.length === 0 ? (
         <View className="flex-1 justify-center">
-          <Text className="capitalize italic">{t('no_result')}</Text>
+          <Text className="italic">{capitalize(t('no_result'))}</Text>
         </View>
       ) : (
         <FlatList

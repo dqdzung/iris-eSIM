@@ -3,14 +3,9 @@ import { useEffect, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { capitalize } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import {
-  ChevronRightIcon,
-  DocumentMagnifyingGlassIcon,
-  ExclamationCircleIcon,
-  HomeIcon,
-  QuestionMarkCircleIcon,
-} from '@heroicons/react/24/outline';
 import { fetchTransactionResult } from '@/api';
+import CallButton from '@/components/CallButton';
+import DotStrip from '@/components/DotStrip';
 import { TransactionResult, TransactionStatus } from '@/types';
 import { useToast } from '@/components/Toast';
 import { formatDateTime } from '@/utils';
@@ -18,6 +13,7 @@ import LoadingOverlay from '@/components/LoadingOverlay';
 import NavHeader from '@/components/NavHeader';
 import PrimaryButton from '@/components/PrimaryButton';
 import { EsimInfoActionSheet } from '@/components/EsimInfoActionSheet';
+import { ChevronRight, CircleAlert, CircleHelp, FileSearch, House } from 'lucide-react';
 
 const STATUS_STYLE: Record<TransactionStatus, { key: string; className: string }> = {
   PENDING: { key: 'history_screen.status.pending', className: 'text-yellow-600' },
@@ -122,13 +118,18 @@ export default function TransactionDetailScreen() {
 
       <NavHeader>
         <View className="flex-1 flex-row items-center justify-between">
-          <Text className="text-[16px] font-medium text-white">
+          <Text className="text-base font-medium text-white">
             {capitalize(t('history_screen.detail_title'))}
           </Text>
 
-          <Pressable onPress={handleGoHome}>
-            <HomeIcon className="h-5 w-5 stroke-2 font-bold text-white" />
-          </Pressable>
+          <View className="flex-row items-center gap-3">
+            <DotStrip />
+            <CallButton />
+            <View className="h-5 w-px bg-white" />
+            <Pressable onPress={handleGoHome}>
+              <House className="h-5 w-5 stroke-2 font-bold text-white" />
+            </Pressable>
+          </View>
         </View>
       </NavHeader>
 
@@ -136,7 +137,7 @@ export default function TransactionDetailScreen() {
         {transaction && (
           <View className="mt-5 w-full items-center gap-3">
             <View className="absolute -top-5 z-10 h-10 w-10 items-center justify-center rounded-full bg-primary">
-              <DocumentMagnifyingGlassIcon className="h-5 w-5 stroke-2 text-white" />
+              <FileSearch className="h-5 w-5 stroke-2 text-white" />
             </View>
 
             <CardRows rows={infoRows} />
@@ -144,8 +145,8 @@ export default function TransactionDetailScreen() {
 
             {transaction.status === 'FAILED' || transaction.status === 'PENDING' ? (
               <View className="mt-5 w-full flex-row items-center gap-2 rounded-xl bg-white px-3 py-2 drop-shadow-sm">
-                <ExclamationCircleIcon className="h-6 w-6 stroke-2 text-orange-500" />
-                <Text className="flex-1 text-[10px] text-gray-500">
+                <CircleAlert className="h-6 w-6 stroke-2 text-orange-500" />
+                <Text className="flex-1 text-xxs text-gray-500">
                   {capitalize(
                     t(
                       transaction.status === 'FAILED'
@@ -161,9 +162,9 @@ export default function TransactionDetailScreen() {
                 className="mt-5 w-full rounded-xl drop-shadow-md"
                 pressableClassName="py-3">
                 <View className="flex-row items-center justify-center gap-2">
-                  {/* <DevicePhoneMobileIcon className="h-5 w-5 text-white" /> */}
-                  <Text className="font-semibold capitalize text-white">
-                    {t('history_screen.detail.view_esim')}
+                  {/* <Smartphone className="h-5 w-5 text-white" /> */}
+                  <Text className="font-semibold text-white">
+                    {capitalize(t('history_screen.detail.view_esim'))}
                   </Text>
                 </View>
               </PrimaryButton>
@@ -173,13 +174,13 @@ export default function TransactionDetailScreen() {
               onPress={handleClickSupport}
               className="w-full flex-row items-center justify-between gap-2 rounded-xl bg-white px-3 py-2 drop-shadow-sm">
               <View className="flex-row items-center gap-2">
-                <QuestionMarkCircleIcon className="h-6 w-6 stroke-2 text-primary" />
-                <Text className="text-[10px] font-semibold capitalize text-primary">
-                  {t('history_screen.detail.support_request')}
+                <CircleHelp className="h-6 w-6 stroke-2 text-primary" />
+                <Text className="text-xxs font-semibold text-primary">
+                  {capitalize(t('history_screen.detail.support_request'))}
                 </Text>
               </View>
 
-              <ChevronRightIcon className="h-5 w-5 stroke-2 text-primary" />
+              <ChevronRight className="h-5 w-5 stroke-2 text-primary" />
             </Pressable>
           </View>
         )}

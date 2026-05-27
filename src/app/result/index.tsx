@@ -1,8 +1,3 @@
-import {
-  BookOpenIcon,
-  ChevronRightIcon,
-  QuestionMarkCircleIcon,
-} from '@heroicons/react/24/outline';
 import { Image } from 'expo-image';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
@@ -12,6 +7,7 @@ import successImg from '@assets/success.png';
 import failureImg from '@assets/failure.png';
 import NavHeader from '@/components/NavHeader';
 import PrimaryButton from '@/components/PrimaryButton';
+import { BookOpen, ChevronRight, CircleHelp } from 'lucide-react';
 
 const ResultScreen = () => {
   const router = useRouter();
@@ -37,7 +33,7 @@ const ResultScreen = () => {
       <Stack.Screen options={{ headerShown: false }} />
 
       <NavHeader>
-        <Text className="text-[16px] font-semibold text-white ">
+        <Text className="text-base font-semibold text-white ">
           {capitalize(t('nav.transaction_result'))}
         </Text>
       </NavHeader>
@@ -68,13 +64,13 @@ const ResultScreen = () => {
             onPress={handleClickHowToUse}
             className="flex-row items-center justify-between gap-2 rounded-xl bg-white px-3 py-2 drop-shadow-sm">
             <View className="flex-row items-center gap-2">
-              <BookOpenIcon className="h-6 w-6 stroke-2 text-primary" />
-              <Text className="text-[10px] font-semibold capitalize text-primary">
-                {t('guide_screen.topics.how-to-use.title')}
+              <BookOpen className="h-6 w-6 stroke-2 text-primary" />
+              <Text className="text-xxs font-semibold text-primary">
+                {capitalize(t('guide_screen.topics.how-to-use.title'))}
               </Text>
             </View>
 
-            <ChevronRightIcon className="h-5 w-5 stroke-2 text-primary" />
+            <ChevronRight className="h-5 w-5 stroke-2 text-primary" />
           </Pressable>
         ) : null}
 
@@ -82,13 +78,13 @@ const ResultScreen = () => {
           onPress={handleClickSupport}
           className="flex-row items-center justify-between gap-2 rounded-xl bg-white px-3 py-2 drop-shadow-sm">
           <View className="flex-row items-center gap-2">
-            <QuestionMarkCircleIcon className="h-6 w-6 stroke-2 text-primary" />
-            <Text className="text-[10px] font-semibold capitalize text-primary">
-              {t('result_screen.support_request')}
+            <CircleHelp className="h-6 w-6 stroke-2 text-primary" />
+            <Text className="text-xxs font-semibold text-primary">
+              {capitalize(t('result_screen.support_request'))}
             </Text>
           </View>
 
-          <ChevronRightIcon className="h-5 w-5 stroke-2 text-primary" />
+          <ChevronRight className="h-5 w-5 stroke-2 text-primary" />
         </Pressable>
       </View>
     </View>

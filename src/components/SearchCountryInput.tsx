@@ -1,8 +1,8 @@
-import { MagnifyingGlassIcon } from '@heroicons/react/16/solid';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View, Pressable, Text } from 'react-native';
 import { SearchActionSheet } from './SearchActionSheet';
+import { Search } from 'lucide-react';
 
 const SearchCountryInput = () => {
   const { t } = useTranslation();
@@ -13,7 +13,7 @@ const SearchCountryInput = () => {
       <Pressable
         onPress={() => setOpenSearch(() => true)}
         className="flex-1 flex-row items-center gap-2">
-        <MagnifyingGlassIcon className="h-5 w-5 stroke-2 text-primary" />
+        <Search className="h-5 w-5 stroke-2 text-primary" />
         <Text className="text-xs text-gray-400/80">{t('country_region_placeholder')}</Text>
       </Pressable>
 

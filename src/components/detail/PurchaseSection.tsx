@@ -1,4 +1,3 @@
-import { MinusIcon, PlusIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
 import { capitalize } from 'lodash';
 import { t } from 'i18next';
 import React, { useMemo, useState } from 'react';
@@ -13,6 +12,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'expo-router';
 import { formatVnd } from '@/utils';
+import { Info, Minus, Plus } from 'lucide-react';
 
 type Form = {
   email: string;
@@ -89,14 +89,14 @@ const PurchaseSection = ({ selectedPackage }: { selectedPackage: Package }) => {
       />
 
       <View className="relative w-full flex-row items-center justify-between">
-        <Text className="text-lg font-semibold capitalize text-primary">
-          {t('purchase.quantity')}
+        <Text className="text-lg font-semibold text-primary">
+          {capitalize(t('purchase.quantity'))}
         </Text>
         <View className="flex-row items-center gap-3">
           <Pressable
             onPress={handleMinus}
             className="h-7 w-7 items-center justify-center rounded-lg bg-primary/50">
-            <MinusIcon className="h-5 w-5 text-white" />
+            <Minus className="h-5 w-5 text-white" />
           </Pressable>
 
           <View className="w-6">
@@ -106,12 +106,12 @@ const PurchaseSection = ({ selectedPackage }: { selectedPackage: Package }) => {
           <Pressable
             onPress={handleAdd}
             className="h-7 w-7 items-center justify-center rounded-lg bg-primary">
-            <PlusIcon className="h-5 w-5 text-white" />
+            <Plus className="h-5 w-5 text-white" />
           </Pressable>
         </View>
 
         {/* <Pressable onPress={onClose}>
-              <XMarkIcon className="h-6 w-6" />
+              <X className="h-6 w-6" />
             </Pressable> */}
       </View>
 
@@ -120,7 +120,7 @@ const PurchaseSection = ({ selectedPackage }: { selectedPackage: Package }) => {
           <View className="flex-row items-center gap-1">
             <Text>{t('checkout_form.deviceCompatibility')}</Text>
             <Pressable onPress={() => setSheetVisible(true)}>
-              <InformationCircleIcon className="h-6 w-6 text-primary" />
+              <Info className="h-6 w-6 text-primary" />
             </Pressable>
 
             {isSheetVisible && (
@@ -137,7 +137,7 @@ const PurchaseSection = ({ selectedPackage }: { selectedPackage: Package }) => {
 
       <View className="flex-row items-center justify-between rounded-xl border-2 border-primary bg-primary/10 p-2.5">
         <View>
-          <Text className="text-xs capitalize text-gray-500">{t('purchase.total_price')}</Text>
+          <Text className="text-xs text-gray-500">{capitalize(t('purchase.total_price'))}</Text>
           <Text className="text-center text-xl font-semibold">{formattedTotal}</Text>
         </View>
 

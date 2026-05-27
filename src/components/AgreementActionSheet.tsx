@@ -1,11 +1,12 @@
 import React from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
-import { XMarkIcon } from '@heroicons/react/24/solid';
 import { useTranslation } from 'react-i18next';
+import { capitalize } from 'lodash';
 import { ActionSheet } from './ActionSheet';
 import { CollapsibleText } from './CollapsibleText';
 import PrimaryButton from './PrimaryButton';
 import termsAndConditions from '@/constants/terms.json';
+import { X } from 'lucide-react';
 
 export const AgreementActionSheet = ({
   visible,
@@ -27,12 +28,12 @@ export const AgreementActionSheet = ({
       <View className="relative w-full flex-row items-center justify-between">
         <View />
 
-        <Text className="px-20 text-center text-[16px] font-semibold capitalize leading-6">
-          {t('terms_of_service')}
+        <Text className="px-20 text-center text-base font-semibold leading-6">
+          {capitalize(t('terms_of_service'))}
         </Text>
 
         <Pressable onPress={onClose}>
-          <XMarkIcon className="h-6 w-6" />
+          <X className="h-6 w-6" />
         </Pressable>
       </View>
 

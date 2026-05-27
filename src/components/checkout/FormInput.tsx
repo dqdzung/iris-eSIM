@@ -39,7 +39,7 @@ const FormInput = ({
               placeholder={placeholder}
               autoFocus={autoFocus}
             />
-            {error && <Text className="text-[11px] text-red-500">{capitalize(error.message)}</Text>}
+            {error && <Text className="text-xxs text-red-500">{capitalize(error.message)}</Text>}
           </View>
         );
       }}

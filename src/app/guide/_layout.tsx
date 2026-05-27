@@ -1,7 +1,9 @@
 import { Stack, useRouter } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
-import { HomeIcon } from '@heroicons/react/24/outline';
+import CallButton from '@/components/CallButton';
+import DotStrip from '@/components/DotStrip';
 import NavHeader from '@/components/NavHeader';
+import { House } from 'lucide-react';
 
 export default function GuideLayout() {
   const router = useRouter();
@@ -17,12 +19,17 @@ export default function GuideLayout() {
           header: ({ options }) => (
             <NavHeader>
               <View className="flex-1 flex-row items-center justify-between">
-                <Text className="text-[16px] font-medium text-white" numberOfLines={1}>
+                <Text className="text-base font-medium text-white" numberOfLines={1}>
                   {String(options.title ?? '')}
                 </Text>
-                <Pressable onPress={handleGoHome}>
-                  <HomeIcon className="h-5 w-5 stroke-2 font-bold text-white" />
-                </Pressable>
+                <View className="flex-row items-center gap-3">
+                  <DotStrip />
+                  <CallButton />
+                  <View className="h-5 w-px bg-white" />
+                  <Pressable onPress={handleGoHome}>
+                    <House className="h-5 w-5 stroke-2 font-bold text-white" />
+                  </Pressable>
+                </View>
               </View>
             </NavHeader>
           ),
