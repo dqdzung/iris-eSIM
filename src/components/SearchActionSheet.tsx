@@ -7,8 +7,7 @@ import { filterCountry } from '@/utils/filterHelper';
 import { Country } from '@/types';
 import { useGlobalDataContext } from '@/hooks/useGlobalDataContext';
 import { useRouter } from 'expo-router';
-import { FlagImage } from './FlagImage';
-import { useCurrency } from '@/hooks/useCurrency';
+import CountryCard from './CountryCard';
 import { ActionSheet } from './ActionSheet';
 import { Search, X } from 'lucide-react';
 
@@ -21,7 +20,6 @@ export const SearchActionSheet = ({
 }) => {
   const { t } = useTranslation();
   const router = useRouter();
-  const { format, isEnglish } = useCurrency();
 
   const { countryAndRegion } = useGlobalDataContext();
 
@@ -63,34 +61,9 @@ export const SearchActionSheet = ({
   );
 
   const renderListItem = useCallback(
-    ({ item }: { item: Country }) => {
-      if (!item) return null;
-
-      const name = isEnglish ? item.nameLocation : item.nameVi;
-      const price = isEnglish ? item.fromPriceUsd : item.fromPrice;
-      const formatted = format(Number(price));
-
-      return (
-        <Pressable
-          onPress={() => handlePress(item.locationId)}
-          className="w-full flex-row overflow-hidden rounded-lg p-1 hover:text-primary hover:drop-shadow-md">
-          <View className="flex-1 flex-row items-center justify-between">
-            <View className="flex-row items-center gap-2">
-              <View className="h-5 w-5 overflow-hidden rounded-full border-2 border-gray-100">
-                <FlagImage country={item} className="h-full w-full" />
-              </View>
-
-              <Text className="text-inherit">{name}</Text>
-            </View>
-            <Text className="text-xxs">
-              {`${capitalize(t('from'))}: `}
-              <Text className="text-sm font-bold">{formatted}</Text>
-            </Text>
-          </View>
-        </Pressable>
-      );
-    },
-    [handlePress, isEnglish, format, t]
+    ({ item }: { item: Country }) =>
+      item ? <CountryCard country={item} variant="row" onPress={handlePress} /> : null,
+    [handlePress]
   );
 
   useEffect(() => {
