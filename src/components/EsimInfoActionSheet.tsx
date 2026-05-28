@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { capitalize } from 'lodash';
-import { useRouter } from 'expo-router';
 import { TransactionResultItem } from '@/types';
 import { useGlobalDataContext } from '@/hooks/useGlobalDataContext';
 import { formatDateTime } from '@/utils';
@@ -10,7 +9,8 @@ import { ActionSheet } from './ActionSheet';
 import { EsimItemCard } from './EsimItemCard';
 import { FlagImage } from './FlagImage';
 import { QrOverlay } from './QrOverlay';
-import { BookOpen, ChevronDown, ChevronRight } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
+import GuideButton from './GuideButton';
 
 type Props = {
   visible: boolean;
@@ -21,7 +21,6 @@ type Props = {
 
 export const EsimInfoActionSheet = ({ visible, onClose, items, createDate }: Props) => {
   const { t, i18n } = useTranslation();
-  const router = useRouter();
   const { countryAndRegion } = useGlobalDataContext();
   const isEnglish = i18n.language === 'en-US';
 
@@ -37,11 +36,6 @@ export const EsimInfoActionSheet = ({ visible, onClose, items, createDate }: Pro
 
   const lookupCountry = (regionName: string) => countryByName.get(regionName.toLowerCase()) ?? null;
 
-  const handleClickGuide = () => {
-    onClose();
-    router.push(`/guide/how-to-use`);
-  };
-
   const dateLabel = createDate ? formatDateTime(createDate, i18n.language) : '';
 
   return (
@@ -52,23 +46,7 @@ export const EsimInfoActionSheet = ({ visible, onClose, items, createDate }: Pro
       panelClassName="w-full flex-col gap-5 rounded-t-2xl px-5 py-4"
       footer={
         <View className="w-full bg-gray-100 p-3">
-          <View className="flex-row items-center justify-between gap-2 rounded-lg bg-white p-3 drop-shadow-sm">
-            <View className="flex-row items-center gap-2">
-              <BookOpen className="h-6 w-6 stroke-2 text-primary" />
-              <Text className="text-xxs font-semibold text-primary">
-                {capitalize(t('home_screen.detailed_guide'))}
-              </Text>
-            </View>
-
-            <Pressable
-              onPress={handleClickGuide}
-              className="flex-row items-center gap-1 rounded-full border border-primary px-3 py-0.5">
-              <Text className="text-xxs font-semibold text-primary">
-                {capitalize(t('home_screen.view_guide'))}
-              </Text>
-              <ChevronRight className="h-5 w-5 stroke-2 text-primary" />
-            </Pressable>
-          </View>
+          <GuideButton onClick={onClose} />
         </View>
       }>
       <View className="relative w-full flex-row items-center justify-between">

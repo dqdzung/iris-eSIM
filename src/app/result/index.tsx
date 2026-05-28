@@ -7,7 +7,7 @@ import successImg from '@assets/success.png';
 import failureImg from '@assets/failure.png';
 import NavHeader from '@/components/NavHeader';
 import PrimaryButton from '@/components/PrimaryButton';
-import { BookOpen, ChevronRight, CircleHelp } from 'lucide-react';
+import { BookMarked, BookOpen, ChevronRight, CircleHelp } from 'lucide-react';
 
 const ResultScreen = () => {
   const router = useRouter();
@@ -64,13 +64,13 @@ const ResultScreen = () => {
             onPress={handleClickHowToUse}
             className="flex-row items-center justify-between gap-2 rounded-xl bg-white px-3 py-2 drop-shadow-sm">
             <View className="flex-row items-center gap-2">
-              <BookOpen className="h-6 w-6 stroke-2 text-primary" />
+              <BookMarked className="h-6 w-6 text-primary" />
               <Text className="text-xxs font-semibold text-primary">
                 {capitalize(t('guide_screen.topics.how-to-use.title'))}
               </Text>
             </View>
 
-            <ChevronRight className="h-5 w-5 stroke-2 text-primary" />
+            <ChevronRight className="h-5 w-5 text-primary" />
           </Pressable>
         ) : null}
 
@@ -78,13 +78,13 @@ const ResultScreen = () => {
           onPress={handleClickSupport}
           className="flex-row items-center justify-between gap-2 rounded-xl bg-white px-3 py-2 drop-shadow-sm">
           <View className="flex-row items-center gap-2">
-            <CircleHelp className="h-6 w-6 stroke-2 text-primary" />
+            <CircleHelp className="h-6 w-6 text-primary" />
             <Text className="text-xxs font-semibold text-primary">
               {capitalize(t('result_screen.support_request'))}
             </Text>
           </View>
 
-          <ChevronRight className="h-5 w-5 stroke-2 text-primary" />
+          <ChevronRight className="h-5 w-5 text-primary" />
         </Pressable>
       </View>
     </View>
