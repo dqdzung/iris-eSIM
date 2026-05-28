@@ -1,14 +1,13 @@
 import { Stack, useRouter } from 'expo-router';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { FlatList, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
-import { delay } from '@/utils';
-import { filterCountry } from '@/utils/filterHelper';
 import { Country } from '@/types';
 import CountryCard from '@/components/CountryCard';
 import { useTranslation } from 'react-i18next';
-import { capitalize, debounce } from 'lodash';
+import { capitalize } from 'lodash';
 import LoadingOverlay from '@/components/LoadingOverlay';
 import NavHeader from '@/components/NavHeader';
+import { useCountrySearch } from '@/hooks/useCountrySearch';
 import { useGlobalDataContext } from '@/hooks/useGlobalDataContext';
 import { Search, X } from 'lucide-react';
 
@@ -16,48 +15,17 @@ const DisplayAllScreen = () => {
   const router = useRouter();
   const { t } = useTranslation();
 
-  const {
-    regions,
-    countryAndRegion,
-    uniqueCountries,
-    loading: bootLoading,
-  } = useGlobalDataContext();
+  const { regions, uniqueCountries, loading: bootLoading } = useGlobalDataContext();
+  const { loading, results: listData, search, handleSearch } = useCountrySearch();
 
   const inputRef = useRef<TextInput & { value?: string }>(null);
 
-  const [loading, setLoading] = useState(false);
-  const [listData, setListData] = useState<Country[]>([]);
-
   const handlePress = useCallback((id: number) => router.push(`/detail/${id}`), [router]);
-
-  const filterData = useCallback(
-    async (searchTerm?: string) => {
-      if (searchTerm) {
-        setLoading(true);
-        await delay(300);
-        setLoading(false);
-      }
-      const res = filterCountry(countryAndRegion, searchTerm);
-      setListData(res);
-    },
-    [countryAndRegion]
-  );
-
-  const debouncedSearch = debounce(filterData, 500);
-
-  const handleSearch = (value: string) => {
-    if (!value) {
-      filterData();
-      return;
-    }
-    const trimmed = value.trim().toLocaleLowerCase();
-    debouncedSearch(trimmed);
-  };
 
   const handleClearInput = () => {
     if (!inputRef.current || !inputRef.current.value) return;
     inputRef.current.clear();
-    filterData();
+    search();
     inputRef.current.focus();
   };
 
@@ -69,8 +37,8 @@ const DisplayAllScreen = () => {
 
   useEffect(() => {
     inputRef.current?.focus();
-    filterData();
-  }, [filterData]);
+    search();
+  }, [search]);
 
   return (
     <View className="flex-1">
