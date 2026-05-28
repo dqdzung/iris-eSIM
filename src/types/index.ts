@@ -28,7 +28,7 @@ export type Package = {
   geographicType: string;
   operator: string;
   variantType: 'DAILY' | 'UNLIMITED' | 'FIXED';
-  tiktok?: 'ENABLE' | 'DISABLE'; // backend hasn't shipped yet
+  tiktok?: boolean;
 };
 
 export type Transaction = {
@@ -57,6 +57,7 @@ export type EsimInfo = {
 
 export type TransactionResultItem = {
   quantity: number;
+  price: number;
   discountAmount: number;
   regionName: string;
   productName: string;

@@ -1,12 +1,12 @@
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { capitalize } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { fetchTransactionResult } from '@/api';
 import { TransactionResult, TransactionStatus } from '@/types';
 import { useToast } from '@/components/Toast';
-import { formatDateTime } from '@/utils';
+import { formatDateTime, formatVnd } from '@/utils';
 import LoadingOverlay from '@/components/LoadingOverlay';
 import NavHeader from '@/components/NavHeader';
 import PrimaryButton from '@/components/PrimaryButton';
@@ -49,66 +49,61 @@ export default function TransactionDetailScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [trackingId]);
 
-  const status = transaction ? (STATUS_STYLE[transaction.status] ?? DEFAULT_STATUS) : null;
-  const firstItem = transaction?.items?.[0];
-  const serviceLabel = firstItem ? `${firstItem.regionName} - ${firstItem.productName}` : '';
+  const infoRows = useMemo<RowData[]>(() => {
+    if (!transaction) return [];
+    const status = STATUS_STYLE[transaction.status] ?? DEFAULT_STATUS;
+    const firstItem = transaction.items?.[0];
+    const serviceLabel = firstItem ? `${firstItem.regionName} - ${firstItem.productName}` : '';
+    return [
+      {
+        label: t('history_screen.detail.transaction_code'),
+        value: transaction.trackingId,
+      },
+      { label: t('history_screen.detail.service'), value: serviceLabel },
+      { label: t('history_screen.detail.email'), value: transaction.email },
+      {
+        label: t('history_screen.detail.time'),
+        value: transaction.createDate ? formatDateTime(transaction.createDate, i18n.language) : '',
+      },
+      {
+        label: t('history_screen.detail.status'),
+        value: capitalize(t(status.key)),
+        valueClassName: status.className,
+      },
+    ];
+  }, [transaction, t, i18n.language]);
 
-  const infoRows: RowData[] =
-    transaction && status
-      ? [
-          {
-            label: t('history_screen.detail.transaction_code'),
-            value: transaction.trackingId,
-          },
-          {
-            label: t('history_screen.detail.service'),
-            value: serviceLabel,
-          },
-          {
-            label: t('history_screen.detail.email'),
-            value: transaction.email,
-          },
-          {
-            label: t('history_screen.detail.time'),
-            value: transaction.createDate
-              ? formatDateTime(transaction.createDate, i18n.language)
-              : '',
-          },
-          {
-            label: t('history_screen.detail.status'),
-            value: capitalize(t(status.key)),
-            valueClassName: `${status.className}`,
-          },
-        ]
-      : [];
-
-  // TODO: backend doesn't return these yet — using placeholders.
-  const amountRows: RowData[] = transaction
-    ? [
-        {
-          label: t('history_screen.detail.amount'),
-          value: '—',
-        },
-        {
-          label: t('history_screen.detail.quantity'),
-          value: '—',
-        },
-        {
-          label: t('history_screen.detail.discount'),
-          value: '—',
-        },
-        {
-          label: t('history_screen.detail.total'),
-          value: '—',
-        },
-      ]
-    : [];
+  const amountRows = useMemo<RowData[]>(() => {
+    if (!transaction) return [];
+    const totalQuantity = transaction.items?.reduce((sum, item) => sum + (item.quantity ?? 0), 0);
+    const totalAmount = transaction.items?.reduce((sum, item) => sum + (item.price ?? 0), 0);
+    const totalDiscount = transaction.items?.reduce(
+      (sum, item) => sum + (item.discountAmount ?? 0),
+      0
+    );
+    const total = totalAmount != null && totalDiscount != null ? totalAmount - totalDiscount : null;
+    return [
+      {
+        label: t('history_screen.detail.amount'),
+        value: totalAmount != null ? formatVnd(totalAmount) : '—',
+      },
+      {
+        label: t('history_screen.detail.quantity'),
+        value: String(totalQuantity ?? '—'),
+      },
+      {
+        label: t('history_screen.detail.discount'),
+        value: totalDiscount != null ? formatVnd(totalDiscount) : '—',
+      },
+      {
+        label: t('history_screen.detail.total'),
+        value: total != null ? formatVnd(total) : '—',
+      },
+    ];
+  }, [transaction, t]);
 
   const handleClickSupport = () => router.push('/support');
   const handleGoHome = () => router.dismissTo('/');
-  const handleClickInfo = () => {
-    setVisible(true);
-  };
 
   return (
     <View className="flex-1">
@@ -150,13 +145,12 @@ export default function TransactionDetailScreen() {
               </View>
             ) : (
               <PrimaryButton
-                onPress={handleClickInfo}
+                onPress={() => setVisible(true)}
                 className="mt-5 w-full rounded-xl drop-shadow-md"
                 pressableClassName="py-3">
                 <View className="flex-row items-center justify-center gap-2">
-                  {/* <Smartphone className="h-5 w-5 text-white" /> */}
                   <Text className="font-semibold text-white">
-                    {capitalize(t('history_screen.detail.view_esim'))}
+                    {t('history_screen.detail.view_esim')}
                   </Text>
                 </View>
               </PrimaryButton>

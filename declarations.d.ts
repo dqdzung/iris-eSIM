@@ -17,3 +17,8 @@ declare module '*.gif' {
   const value: import('expo-image').ImageSource;
   export default value;
 }
+
+declare module '*.svg' {
+  const value: { uri: string; width: number; height: number; scale: number };
+  export default value;
+}

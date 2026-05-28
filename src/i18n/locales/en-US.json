@@ -45,6 +45,10 @@
     "detailed_guide": "detailed guide",
     "view_guide": "view guide"
   },
+  "detail_screen": {
+    "tab_spec": "specifications",
+    "tab_note": "notes"
+  },
   "all_screen": {
     "search_result": "search results",
     "no_result_prefix": "no results matched the keyword",
@@ -86,7 +90,7 @@
       "quantity": "quantity",
       "discount": "discount",
       "total": "total",
-      "view_esim": "view eSIM info",
+      "view_esim": "View eSIM info",
       "support_request": "request support",
       "failed_refund_notice": "failed transactions are processed and refunded within 5 business days.",
       "pending_processing_notice": "transaction is being processed, please wait for the system to update the result"
