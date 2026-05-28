@@ -16,7 +16,6 @@ import LoadingOverlay from '@/components/LoadingOverlay';
 import NavHeader from '@/components/NavHeader';
 import PrimaryButton from '@/components/PrimaryButton';
 import { useToast } from '@/components/Toast';
-import DotStrip from '@/components/DotStrip';
 
 export default function DetailScreen() {
   const { t } = useTranslation();
@@ -154,16 +153,10 @@ export default function DetailScreen() {
     <View className="flex-1">
       <Stack.Screen options={{ headerShown: false }} />
 
-      <NavHeader>
-        <View className="flex-1 flex-row items-center justify-between">
-          <Text className="text-base font-semibold text-white">
-            {capitalize(t('nav.detail'))}
-          </Text>
-        </View>
-        <View className="flex-row items-center gap-3">
-          <DotStrip />
-          <HistoryButton />
-        </View>
+      <NavHeader actions={<HistoryButton />} showCallButton={false}>
+        <Text className="text-base font-semibold text-white">
+          {capitalize(t('nav.detail'))}
+        </Text>
       </NavHeader>
 
       <View className="relative flex-1">

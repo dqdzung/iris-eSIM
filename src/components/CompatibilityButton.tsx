@@ -3,7 +3,7 @@ import { View, Pressable, Text } from 'react-native';
 import { CompatibilityActionSheet } from './CompatibilityActionSheet';
 import { LinearGradient } from 'expo-linear-gradient';
 import { capitalize } from 'lodash';
-import { useTranslation } from 'node_modules/react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Info } from 'lucide-react';
 
 const CompatibilityButton = () => {
