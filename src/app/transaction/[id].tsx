@@ -4,8 +4,6 @@ import { Pressable, Text, View } from 'react-native';
 import { capitalize } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { fetchTransactionResult } from '@/api';
-import CallButton from '@/components/CallButton';
-import DotStrip from '@/components/DotStrip';
 import { TransactionResult, TransactionStatus } from '@/types';
 import { useToast } from '@/components/Toast';
 import { formatDateTime } from '@/utils';
@@ -116,21 +114,15 @@ export default function TransactionDetailScreen() {
     <View className="flex-1">
       <Stack.Screen options={{ headerShown: false }} />
 
-      <NavHeader>
-        <View className="flex-1 flex-row items-center justify-between">
-          <Text className="text-base font-medium text-white">
-            {capitalize(t('history_screen.detail_title'))}
-          </Text>
-
-          <View className="flex-row items-center gap-3">
-            <DotStrip />
-            <CallButton />
-            <View className="h-5 w-px bg-white" />
-            <Pressable onPress={handleGoHome}>
-              <House className="h-5 w-5 stroke-2 font-bold text-white" />
-            </Pressable>
-          </View>
-        </View>
+      <NavHeader
+        actions={
+          <Pressable onPress={handleGoHome}>
+            <House className="h-5 w-5 stroke-2 font-bold text-white" />
+          </Pressable>
+        }>
+        <Text className="text-base font-medium text-white">
+          {capitalize(t('history_screen.detail_title'))}
+        </Text>
       </NavHeader>
 
       <View className="relative flex-1 items-center p-4">

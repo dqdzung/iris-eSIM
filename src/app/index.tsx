@@ -4,9 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Stack, useRouter } from 'expo-router';
 import { filterCountry } from '@/utils/filterHelper';
 import ListCountryRegion from '@/components/ListCountryRegion';
-import CallButton from '@/components/CallButton';
 import CompatibilityButton from '@/components/CompatibilityButton';
-import DotStrip from '@/components/DotStrip';
 import HistoryButton from '@/components/HistoryButton';
 import { Image } from 'expo-image';
 import headerImg from '@assets/header.jpg';
@@ -15,6 +13,7 @@ import NavHeader from '@/components/NavHeader';
 import { useGlobalDataContext } from '@/hooks/useGlobalDataContext';
 import { Bookmark, BookMarked, BookOpen, ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { capitalize } from 'lodash';
+import GuideButton from '@/components/GuideButton';
 
 export default function HomeScreen() {
   const { t } = useTranslation();
@@ -39,24 +38,11 @@ export default function HomeScreen() {
     router.push(`/all`);
   };
 
-  const handleClickGuide = () => {
-    router.push(`/guide`);
-  };
-
   return (
     <View className="flex-1">
       <Stack.Screen options={{ headerShown: false }} />
-      <NavHeader>
-        <View className="flex-1 flex-row items-center justify-between">
-          <Text className="text-base font-semibold text-white">{t('home_screen.app_title')}</Text>
-        </View>
-
-        <View className="flex-row items-center gap-3">
-          <DotStrip />
-          <CallButton />
-          <View className="h-5 w-px bg-white" />
-          <HistoryButton showLabel={false} />
-        </View>
+      <NavHeader actions={<HistoryButton showLabel={false} />}>
+        <Text className="text-base font-semibold text-white">{t('home_screen.app_title')}</Text>
       </NavHeader>
 
       <View className="relative flex-1 gap-2 p-4">
@@ -98,27 +84,8 @@ export default function HomeScreen() {
           </Pressable>
         </View>
 
-        <View className="flex-1 gap-2">
-          <ListCountryRegion data={listData} handlePress={handlePress} />
-
-          <View className="flex-row items-center justify-between gap-2 rounded-lg bg-white p-3 drop-shadow-sm">
-            <View className="flex-row items-center gap-2">
-              <BookMarked className="h-6 w-6 stroke-2 text-primary" />
-              <Text className="text-xxs font-semibold text-primary">
-                {capitalize(t('home_screen.detailed_guide'))}
-              </Text>
-            </View>
-
-            <Pressable
-              onPress={handleClickGuide}
-              className="flex-row items-center gap-1 rounded-full border border-primary px-3 py-0.5">
-              <Text className="text-xxs font-semibold text-primary">
-                {capitalize(t('home_screen.view_guide'))}
-              </Text>
-              <ChevronRight className="h-5 w-5 stroke-2 text-primary" />
-            </Pressable>
-          </View>
-        </View>
+        <ListCountryRegion data={listData} handlePress={handlePress} />
+        <GuideButton />
 
         <LoadingOverlay isVisible={bootLoading} />
       </View>

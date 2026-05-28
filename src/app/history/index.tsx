@@ -14,8 +14,6 @@ import { capitalize } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { fetchTransactions } from '@/api';
 import { Country, Transaction } from '@/types';
-import CallButton from '@/components/CallButton';
-import DotStrip from '@/components/DotStrip';
 import { useToast } from '@/components/Toast';
 import { useGlobalDataContext } from '@/hooks/useGlobalDataContext';
 import { formatDateTime, formatVnd } from '@/utils';
@@ -147,24 +145,18 @@ export default function HistoryScreen() {
     <View className="flex-1">
       <Stack.Screen options={{ headerShown: false }} />
 
-      <NavHeader>
-        <View className="flex-1 flex-row items-center justify-between">
-          <Text className="text-base font-semibold text-white">
-            {capitalize(t('history_screen.title'))}
-          </Text>
-
-          <View className="flex-row items-center gap-3">
-            <DotStrip />
-            <CallButton />
-            <View className="h-5 w-px bg-white" />
-            <Pressable onPress={() => setFilterSheetVisible(true)} className="relative">
-              <Funnel className="h-5 w-5 stroke-2 text-white" />
-              {hasFilter && (
-                <View className="absolute right-0 top-0 h-2 w-2 rounded-full bg-red-500" />
-              )}
-            </Pressable>
-          </View>
-        </View>
+      <NavHeader
+        actions={
+          <Pressable onPress={() => setFilterSheetVisible(true)} className="relative">
+            <Funnel className="h-5 w-5 stroke-2 text-white" />
+            {hasFilter && (
+              <View className="absolute right-0 top-0 h-2 w-2 rounded-full bg-red-500" />
+            )}
+          </Pressable>
+        }>
+        <Text className="text-base font-semibold text-white">
+          {capitalize(t('history_screen.title'))}
+        </Text>
       </NavHeader>
 
       <View className="relative flex-1">

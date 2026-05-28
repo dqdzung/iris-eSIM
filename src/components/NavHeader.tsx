@@ -1,10 +1,18 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import React, { ReactNode } from 'react';
-import { Pressable } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { ChevronLeft } from 'lucide-react';
+import CallButton from './CallButton';
+import DotStrip from './DotStrip';
 
-const NavHeader = ({ children }: { children: ReactNode }) => {
+type Props = {
+  children: ReactNode;
+  actions?: ReactNode;
+  showCallButton?: boolean;
+};
+
+const NavHeader = ({ children, actions, showCallButton = true }: Props) => {
   const router = useRouter();
 
   const handleBack = () => {
@@ -19,7 +27,24 @@ const NavHeader = ({ children }: { children: ReactNode }) => {
       <Pressable onPress={handleBack}>
         <ChevronLeft className="h-6 w-6 stroke-2 text-white" />
       </Pressable>
-      {children}
+
+      {actions !== undefined ? (
+        <View className="flex-1 flex-row items-center justify-between">
+          {children}
+          <View className="flex-row items-center gap-3">
+            <DotStrip />
+            {showCallButton && (
+              <>
+                <CallButton />
+                <View className="h-5 w-px bg-white" />
+              </>
+            )}
+            {actions}
+          </View>
+        </View>
+      ) : (
+        children
+      )}
     </LinearGradient>
   );
 };
