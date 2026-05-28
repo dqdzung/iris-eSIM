@@ -45,6 +45,10 @@
     "detailed_guide": "hướng dẫn chi tiết",
     "view_guide": "xem hướng dẫn"
   },
+  "detail_screen": {
+    "tab_spec": "thông số kỹ thuật",
+    "tab_note": "lưu ý"
+  },
   "all_screen": {
     "search_result": "kết quả tìm kiếm",
     "no_result_prefix": "không có kết quả nào phù hợp với từ khoá",
@@ -86,7 +90,7 @@
       "quantity": "số lượng",
       "discount": "giảm giá",
       "total": "tổng tiền",
-      "view_esim": "xem thông tin eSIM",
+      "view_esim": "Xem thông tin eSIM",
       "support_request": "yêu cầu hỗ trợ",
       "failed_refund_notice": "các giao dịch thất bại được xử lý và hoàn tiền trong 05 ngày làm việc.",
       "pending_processing_notice": "giao dịch đang được xử lý, vui lòng chờ hệ thống cập nhật kết quả"
