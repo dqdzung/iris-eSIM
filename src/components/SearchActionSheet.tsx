@@ -1,11 +1,9 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlatList, Pressable, Text, TextInput, View } from 'react-native';
-import { capitalize, debounce } from 'lodash';
-import { delay } from '@/utils';
-import { filterCountry } from '@/utils/filterHelper';
+import { capitalize } from 'lodash';
 import { Country } from '@/types';
-import { useGlobalDataContext } from '@/hooks/useGlobalDataContext';
+import { useCountrySearch } from '@/hooks/useCountrySearch';
 import { useRouter } from 'expo-router';
 import CountryCard from './CountryCard';
 import { ActionSheet } from './ActionSheet';
@@ -20,37 +18,9 @@ export const SearchActionSheet = ({
 }) => {
   const { t } = useTranslation();
   const router = useRouter();
-
-  const { countryAndRegion } = useGlobalDataContext();
-
-  const [loading, setLoading] = useState(false);
-  const [listData, setListData] = useState<Country[]>([]);
+  const { loading, results: listData, search, handleSearch } = useCountrySearch();
 
   const inputRef = useRef<TextInput>(null);
-
-  const fetchData = useCallback(
-    async (searchTerm?: string) => {
-      if (searchTerm) {
-        setLoading(true);
-        await delay(300);
-        setLoading(false);
-      }
-      const res = filterCountry(countryAndRegion, searchTerm);
-      setListData(res);
-    },
-    [countryAndRegion]
-  );
-
-  const debouncedSearch = debounce(fetchData, 500);
-
-  const handleSearch = (value: string) => {
-    if (!value) {
-      fetchData();
-      return;
-    }
-    const trimmed = value.trim().toLocaleLowerCase();
-    debouncedSearch(trimmed);
-  };
 
   const handlePress = useCallback(
     (id: number) => {
@@ -69,9 +39,9 @@ export const SearchActionSheet = ({
   useEffect(() => {
     if (visible) {
       inputRef.current?.focus();
-      fetchData();
+      search();
     }
-  }, [fetchData, visible]);
+  }, [search, visible]);
 
   return (
     <ActionSheet
