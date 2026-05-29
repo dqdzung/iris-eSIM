@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, Text, View } from 'react-native';
 import { capitalize } from 'lodash';
 import { Package } from '@/types';
-import { delay, formatVnd } from '@/utils';
+import { formatVnd } from '@/utils';
 import { useRouter } from 'expo-router';
 import FormCheckbox from '../checkout/FormCheckbox';
 import { CompatibilityActionSheet } from '../CompatibilityActionSheet';
