@@ -7,17 +7,17 @@ import successImg from '@assets/success.png';
 import failureImg from '@assets/failure.png';
 import NavHeader from '@/components/NavHeader';
 import PrimaryButton from '@/components/PrimaryButton';
-import { BookMarked, BookOpen, ChevronRight, CircleHelp } from 'lucide-react';
+import { BookMarked, ChevronRight, CircleHelp } from 'lucide-react';
 
 const ResultScreen = () => {
   const router = useRouter();
   const { t } = useTranslation();
-  const { success: successParam } = useLocalSearchParams<{ success: string }>();
-  const isPaymentSuccessful = successParam === 'true';
+  const { trackingId } = useLocalSearchParams<{ trackingId: string }>();
+  const isPaymentSuccessful = trackingId ? true : false;
 
   const handleClick = () => {
     if (isPaymentSuccessful) {
-      // TODO: Navigate to transaction details page or show details
+      router.push(`/transaction/${trackingId}`);
     } else
       // Navigate back to the previous screen or home
       router.back();

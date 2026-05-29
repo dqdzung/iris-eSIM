@@ -11,7 +11,7 @@ import LoadingOverlay from '@/components/LoadingOverlay';
 import NavHeader from '@/components/NavHeader';
 import PrimaryButton from '@/components/PrimaryButton';
 import { EsimInfoActionSheet } from '@/components/EsimInfoActionSheet';
-import { ChevronRight, CircleAlert, CircleHelp, FileSearch, House } from 'lucide-react';
+import { ChevronRight, CircleAlert, CircleHelp, FileSearchCorner, House } from 'lucide-react';
 
 const STATUS_STYLE: Record<TransactionStatus, { key: string; className: string }> = {
   PENDING: { key: 'history_screen.status.pending', className: 'text-yellow-600' },
@@ -124,7 +124,7 @@ export default function TransactionDetailScreen() {
         {transaction && (
           <View className="mt-5 w-full items-center gap-3">
             <View className="absolute -top-5 z-10 h-10 w-10 items-center justify-center rounded-full bg-primary">
-              <FileSearch className="h-5 w-5 stroke-2 text-white" />
+              <FileSearchCorner className="h-5 w-5 stroke-2 text-white" />
             </View>
 
             <CardRows rows={infoRows} />

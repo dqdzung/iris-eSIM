@@ -6,4 +6,5 @@ export const API_PATH = {
   packs: 'esim/packs',
   transactions: 'esim/transactions',
   result: 'esim/result',
+  prepare: 'esim/prepare',
 };
