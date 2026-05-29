@@ -32,11 +32,11 @@ const FormInput = ({
               </Text>
             ) : null}
             <TextInput
-              className={`h-12 rounded-xl bg-gray-100/80 p-4 ${error ? 'border border-red-500' : ''}`}
+              className={`h-12 rounded-xl border border-gray-300 p-4 ${error ? 'border border-red-500' : ''}`}
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
-              placeholder={placeholder}
+              placeholder={`${placeholder} ${required ? '*' : ''}`}
               autoFocus={autoFocus}
             />
             {error && <Text className="text-xxs text-red-500">{capitalize(error.message)}</Text>}
