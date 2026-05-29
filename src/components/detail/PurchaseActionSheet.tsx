@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, Text, View } from 'react-native';
 import { capitalize } from 'lodash';
 import { Package } from '@/types';
-import { formatVnd } from '@/utils';
+import { delay, formatVnd } from '@/utils';
 import { useRouter } from 'expo-router';
 import FormCheckbox from '../checkout/FormCheckbox';
 import { CompatibilityActionSheet } from '../CompatibilityActionSheet';
@@ -13,10 +13,15 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import FormInput from '../checkout/FormInput';
-import { Info, Minus, Plus } from 'lucide-react';
+import { Info, Megaphone, Minus, Plus } from 'lucide-react';
+import { preparePayment } from '@/api';
+
+const MIN_QUANTITY = 1;
+const MAX_QUANTITY = 10;
 
 type Form = {
   email: string;
+  quantity: number;
   deviceCompatibility: boolean;
 };
 
@@ -31,27 +36,28 @@ export const PurchaseActionSheet = ({
 }) => {
   const { t } = useTranslation();
   const router = useRouter();
-  // const { id: countryId } = useLocalSearchParams<{ id: string }>();
 
-  const [amount, setAmount] = useState(1);
   const [isSheetVisible, setSheetVisible] = useState(false);
 
   const {
     control,
     handleSubmit,
-    formState: { errors, isValid },
+    watch,
+    setValue,
+    reset,
+    formState: { errors, isValid, isSubmitting },
   } = useForm<Form>({
     mode: 'onChange',
     defaultValues: {
       email: '',
+      quantity: MIN_QUANTITY,
       deviceCompatibility: true,
     },
     resolver: zodResolver(
       z
         .object({
-          // Allows an empty string or a valid email string.
-          // If the field is left blank (empty string), it passes validation.
-          email: z.union([z.literal(''), z.email(t('error.invalid_email'))]),
+          email: z.email(t('error.invalid_email')).min(1, t('error.required_field')),
+          quantity: z.number(),
           deviceCompatibility: z.boolean(),
         })
         .refine((data) => data.deviceCompatibility === true, {
@@ -61,45 +67,45 @@ export const PurchaseActionSheet = ({
     ),
   });
 
-  const onSubmit: SubmitHandler<Form> = (data: Form) => {
-    // console.log(data);
+  const quantity = watch('quantity');
 
-    // TODO: handle checkout logic
+  const onSubmit: SubmitHandler<Form> = async (data) => {
+    const res = await preparePayment({
+      packCode: selectedPackage.packCode,
+      email: data.email,
+      quantity: data.quantity,
+      locationId: selectedPackage.regionId,
+    });
 
+    if (!res.success) return;
+
+    onClose();
     router.push({
       pathname: '/result',
-      params: { success: Math.random() >= 0.5 ? 'true' : 'false' }, // Simulate success or failure randomly
+      params: { trackingId: res.data?.trackingId || '' },
     });
-    onClose();
   };
 
   const totalCost = useMemo(
-    () => selectedPackage.amount * amount,
-    [selectedPackage.amount, amount]
+    () => selectedPackage.amount * quantity,
+    [selectedPackage.amount, quantity]
   );
 
   const formattedTotal = useMemo(() => formatVnd(totalCost), [totalCost]);
 
   const handleAdd = () => {
-    if (amount >= 10) return;
-    setAmount((prev) => prev + 1);
+    if (quantity >= MAX_QUANTITY) return;
+    setValue('quantity', quantity + 1);
   };
 
   const handleMinus = () => {
-    if (amount <= 1) return;
-    setAmount((prev) => prev - 1);
+    if (quantity <= MIN_QUANTITY) return;
+    setValue('quantity', quantity - 1);
   };
 
-  // const handlePurchase = () => {
-  //   router.push(
-  //     `/checkout?countryId=${countryId}&variantId=${selectedPackage.variant_id}&amount=${amount}&total=${totalCost}`
-  //   );
-  //   onClose();
-  // };
-
   useEffect(() => {
-    if (!visible) setAmount(1);
-  }, [visible]);
+    if (!visible) reset();
+  }, [visible, reset]);
 
   return (
     <ActionSheet
@@ -107,12 +113,19 @@ export const PurchaseActionSheet = ({
       onClose={onClose}
       overlayClassName="bg-black/30 items-center"
       panelClassName="w-full gap-5 rounded-t-2xl p-4">
+      <View className="flex-row items-center gap-3 rounded-xl bg-primary/10 px-3 py-2">
+        <Megaphone className="h-6 w-6 -rotate-[30deg] text-primary" />
+        <Text className="text-xs text-gray-500">
+          Quý khách lấy <Text className="font-semibold text-primary">thông tin eSIM</Text> trong
+          email đăng ký nhận hoặc Lịch sử giao dịch
+        </Text>
+      </View>
+
       <FormInput
         placeholder="Email"
         fieldName="email"
         control={control}
         error={errors.email}
-        required={false}
         autoFocus
       />
 
@@ -128,7 +141,7 @@ export const PurchaseActionSheet = ({
           </Pressable>
 
           <View className="w-6">
-            <Text className="text-center text-xl font-semibold">{amount}</Text>
+            <Text className="text-center text-xl font-semibold">{quantity}</Text>
           </View>
 
           <Pressable
@@ -141,10 +154,10 @@ export const PurchaseActionSheet = ({
 
       <FormCheckbox
         label={
-          <View className="flex-row items-center gap-1">
+          <View className="flex-row items-center gap-2">
             <Text>{t('checkout_form.deviceCompatibility')}</Text>
             <Pressable onPress={() => setSheetVisible(true)}>
-              <Info className="h-6 w-6 text-primary" />
+              <Info className="h-5 w-5 text-primary" />
             </Pressable>
 
             {isSheetVisible && (
@@ -166,6 +179,7 @@ export const PurchaseActionSheet = ({
         </View>
 
         <PrimaryButton
+          loading={isSubmitting}
           disabled={!isValid}
           onPress={handleSubmit(onSubmit)}
           label={capitalize(t('checkout_form.pay'))}

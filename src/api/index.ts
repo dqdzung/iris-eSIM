@@ -5,6 +5,7 @@ import {
   ApiResponse,
   AuthenticateResponse,
   HttpError,
+  PreparePaymentResponse,
   TransactionsFilter,
   TypeLocation,
   VerifySessionResponse,
@@ -120,6 +121,31 @@ export const fetchTransactionResult = (
     null
   );
 
+export const preparePayment = ({
+  packCode,
+  email,
+  quantity = 1,
+  locationId,
+}: {
+  packCode: string;
+  email: string;
+  quantity?: number;
+  locationId?: number;
+}): Promise<ApiResponse<PreparePaymentResponse | null>> =>
+  toApiResponse<PreparePaymentResponse | null>(
+    async () =>
+      (
+        await apiService.post<{ data: PreparePaymentResponse }>(API_PATH.prepare, {
+          partner: PARTNER,
+          packCode,
+          email,
+          quantity,
+          locationId,
+        })
+      ).data ?? null,
+    null
+  );
+
 const refreshAuth = async (): Promise<boolean> => {
   const auth = await authenticate();
   if (!auth.success || !auth.data?.loginToken) return false;
@@ -129,5 +155,4 @@ const refreshAuth = async (): Promise<boolean> => {
 
 apiService.setAuthRefreshHandler(refreshAuth);
 
-export const onAuthLost = (handler: (() => void) | null) =>
-  apiService.setAuthLostHandler(handler);
+export const onAuthLost = (handler: (() => void) | null) => apiService.setAuthLostHandler(handler);

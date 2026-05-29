@@ -33,3 +33,11 @@ export type TransactionsFilter = {
   fromDate?: string;
   toDate?: string;
 };
+
+export type PreparePaymentResponse = {
+  trackingId: string;
+  status: 'PENDING_PAYMENT' | string;
+  expireAt: string;
+  amount: number;
+  typeCode: string;
+};
