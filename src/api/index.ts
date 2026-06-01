@@ -101,8 +101,8 @@ export const fetchTransactions = (
       page,
       size,
     };
-    if (filter.fromDate) params.fromDate = filter.fromDate;
-    if (filter.toDate) params.toDate = filter.toDate;
+    if (filter.beginTime) params.beginTime = filter.beginTime;
+    if (filter.endTime) params.endTime = filter.endTime;
     return (
       (await apiService.get<{ data: Transaction[] }>(API_PATH.transactions, params)).data ?? []
     );

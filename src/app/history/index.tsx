@@ -51,7 +51,7 @@ export default function HistoryScreen() {
   const [filterSheetVisible, setFilterSheetVisible] = useState(false);
   const fetchingRef = useRef(false);
 
-  const hasFilter = Boolean(filter.fromDate || filter.toDate);
+  const hasFilter = Boolean(filter.beginTime || filter.endTime);
   const hasHistory = transactions.length > 0;
 
   const countryByCode = useMemo(() => {
@@ -235,7 +235,7 @@ export default function HistoryScreen() {
         visible={filterSheetVisible}
         onClose={() => setFilterSheetVisible(false)}
         value={filter}
-        onApply={setFilter}
+        onApply={(nextFilter) => setFilter(nextFilter)}
       />
     </View>
   );

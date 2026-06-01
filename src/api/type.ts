@@ -30,8 +30,8 @@ export type VerifySessionResponse = {
 export type TypeLocation = 'COUNTRY' | 'REGION';
 
 export type TransactionsFilter = {
-  fromDate?: string;
-  toDate?: string;
+  beginTime?: string;
+  endTime?: string;
 };
 
 export type PreparePaymentResponse = {

@@ -6,14 +6,13 @@ import { ActionSheet } from './ActionSheet';
 import { NativeDatePicker } from './NativeDatePicker';
 import PrimaryButton from './PrimaryButton';
 import { X } from 'lucide-react';
-
-export type DateRange = { fromDate?: string; toDate?: string };
+import { TransactionsFilter } from '@/api/type';
 
 type Props = {
   visible: boolean;
   onClose: () => void;
-  value: DateRange;
-  onApply: (next: DateRange) => void;
+  value: TransactionsFilter;
+  onApply: (next: TransactionsFilter) => void;
 };
 
 const todayString = () => {
@@ -27,26 +26,26 @@ const todayString = () => {
 export const HistoryFilterSheet = ({ visible, onClose, value, onApply }: Props) => {
   const { t, i18n } = useTranslation();
 
-  const [fromDate, setFromDate] = useState(value.fromDate ?? todayString());
-  const [toDate, setToDate] = useState(value.toDate ?? todayString());
+  const [beginTime, setBeginTime] = useState(value.beginTime ?? todayString());
+  const [endTime, setEndTime] = useState(value.endTime ?? todayString());
 
   const handleApply = () => {
     onApply({
-      fromDate: fromDate || undefined,
-      toDate: toDate || undefined,
+      beginTime: beginTime || undefined,
+      endTime: endTime || undefined,
     });
     onClose();
   };
 
-  const invalidRange = fromDate && toDate && fromDate > toDate;
+  const invalidRange = beginTime && endTime && beginTime > endTime;
 
   useEffect(() => {
     if (visible) {
       const today = todayString();
-      setFromDate(value.fromDate ?? today);
-      setToDate(value.toDate ?? today);
+      setBeginTime(value.beginTime ?? today);
+      setEndTime(value.endTime ?? today);
     }
-  }, [visible, value.fromDate, value.toDate]);
+  }, [visible, value.beginTime, value.endTime]);
 
   return (
     <ActionSheet
@@ -71,9 +70,9 @@ export const HistoryFilterSheet = ({ visible, onClose, value, onApply }: Props) 
               {capitalize(t('history_screen.filter.from_date'))}
             </Text>
             <NativeDatePicker
-              value={fromDate}
-              onChange={setFromDate}
-              max={toDate || undefined}
+              value={beginTime}
+              onChange={setBeginTime}
+              max={endTime || undefined}
               locale={i18n.language}
             />
           </View>
@@ -83,9 +82,9 @@ export const HistoryFilterSheet = ({ visible, onClose, value, onApply }: Props) 
               {capitalize(t('history_screen.filter.to_date'))}
             </Text>
             <NativeDatePicker
-              value={toDate}
-              onChange={setToDate}
-              min={fromDate || undefined}
+              value={endTime}
+              onChange={setEndTime}
+              min={beginTime || undefined}
               locale={i18n.language}
             />
           </View>
