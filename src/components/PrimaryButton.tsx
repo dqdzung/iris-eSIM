@@ -1,9 +1,7 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { ReactNode } from 'react';
 import { ActivityIndicator, Pressable, Text, View } from 'react-native';
-
-const ENABLED_COLORS = ['rgba(58, 89, 237, 1)', 'rgba(125, 68, 225, 1)'] as const;
-const DISABLED_COLORS = ['rgba(200, 200, 200, 1)', 'rgba(170, 170, 170, 1)'] as const;
+import { Gradients } from '@/constants/theme';
 
 type Props = {
   onPress: () => void;
@@ -29,7 +27,7 @@ const PrimaryButton = ({
   return (
     <LinearGradient
       className={`${isDisabled ? 'cursor-not-allowed' : ''} ${className}`}
-      colors={[...(isDisabled ? DISABLED_COLORS : ENABLED_COLORS)]}>
+      colors={[...(isDisabled ? Gradients.disabled : Gradients.primary)]}>
       <Pressable disabled={isDisabled} onPress={onPress} className={pressableClassName}>
         <View style={{ opacity: loading ? 0 : 1 }}>{content}</View>
         {loading && (

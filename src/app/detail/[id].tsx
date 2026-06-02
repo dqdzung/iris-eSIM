@@ -161,7 +161,7 @@ export default function DetailScreen() {
           {/* header */}
           <View className="flex-row items-center justify-between rounded-xl bg-white px-3 py-2 drop-shadow-sm">
             <View className="flex-row items-center gap-2">
-              <View className="h-10 w-10 overflow-hidden rounded-full border-2 border-gray-100">
+              <View className="h-8 w-8 overflow-hidden rounded-full border-2 border-gray-100">
                 <Image source={flag} className="h-full w-full" />
               </View>
               <Text className="text-lg font-medium">{name}</Text>

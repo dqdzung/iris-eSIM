@@ -1,8 +1,7 @@
 import { View, Text } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import DayButton from './DayButton';
-import { CalendarDays } from 'lucide-react';
 import { capitalize } from 'lodash';
+import SelectableChip from './SelectableChip';
 
 interface DaySelectorProps {
   dayOptions: number[];
@@ -21,11 +20,11 @@ const DaySelector = ({ dayOptions, selectedDay, handleSelectDay }: DaySelectorPr
 
       <View className="grid grid-cols-6 gap-3 sm:grid-cols-8">
         {dayOptions.map((day) => (
-          <DayButton
+          <SelectableChip
             key={day}
-            day={day}
-            selectedDay={selectedDay}
-            handleSelectDay={handleSelectDay}
+            label={String(day)}
+            selected={selectedDay === day}
+            onPress={() => handleSelectDay(day)}
           />
         ))}
       </View>

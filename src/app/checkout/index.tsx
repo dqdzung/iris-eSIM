@@ -12,6 +12,7 @@ import FormCheckbox from '@/components/checkout/FormCheckbox';
 import FormInput from '@/components/checkout/FormInput';
 import FormRadioGroup from '@/components/checkout/FormRadioGroup';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Gradients } from '@/constants/theme';
 import { CompatibilityActionSheet } from '@/components/CompatibilityActionSheet';
 import LoadingOverlay from '@/components/LoadingOverlay';
 import PrimaryButton from '@/components/PrimaryButton';
@@ -228,9 +229,7 @@ export default function CheckoutScreen() {
               placeholder={capitalize(t('checkout_form.discount_code'))}
             />
 
-            <LinearGradient
-              className="rounded-lg"
-              colors={['rgba(58, 89, 237, 1)', 'rgba(125, 68, 225, 1)']}>
+            <LinearGradient className="rounded-lg" colors={[...Gradients.primary]}>
               <Pressable className="px-4 py-3">
                 <Text className="text-white">{capitalize(t('checkout_form.choose_code'))}</Text>
               </Pressable>

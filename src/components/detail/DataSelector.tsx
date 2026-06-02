@@ -1,28 +1,28 @@
-import { View, Text, Switch } from 'react-native';
+import { View, Text } from 'react-native';
 import { capitalize } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { Image } from 'expo-image';
-import { Colors } from '@/constants/theme';
-import DataButton from './DataButton';
+import IosSwitch from '../IosSwitch';
+import SelectableChip from './SelectableChip';
 
 interface DataSelectorProps {
   selectedData: string;
   validDataOptions: string[];
-  handleSelectData: (data: string) => void;
   isTiktokSupported: boolean;
-  handleToggle: () => void;
   tiktokToggleDisabled: boolean;
   selectedDay: number;
+  handleToggle: () => void;
+  handleSelectData: (data: string) => void;
 }
 
 const DataSelector = ({
   selectedData,
   validDataOptions,
-  handleSelectData,
   isTiktokSupported,
-  handleToggle,
   tiktokToggleDisabled,
   selectedDay,
+  handleToggle,
+  handleSelectData,
 }: DataSelectorProps) => {
   const { t } = useTranslation();
 
@@ -36,29 +36,25 @@ const DataSelector = ({
           <Text className="font-semibold text-primary">{capitalize(t('data'))}</Text>
         </View>
 
-        <View className="flex-row items-center gap-2">
-          <Text className="italic text-gray-400">{capitalize(t('support'))}: </Text>
-          <Image className="h-5 w-5" source={require('@assets/tiktok-logo.png')} />
+        <View className="flex-row items-center gap-3">
+          <Text className="text-gray-400">{capitalize(t('support'))}: </Text>
+          <Image className="h-6 w-6" source={require('@assets/tiktok-logo.png')} />
 
-          <Switch
-            // @ts-expect-error
-            activeThumbColor="white"
-            trackColor={{ false: 'gray', true: Colors.primary }}
+          <IosSwitch
             value={isTiktokSupported}
             onValueChange={handleToggle}
             disabled={tiktokToggleDisabled}
-            className={`scale-90 transform ${tiktokToggleDisabled ? 'opacity-50' : ''}`}
           />
         </View>
       </View>
 
       <View className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
         {validDataOptions.map((amount) => (
-          <DataButton
+          <SelectableChip
             key={amount}
-            amount={amount}
-            selectedData={selectedData}
-            handleSelectData={handleSelectData}
+            label={amount === '0GB' ? capitalize(t('unlimited')) : amount}
+            selected={selectedData === amount}
+            onPress={() => handleSelectData(amount)}
           />
         ))}
       </View>
