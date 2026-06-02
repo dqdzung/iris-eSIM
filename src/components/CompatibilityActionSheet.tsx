@@ -81,7 +81,7 @@ export const CompatibilityActionSheet = ({
         <Smartphone className="h-6 w-6 text-primary" />
 
         <View className="flex-col gap-0.5">
-          <Text className="font-semibold text-sm">{item.name}</Text>
+          <Text className="text-sm font-semibold">{item.name}</Text>
           <Text className="text-xs text-gray-400">{item.brand}</Text>
         </View>
       </View>
@@ -89,10 +89,7 @@ export const CompatibilityActionSheet = ({
   }, []);
 
   useEffect(() => {
-    if (visible) {
-      inputRef.current?.focus();
-      getListCompatibleDevice();
-    }
+    if (visible) getListCompatibleDevice();
   }, [getListCompatibleDevice, visible]);
 
   return (
@@ -100,7 +97,7 @@ export const CompatibilityActionSheet = ({
       visible={visible}
       onClose={onClose}
       overlayClassName="bg-black/30 items-center"
-      panelClassName="w-full gap-5 rounded-t-2xl px-5 py-4">
+      panelClassName="w-full h-[90dvh] gap-5 rounded-t-2xl px-5 py-4">
       <View className="relative w-full flex-row items-center justify-between">
         <View />
 
@@ -137,13 +134,14 @@ export const CompatibilityActionSheet = ({
         </View>
       </View>
 
-      <View className="">
+      <View className="flex-1">
         <View className="-top-8 items-center">
           <Image source={require('@assets/device.png')} className="-bottom-8 h-[120px] w-[120px]" />
           <View className="w-full flex-row items-center justify-between rounded-full bg-white px-4 py-3 shadow-md shadow-primary/50">
             <View className="flex-row gap-2">
               <Search className="h-5 w-5 stroke-2 text-primary" />
               <TextInput
+                autoFocus={false}
                 ref={inputRef}
                 keyboardType="web-search"
                 className="text-md w-full px-1 outline-none"
@@ -175,7 +173,7 @@ export const CompatibilityActionSheet = ({
           </View>
         ) : (
           <FlatList
-            className="h-96"
+            className="min-h-0 flex-1"
             contentContainerClassName="gap-2.5"
             keyExtractor={(item) => item.name}
             numColumns={1}
