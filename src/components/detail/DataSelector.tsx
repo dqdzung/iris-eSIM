@@ -32,7 +32,6 @@ const DataSelector = ({
     <View className="gap-3">
       <View className="flex-row items-center justify-between">
         <View className="flex-row items-center gap-2">
-          {/* <Database className="h-5 w-5 text-primary" /> */}
           <Text className="font-semibold text-primary">{capitalize(t('data'))}</Text>
         </View>
 

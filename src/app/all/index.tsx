@@ -135,23 +135,6 @@ const DisplayAllScreen = () => {
 
         <LoadingOverlay isVisible={bootLoading} />
       </View>
-
-      {/* <ScrollView contentContainerClassName="gap-5 px-4 pb-4">
-        <View>
-          <Text className="font-semibold text-primary">Khu vực</Text>
-          <ListCountryRegion data={regions} handlePress={handlePress} />
-        </View>
-
-        {regions.map((region) => {
-          if (!region.countries.length) return null;
-          return (
-            <View key={region.id}>
-              <Text className="font-semibold text-primary">{region.name_vi}</Text>
-              <ListCountryRegion data={region.countries} handlePress={handlePress} />
-            </View>
-          );
-        })}
-      </ScrollView> */}
     </View>
   );
 };

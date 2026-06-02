@@ -14,7 +14,6 @@ const DaySelector = ({ dayOptions, selectedDay, handleSelectDay }: DaySelectorPr
   return (
     <View className="gap-3">
       <View className="flex-row items-center gap-2">
-        {/* <CalendarDays className="h-5 w-5 text-primary" /> */}
         <Text className="font-semibold text-primary">{capitalize(t('duration'))}</Text>
       </View>
 

@@ -11,7 +11,7 @@ import headerImg from '@assets/header.jpg';
 import LoadingOverlay from '@/components/LoadingOverlay';
 import NavHeader from '@/components/NavHeader';
 import { useGlobalDataContext } from '@/hooks/useGlobalDataContext';
-import { Bookmark, BookMarked, BookOpen, ChevronLeft, ChevronRight, Search } from 'lucide-react';
+import { ChevronLeft, Search } from 'lucide-react';
 import { capitalize } from 'lodash';
 import GuideButton from '@/components/GuideButton';
 
@@ -52,7 +52,6 @@ export default function HomeScreen() {
 
         <View className="flex-row items-center justify-between gap-2">
           <View className="flex-1 flex-row items-center gap-2">
-            {/* <SearchCountryInput /> */}
             <View className="flex-1 flex-row items-center justify-between rounded-full bg-white p-2 drop-shadow">
               <Pressable onPress={handleClickAll} className="flex-1 flex-row items-center gap-2">
                 <Search className="h-5 w-5 stroke-2 text-primary" />

@@ -159,7 +159,7 @@ export default function DetailScreen() {
       <View className="relative flex-1">
         <ScrollView ref={scrollViewRef} contentContainerClassName="gap-5 p-4 pb-2 h-full">
           {/* header */}
-          <View className="flex-row items-center justify-between rounded-xl bg-white px-3 py-2 drop-shadow-sm">
+          <View className="flex-row items-center justify-between rounded-xl bg-white p-3">
             <View className="flex-row items-center gap-2">
               <View className="h-8 w-8 overflow-hidden rounded-full border-2 border-gray-100">
                 <Image source={flag} className="h-full w-full" />
