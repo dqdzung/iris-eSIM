@@ -1,9 +1,15 @@
 import { API_PATH } from './apiPath';
 import { HttpError } from './type';
 
-const baseUrl = process.env.EXPO_PUBLIC_API_URL;
+// Production sets EXPO_PUBLIC_API_URL explicitly (page and API on different
+// origins). In dev the var is left unset so we fall back to the current page
+// origin — this lets the same build work from laptop (localhost:8443) and
+// phone (LAN IP) hitting the same Caddy proxy, no env swap needed.
+const baseUrl =
+  process.env.EXPO_PUBLIC_API_URL ||
+  (typeof window !== 'undefined' ? window.location.origin : '');
 
-if (!baseUrl) throw new Error('EXPO_BASE_URL environment variable is not set');
+if (!baseUrl) throw new Error('EXPO_PUBLIC_API_URL environment variable is not set');
 
 const buildUrl = (endpoint: string) => `${baseUrl}/api/v1/${endpoint}`;
 
