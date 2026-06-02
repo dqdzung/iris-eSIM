@@ -188,7 +188,7 @@ export default function DetailScreen() {
 
           {/* info */}
           {selectedPackage && (
-            <>
+            <View className="mt-1 flex-1">
               <View className="flex-1 gap-2">
                 <View className="w-full flex-row justify-center gap-2">
                   {TABS.map((key) => (
@@ -211,7 +211,7 @@ export default function DetailScreen() {
                 visible={isPurchaseSheetVisible}
                 onClose={() => setPurchaseSheetVisible(false)}
               />
-            </>
+            </View>
           )}
         </ScrollView>
 
@@ -268,8 +268,8 @@ const mock: Record<Tab, ReactNode> = {
   spec: (
     <View className="gap-2.5">
       {specs.map(({ Icon, label }) => (
-        <View key={label} className="flex-row items-center gap-3">
-          <Icon className="h-5 w-5 shrink-0 text-primary" />
+        <View key={label} className="flex-row items-start gap-3">
+          <Icon className="h-6 w-6 text-primary" />
           <View className="flex-1 gap-0.5">
             <Text className="text-xs font-semibold">{label}</Text>
             <Text className="text-xs text-gray-500">—</Text>
