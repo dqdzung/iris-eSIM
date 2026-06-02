@@ -48,7 +48,7 @@ const DataSelector = ({
         </View>
       </View>
 
-      <View className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
+      <View className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-3">
         {validDataOptions.map((amount) => (
           <SelectableChip
             key={amount}

@@ -14,7 +14,7 @@ const SelectableChip = ({ label, selected, onPress }: SelectableChipProps) => (
     className="rounded-lg p-[2px] drop-shadow">
     <Pressable
       onPress={onPress}
-      className={`rounded-md p-4 ${selected ? 'bg-gray-100' : 'bg-white'}`}>
+      className={`flex-1 justify-center rounded-md py-4 px-2 ${selected ? 'bg-gray-100' : 'bg-white'}`}>
       <Text className={`text-center text-sm font-semibold ${selected ? 'text-primary' : ''}`}>
         {label}
       </Text>

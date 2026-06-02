@@ -18,7 +18,7 @@ const DaySelector = ({ dayOptions, selectedDay, handleSelectDay }: DaySelectorPr
         <Text className="font-semibold text-primary">{capitalize(t('duration'))}</Text>
       </View>
 
-      <View className="grid grid-cols-6 gap-3 sm:grid-cols-8">
+      <View className="grid grid-cols-[repeat(auto-fill,minmax(80px,1fr))] gap-3">
         {dayOptions.map((day) => (
           <SelectableChip
             key={day}
