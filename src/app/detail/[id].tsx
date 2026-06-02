@@ -16,6 +16,20 @@ import LoadingOverlay from '@/components/LoadingOverlay';
 import NavHeader from '@/components/NavHeader';
 import PrimaryButton from '@/components/PrimaryButton';
 import { useToast } from '@/components/Toast';
+import {
+  BanknoteArrowUp,
+  Clock,
+  ClockFading,
+  Fingerprint,
+  Gauge,
+  Phone,
+  QrCode,
+  RadioTower,
+  Satellite,
+  SignalHigh,
+  Wifi,
+  type LucideIcon,
+} from 'lucide-react';
 
 export default function DetailScreen() {
   const { t } = useTranslation();
@@ -130,9 +144,7 @@ export default function DetailScreen() {
       <Stack.Screen options={{ headerShown: false }} />
 
       <NavHeader actions={<HistoryButton />} showCallButton={false}>
-        <Text className="text-base font-semibold text-white">
-          {capitalize(t('nav.detail'))}
-        </Text>
+        <Text className="text-base font-semibold text-white">{capitalize(t('nav.detail'))}</Text>
       </NavHeader>
 
       <View className="relative flex-1">
@@ -181,7 +193,7 @@ export default function DetailScreen() {
                   ))}
                 </View>
 
-                <ScrollView>{mock[tab]}</ScrollView>
+                <ScrollView contentContainerClassName="p-1">{mock[tab]}</ScrollView>
               </View>
 
               <PurchaseActionSheet
@@ -228,31 +240,32 @@ type Tab = 'spec' | 'note';
 
 const TABS: Tab[] = ['spec', 'note'];
 
+const specs: { Icon: LucideIcon; label: string }[] = [
+  { Icon: Satellite, label: 'Nhà mạng' },
+  { Icon: Fingerprint, label: 'Đăng ký thông tin (eKYC)' },
+  { Icon: QrCode, label: 'Cách thức kích hoạt' },
+  { Icon: RadioTower, label: 'Phạm vi phủ sóng' },
+  { Icon: Phone, label: 'Số điện thoại' },
+  { Icon: Wifi, label: 'Phát Wifi' },
+  { Icon: SignalHigh, label: 'Công nghệ mạng' },
+  { Icon: BanknoteArrowUp, label: 'Topup' },
+  { Icon: Clock, label: 'Thời điểm bắt đầu tính gói' },
+  { Icon: ClockFading, label: 'Thời gian reset lưu lượng' },
+  { Icon: Gauge, label: 'Gói Unlimited' },
+];
+
 const mock: Record<Tab, ReactNode> = {
   spec: (
-    <View className="gap-2">
-      <Text className="text-xs">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. A quaerat mollitia dicta? Quidem
-        doloremque numquam fuga, deleniti suscipit aliquam iure similique deserunt quos impedit,
-        aperiam ipsam tempore harum laborum ab, molestias temporibus. Molestiae animi aliquid quod
-        pariatur sint perferendis non, distinctio recusandae, esse quam omnis nobis quae nam ut
-        tempore excepturi cumque alias. Ut eius totam facere doloribus rem quas vel. Mollitia ex
-        aperiam cumque, recusandae atque deserunt? Ullam aperiam exercitationem architecto hic!
-        Asperiores ad fugit provident officia ducimus aspernatur quasi minus harum vel unde mollitia
-        rerum voluptatum ipsa quae, explicabo consequatur, voluptatibus iusto a at possimus illum
-        beatae dolor.
-      </Text>
-      <Text className="text-xs">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. A quaerat mollitia dicta? Quidem
-        doloremque numquam fuga, deleniti suscipit aliquam iure similique deserunt quos impedit,
-        aperiam ipsam tempore harum laborum ab, molestias temporibus. Molestiae animi aliquid quod
-        pariatur sint perferendis non, distinctio recusandae, esse quam omnis nobis quae nam ut
-        tempore excepturi cumque alias. Ut eius totam facere doloribus rem quas vel. Mollitia ex
-        aperiam cumque, recusandae atque deserunt? Ullam aperiam exercitationem architecto hic!
-        Asperiores ad fugit provident officia ducimus aspernatur quasi minus harum vel unde mollitia
-        rerum voluptatum ipsa quae, explicabo consequatur, voluptatibus iusto a at possimus illum
-        beatae dolor.
-      </Text>
+    <View className="gap-2.5">
+      {specs.map(({ Icon, label }) => (
+        <View key={label} className="flex-row items-center gap-3">
+          <Icon className="h-5 w-5 shrink-0 text-primary" />
+          <View className="flex-1 gap-0.5">
+            <Text className="text-xs font-semibold">{label}</Text>
+            <Text className="text-xs text-gray-500">—</Text>
+          </View>
+        </View>
+      ))}
     </View>
   ),
   note: (
