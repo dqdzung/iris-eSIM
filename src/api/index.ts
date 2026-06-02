@@ -70,25 +70,16 @@ export const fetchRegions = (
   );
 
 export const fetchPackages = (id: string): Promise<ApiResponse<Package[]>> =>
-  toApiResponse<Package[]>(async () => {
-    const data =
+  toApiResponse<Package[]>(
+    async () =>
       (
         await apiService.post<{ data: Package[] }>(API_PATH.packs, {
           locationId: Number(id),
           partner: PARTNER,
         })
-      ).data ?? [];
-
-    // MOCK[tiktok-filter]: backend currently returns tiktok:true for every
-    // package, making the toggle a no-op. Flip every other one to false so
-    // the filter is visible. REMOVE THIS BLOCK once backend ships mixed
-    // values — search for "MOCK[tiktok-filter]" to find it.
-    data.forEach((p, i) => {
-      if (i % 2 === 0) p.tiktok = false;
-    });
-
-    return data;
-  }, []);
+      ).data ?? [],
+    []
+  );
 
 export const fetchTransactions = (
   page: number = 1,

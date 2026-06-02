@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { Image } from 'expo-image';
 import { Colors } from '@/constants/theme';
 import DataButton from './DataButton';
-import { Database } from 'lucide-react';
 
 interface DataSelectorProps {
   selectedData: string;
@@ -12,6 +11,7 @@ interface DataSelectorProps {
   handleSelectData: (data: string) => void;
   isTiktokSupported: boolean;
   handleToggle: () => void;
+  tiktokToggleDisabled: boolean;
   selectedDay: number;
 }
 
@@ -21,6 +21,7 @@ const DataSelector = ({
   handleSelectData,
   isTiktokSupported,
   handleToggle,
+  tiktokToggleDisabled,
   selectedDay,
 }: DataSelectorProps) => {
   const { t } = useTranslation();
@@ -45,6 +46,8 @@ const DataSelector = ({
             trackColor={{ false: 'gray', true: Colors.primary }}
             value={isTiktokSupported}
             onValueChange={handleToggle}
+            disabled={tiktokToggleDisabled}
+            className={`scale-90 transform ${tiktokToggleDisabled ? 'opacity-50' : ''}`}
           />
         </View>
       </View>

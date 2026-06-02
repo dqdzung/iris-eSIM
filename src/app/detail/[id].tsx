@@ -52,11 +52,20 @@ export default function DetailScreen() {
   const name = first?.regionName ?? '';
   const flag = first?.flag ?? '';
 
+  const hasTiktokVariety = useMemo(
+    () => new Set(packages.map((p) => Boolean(p.tiktok))).size > 1,
+    [packages]
+  );
+
+  const matchesTiktok = useCallback(
+    (p: Package) => !hasTiktokVariety || Boolean(p.tiktok) === isTiktokSupported,
+    [hasTiktokVariety, isTiktokSupported]
+  );
+
   const dayOptions = useMemo(() => {
-    const filtered = packages.filter((p) => Boolean(p.tiktok) === isTiktokSupported);
-    const days = filtered.map((p) => p.timeLimitDays);
+    const days = packages.filter(matchesTiktok).map((p) => p.timeLimitDays);
     return [...new Set(days)].sort((a, b) => a - b);
-  }, [packages, isTiktokSupported]);
+  }, [packages, matchesTiktok]);
 
   const selectedDay = useMemo(() => {
     if (picks.day != null && dayOptions.includes(picks.day)) return picks.day;
@@ -65,11 +74,11 @@ export default function DetailScreen() {
 
   const validDataOptions = useMemo(() => {
     const filteredPackages = packages.filter(
-      (p) => p.timeLimitDays === selectedDay && Boolean(p.tiktok) === isTiktokSupported
+      (p) => p.timeLimitDays === selectedDay && matchesTiktok(p)
     );
     const dataStrings = filteredPackages.map((p) => convertDataObjToString(p, t));
     return [...new Set(dataStrings)].sort((a, b) => dataSortFunc(a, b, t));
-  }, [packages, selectedDay, isTiktokSupported, t]);
+  }, [packages, selectedDay, matchesTiktok, t]);
 
   const selectedData = useMemo(() => {
     if (picks.data != null && validDataOptions.includes(picks.data)) return picks.data;
@@ -85,10 +94,10 @@ export default function DetailScreen() {
         Number(p.dataVolume) === amount &&
         p.dataUnit === unit &&
         (isDaily ? p.variantType === 'DAILY' : p.variantType !== 'DAILY') &&
-        Boolean(p.tiktok) === isTiktokSupported
+        matchesTiktok(p)
     );
     return pkg;
-  }, [packages, selectedDay, selectedData, isTiktokSupported, t]);
+  }, [packages, selectedDay, selectedData, matchesTiktok, t]);
 
   const formattedTotal = useMemo(() => formatVnd(selectedPackage?.amount || 0), [selectedPackage]);
   const hasSelectedPackage = Boolean(selectedPackage);
@@ -173,6 +182,7 @@ export default function DetailScreen() {
             handleSelectData={handleSelectData}
             isTiktokSupported={isTiktokSupported}
             handleToggle={handleToggle}
+            tiktokToggleDisabled={!hasTiktokVariety}
             selectedDay={selectedDay}
           />
 
