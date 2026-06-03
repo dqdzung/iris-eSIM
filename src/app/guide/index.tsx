@@ -1,8 +1,8 @@
 import { Stack, useRouter } from 'expo-router';
-import { useTranslation } from 'react-i18next';
-import { Pressable, ScrollView, Text, View } from 'react-native';
 import { capitalize } from 'lodash';
 import { ChevronRight, FileText, Info } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 
 export default function GuideScreen() {
   const { t } = useTranslation();
@@ -14,14 +14,8 @@ export default function GuideScreen() {
 
       <ScrollView className="flex-1" contentContainerClassName="gap-6 p-4">
         <Section title={t('guide')} Icon={Info}>
-          <Button
-            title="eSIM du lịch là gì?"
-            onPress={() => router.push('/guide/what-is-esim')}
-          />
-          <Button
-            title="Cách mua eSIM du lịch"
-            onPress={() => router.push('/guide/how-to-buy')}
-          />
+          <Button title="eSIM du lịch là gì?" onPress={() => router.push('/guide/what-is-esim')} />
+          <Button title="Cách mua eSIM du lịch" onPress={() => router.push('/guide/how-to-buy')} />
           <Button title="Cách sử dụng eSIM" onPress={() => router.push('/guide/how-to-use')} />
           <Button
             title="Cách kiểm tra dung lượng đã sử dụng"
@@ -34,10 +28,7 @@ export default function GuideScreen() {
             title="Điều khoản dịch vụ"
             onPress={() => router.push('/guide/terms-of-service')}
           />
-          <Button
-            title="Chính sách bảo mật"
-            onPress={() => router.push('/guide/privacy-policy')}
-          />
+          <Button title="Chính sách bảo mật" onPress={() => router.push('/guide/privacy-policy')} />
           <Button
             title="Chính sách thanh toán"
             onPress={() => router.push('/guide/payment-policy')}

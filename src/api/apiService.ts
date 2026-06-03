@@ -6,8 +6,7 @@ import { HttpError } from './type';
 // origin — this lets the same build work from laptop (localhost:8443) and
 // phone (LAN IP) hitting the same Caddy proxy, no env swap needed.
 const baseUrl =
-  process.env.EXPO_PUBLIC_API_URL ||
-  (typeof window !== 'undefined' ? window.location.origin : '');
+  process.env.EXPO_PUBLIC_API_URL || (typeof window !== 'undefined' ? window.location.origin : '');
 
 if (!baseUrl) throw new Error('EXPO_PUBLIC_API_URL environment variable is not set');
 

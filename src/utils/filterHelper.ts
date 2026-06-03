@@ -1,6 +1,7 @@
-import { Country } from '@/types';
-import { toLowerCaseNonAccentVietnamese } from '.';
 import { SPECIAL_CHAR_REGEX } from '@/constants/regex';
+import type { Country } from '@/types';
+
+import { toLowerCaseNonAccentVietnamese } from '.';
 
 const filterCountry = (data: Country[], searchTerm?: string) => {
   let filtered = [...data];

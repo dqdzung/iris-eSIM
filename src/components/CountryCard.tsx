@@ -1,9 +1,11 @@
-import { Country } from '@/types';
-import { useCurrency } from '@/hooks/useCurrency';
-import { FlagImage } from './FlagImage';
-import { useTranslation } from 'react-i18next';
 import { capitalize } from 'lodash';
-import { Pressable, StyleProp, Text, View, ViewStyle } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { Pressable, type StyleProp, Text, View, type ViewStyle } from 'react-native';
+
+import { useCurrency } from '@/hooks/useCurrency';
+import type { Country } from '@/types';
+
+import { FlagImage } from './FlagImage';
 
 type Props = {
   country: Country;

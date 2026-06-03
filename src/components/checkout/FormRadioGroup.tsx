@@ -1,7 +1,8 @@
-import React, { ReactNode } from 'react';
-import { Controller, FieldError } from 'react-hook-form';
-import { Text, View } from 'react-native';
 import { capitalize } from 'lodash';
+import type { ReactNode } from 'react';
+import { Controller, type FieldError } from 'react-hook-form';
+import { Text, View } from 'react-native';
+
 import RadioOption from './RadioOption';
 
 interface FormRadioGroupProps {

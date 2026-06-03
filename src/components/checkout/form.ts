@@ -1,6 +1,7 @@
-import { PHONE_REGEX } from '@/constants/regex';
-import { TFunction } from 'i18next';
+import type { TFunction } from 'i18next';
 import { z } from 'zod';
+
+import { PHONE_REGEX } from '@/constants/regex';
 
 export const createCheckoutSchema = (t: TFunction) => {
   return z.object({

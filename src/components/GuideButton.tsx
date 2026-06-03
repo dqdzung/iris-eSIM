@@ -1,8 +1,8 @@
-import { capitalize } from 'lodash';
 import { useRouter } from 'expo-router';
+import { capitalize } from 'lodash';
 import { BookMarked, ChevronRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, View, Text } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
 export default function GuideButton({ onClick }: { onClick?: () => void }) {
   const { t } = useTranslation();

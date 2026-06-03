@@ -1,7 +1,7 @@
 import { CircleCheck, Info, TriangleAlert, X } from 'lucide-react';
 import {
   createContext,
-  ReactNode,
+  type ReactNode,
   useCallback,
   useContext,
   useEffect,

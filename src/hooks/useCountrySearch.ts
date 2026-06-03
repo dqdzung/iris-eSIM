@@ -1,8 +1,10 @@
-import { useCallback, useState } from 'react';
 import { debounce } from 'lodash';
+import { useCallback, useState } from 'react';
+
+import type { Country } from '@/types';
 import { delay } from '@/utils';
 import { filterCountry } from '@/utils/filterHelper';
-import { Country } from '@/types';
+
 import { useGlobalDataContext } from './useGlobalDataContext';
 
 export const useCountrySearch = () => {

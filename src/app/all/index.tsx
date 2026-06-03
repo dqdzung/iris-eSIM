@@ -1,15 +1,16 @@
 import { Stack, useRouter } from 'expo-router';
-import React, { useCallback, useEffect, useRef } from 'react';
-import { FlatList, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
-import { Country } from '@/types';
-import CountryCard from '@/components/CountryCard';
-import { useTranslation } from 'react-i18next';
 import { capitalize } from 'lodash';
+import { Search, X } from 'lucide-react';
+import React, { useCallback, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import { FlatList, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+
+import CountryCard from '@/components/CountryCard';
 import LoadingOverlay from '@/components/LoadingOverlay';
 import NavHeader from '@/components/NavHeader';
 import { useCountrySearch } from '@/hooks/useCountrySearch';
 import { useGlobalDataContext } from '@/hooks/useGlobalDataContext';
-import { Search, X } from 'lucide-react';
+import type { Country } from '@/types';
 
 const DisplayAllScreen = () => {
   const router = useRouter();

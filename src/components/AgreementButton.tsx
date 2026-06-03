@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { Pressable, Text } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import { capitalize } from 'lodash';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Pressable, Text } from 'react-native';
+
 import { AgreementActionSheet } from './AgreementActionSheet';
 
 const AgreementButton = ({ onAccept }: { onAccept?: () => void }) => {

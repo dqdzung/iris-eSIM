@@ -1,5 +1,6 @@
-import { TFunction } from 'i18next';
-import { Package } from '@/types';
+import type { TFunction } from 'i18next';
+
+import type { Package } from '@/types';
 
 const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
@@ -78,12 +79,12 @@ const convertDataObjToString = (item: Package, t: TFunction) => {
 };
 
 export {
+  convertDataObjToString,
+  convertDataStringToObj,
+  dataSortFunc,
   delay,
   formatCurrency,
-  formatVnd,
   formatDateTime,
+  formatVnd,
   toLowerCaseNonAccentVietnamese,
-  dataSortFunc,
-  convertDataStringToObj,
-  convertDataObjToString,
 };

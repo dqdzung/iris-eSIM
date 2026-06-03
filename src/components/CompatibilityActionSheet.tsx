@@ -1,13 +1,15 @@
+import { Image } from 'expo-image';
+import { capitalize, debounce } from 'lodash';
+import { Search, Smartphone, X } from 'lucide-react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlatList, Pressable, Text, TextInput, View } from 'react-native';
-import { capitalize, debounce } from 'lodash';
+
+import { useGlobalDataContext } from '@/hooks/useGlobalDataContext';
 import { delay } from '@/utils';
 import { filterDevice } from '@/utils/filterHelper';
-import { useGlobalDataContext } from '@/hooks/useGlobalDataContext';
-import { Image } from 'expo-image';
+
 import { ActionSheet } from './ActionSheet';
-import { Search, Smartphone, X } from 'lucide-react';
 
 export const CompatibilityActionSheet = ({
   visible,

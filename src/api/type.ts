@@ -19,6 +19,13 @@ export type ApiResponse<T> = {
   data: T;
 };
 
+export type CustomerCredentials = {
+  customerId: string;
+  name: string;
+  mobile: string;
+  email: string;
+};
+
 export type AuthenticateResponse = { loginToken: string };
 
 export type VerifySessionResponse = {

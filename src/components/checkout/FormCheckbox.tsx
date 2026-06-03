@@ -1,8 +1,9 @@
-import { Colors } from '@/constants/theme';
 import { Checkbox } from 'expo-checkbox';
-import React, { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { Controller } from 'react-hook-form';
 import { Text, View } from 'react-native';
+
+import { Colors } from '@/constants/theme';
 
 const FormCheckbox = ({
   fieldName,

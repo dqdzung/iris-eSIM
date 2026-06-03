@@ -1,16 +1,18 @@
+import { capitalize } from 'lodash';
+import { ChevronDown } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, Text, View } from 'react-native';
-import { capitalize } from 'lodash';
-import { TransactionResultItem } from '@/types';
+
 import { useGlobalDataContext } from '@/hooks/useGlobalDataContext';
+import type { TransactionResultItem } from '@/types';
 import { formatDateTime } from '@/utils';
+
 import { ActionSheet } from './ActionSheet';
 import { EsimItemCard } from './EsimItemCard';
 import { FlagImage } from './FlagImage';
-import { QrOverlay } from './QrOverlay';
-import { ChevronDown } from 'lucide-react';
 import GuideButton from './GuideButton';
+import { QrOverlay } from './QrOverlay';
 
 type Props = {
   visible: boolean;

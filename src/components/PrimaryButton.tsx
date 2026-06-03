@@ -1,6 +1,7 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { ActivityIndicator, Pressable, Text, View } from 'react-native';
+
 import { Gradients } from '@/constants/theme';
 
 type Props = {

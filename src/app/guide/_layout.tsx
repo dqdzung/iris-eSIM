@@ -1,7 +1,8 @@
 import { Stack, useRouter } from 'expo-router';
-import { Pressable, Text } from 'react-native';
-import NavHeader from '@/components/NavHeader';
 import { House } from 'lucide-react';
+import { Pressable, Text } from 'react-native';
+
+import NavHeader from '@/components/NavHeader';
 
 export default function GuideLayout() {
   const router = useRouter();

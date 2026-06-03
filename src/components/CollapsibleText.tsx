@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { View, Text, Pressable, Animated, LayoutChangeEvent } from 'react-native';
 import { ChevronDown } from 'lucide-react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Animated, type LayoutChangeEvent, Pressable, Text, View } from 'react-native';
 
 interface CollapsibleTextProps {
   title: string;
@@ -69,7 +69,9 @@ export const CollapsibleText: React.FC<CollapsibleTextProps> = ({
 
   return (
     <View className={`overflow-hidden p-4 ${className}`}>
-      <Pressable onPress={toggleExpand} className={`flex-row items-center justify-between ${isExpanded ? 'mb-3' : ''}`}>
+      <Pressable
+        onPress={toggleExpand}
+        className={`flex-row items-center justify-between ${isExpanded ? 'mb-3' : ''}`}>
         <Text className="flex-1 text-base font-semibold">{title}</Text>
         <Animated.View style={{ transform: [{ rotate: rotateInterpolation }] }}>
           <ChevronDown className="h-5 w-5 text-gray-500" />
@@ -86,7 +88,7 @@ export const CollapsibleText: React.FC<CollapsibleTextProps> = ({
           opacity: opacityInterpolation,
           overflow: 'hidden',
         }}>
-        <Text className="text-gray-700 text-justify">{content}</Text>
+        <Text className="text-justify text-gray-700">{content}</Text>
       </Animated.View>
     </View>
   );

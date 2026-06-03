@@ -1,12 +1,14 @@
-import { useEffect, useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
 import { capitalize } from 'lodash';
+import { X } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Pressable, Text, View } from 'react-native';
+
+import type { TransactionsFilter } from '@/api/type';
+
 import { ActionSheet } from './ActionSheet';
 import { NativeDatePicker } from './NativeDatePicker';
 import PrimaryButton from './PrimaryButton';
-import { X } from 'lucide-react';
-import { TransactionsFilter } from '@/api/type';
 
 type Props = {
   visible: boolean;

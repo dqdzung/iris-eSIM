@@ -1,17 +1,18 @@
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { useEffect, useMemo, useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
 import { capitalize } from 'lodash';
+import { ChevronRight, CircleAlert, CircleHelp, FileSearchCorner, House } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Pressable, Text, View } from 'react-native';
+
 import { fetchTransactionResult } from '@/api';
-import { TransactionResult, TransactionStatus } from '@/types';
-import { useToast } from '@/components/Toast';
-import { formatDateTime, formatVnd } from '@/utils';
+import { EsimInfoActionSheet } from '@/components/EsimInfoActionSheet';
 import LoadingOverlay from '@/components/LoadingOverlay';
 import NavHeader from '@/components/NavHeader';
 import PrimaryButton from '@/components/PrimaryButton';
-import { EsimInfoActionSheet } from '@/components/EsimInfoActionSheet';
-import { ChevronRight, CircleAlert, CircleHelp, FileSearchCorner, House } from 'lucide-react';
+import { useToast } from '@/components/Toast';
+import type { TransactionResult, TransactionStatus } from '@/types';
+import { formatDateTime, formatVnd } from '@/utils';
 
 const STATUS_STYLE: Record<TransactionStatus, { key: string; className: string }> = {
   PENDING: { key: 'history_screen.status.pending', className: 'text-yellow-600' },

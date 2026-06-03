@@ -1,13 +1,14 @@
+import { Stack, useRouter } from 'expo-router';
+import { capitalize } from 'lodash';
+import { ClipboardCopy, House } from 'lucide-react';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { Pressable, Text, TextInput, View } from 'react-native';
+
 import LoadingOverlay from '@/components/LoadingOverlay';
 import NavHeader from '@/components/NavHeader';
 import PrimaryButton from '@/components/PrimaryButton';
 import { useToast } from '@/components/Toast';
-import { Stack, useRouter } from 'expo-router';
-import { capitalize } from 'lodash';
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Pressable, Text, TextInput, View } from 'react-native';
-import { ClipboardCopy, House } from 'lucide-react';
 
 const SupportScreen = () => {
   const router = useRouter();

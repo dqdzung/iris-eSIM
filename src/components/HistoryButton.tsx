@@ -1,8 +1,8 @@
-import { Pressable, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 import { capitalize } from 'lodash';
-import { useTranslation } from 'react-i18next';
 import { History } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { Pressable, Text } from 'react-native';
 
 const HistoryButton = ({ showLabel = true }: { showLabel?: boolean }) => {
   const { t } = useTranslation();

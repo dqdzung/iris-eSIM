@@ -1,13 +1,15 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import { useRouter } from 'expo-router';
+import { capitalize } from 'lodash';
+import { Search, X } from 'lucide-react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlatList, Pressable, Text, TextInput, View } from 'react-native';
-import { capitalize } from 'lodash';
-import { Country } from '@/types';
+
 import { useCountrySearch } from '@/hooks/useCountrySearch';
-import { useRouter } from 'expo-router';
-import CountryCard from './CountryCard';
+import type { Country } from '@/types';
+
 import { ActionSheet } from './ActionSheet';
-import { Search, X } from 'lucide-react';
+import CountryCard from './CountryCard';
 
 export const SearchActionSheet = ({
   visible,

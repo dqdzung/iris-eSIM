@@ -4,11 +4,11 @@
 // This project ships only to web (Expo Router web export), so falling through
 // to DOM elements is fine.
 import type {
+  AnchorHTMLAttributes,
+  ButtonHTMLAttributes,
   DetailedHTMLProps,
   HTMLAttributes,
   InputHTMLAttributes,
-  ButtonHTMLAttributes,
-  AnchorHTMLAttributes,
 } from 'react';
 
 declare global {

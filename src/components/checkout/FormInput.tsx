@@ -1,6 +1,6 @@
 import { capitalize } from 'lodash';
-import { FieldError, Controller } from 'react-hook-form';
-import { View, TextInput, Text } from 'react-native';
+import { Controller, type FieldError } from 'react-hook-form';
+import { Text, TextInput, View } from 'react-native';
 
 const FormInput = ({
   fieldName,

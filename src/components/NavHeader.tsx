@@ -1,8 +1,9 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import React, { ReactNode } from 'react';
-import { Pressable, View } from 'react-native';
 import { ChevronLeft } from 'lucide-react';
+import type { ReactNode } from 'react';
+import { Pressable, View } from 'react-native';
+
 import CallButton from './CallButton';
 import DotStrip from './DotStrip';
 

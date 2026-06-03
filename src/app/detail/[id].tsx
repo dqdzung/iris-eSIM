@@ -1,35 +1,36 @@
-import { Stack, useLocalSearchParams } from 'expo-router';
-import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
-import { useTranslation } from 'react-i18next';
-import { Package } from '@/types';
-import DaySelector from '@/components/detail/DaySelector';
-import DataSelector from '@/components/detail/DataSelector';
-import { capitalize } from 'lodash';
-import { dataSortFunc, convertDataObjToString, convertDataStringToObj, formatVnd } from '@/utils';
-import { fetchPackages } from '@/api';
-import { PurchaseActionSheet } from '@/components/detail/PurchaseActionSheet';
-import CompatibilityButton from '@/components/CompatibilityButton';
-import HistoryButton from '@/components/HistoryButton';
 import { Image } from 'expo-image';
-import LoadingOverlay from '@/components/LoadingOverlay';
-import NavHeader from '@/components/NavHeader';
-import PrimaryButton from '@/components/PrimaryButton';
-import { useToast } from '@/components/Toast';
+import { Stack, useLocalSearchParams } from 'expo-router';
+import { capitalize } from 'lodash';
 import {
   BanknoteArrowUp,
   Clock,
   ClockFading,
   Fingerprint,
   Gauge,
+  type LucideIcon,
   Phone,
   QrCode,
   RadioTower,
   Satellite,
   SignalHigh,
   Wifi,
-  type LucideIcon,
 } from 'lucide-react';
+import { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { ScrollView, Text, View } from 'react-native';
+
+import { fetchPackages } from '@/api';
+import CompatibilityButton from '@/components/CompatibilityButton';
+import DataSelector from '@/components/detail/DataSelector';
+import DaySelector from '@/components/detail/DaySelector';
+import { PurchaseActionSheet } from '@/components/detail/PurchaseActionSheet';
+import HistoryButton from '@/components/HistoryButton';
+import LoadingOverlay from '@/components/LoadingOverlay';
+import NavHeader from '@/components/NavHeader';
+import PrimaryButton from '@/components/PrimaryButton';
+import { useToast } from '@/components/Toast';
+import type { Package } from '@/types';
+import { convertDataObjToString, convertDataStringToObj, dataSortFunc, formatVnd } from '@/utils';
 
 export default function DetailScreen() {
   const { t } = useTranslation();

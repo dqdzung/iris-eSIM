@@ -1,9 +1,10 @@
-import { Image } from 'expo-image';
-import { Text, View } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import failureImg from '@assets/failure.png';
+import { Image } from 'expo-image';
+import { capitalize } from 'lodash';
+import { useTranslation } from 'react-i18next';
+import { Text, View } from 'react-native';
+
 import PrimaryButton from './PrimaryButton';
-import {capitalize} from 'lodash';
 
 type Props = {
   onReload?: () => void;

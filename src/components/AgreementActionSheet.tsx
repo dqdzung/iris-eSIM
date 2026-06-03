@@ -1,12 +1,14 @@
-import React from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import { capitalize } from 'lodash';
+import { X } from 'lucide-react';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { Pressable, ScrollView, Text, View } from 'react-native';
+
+import termsAndConditions from '@/constants/terms.json';
+
 import { ActionSheet } from './ActionSheet';
 import { CollapsibleText } from './CollapsibleText';
 import PrimaryButton from './PrimaryButton';
-import termsAndConditions from '@/constants/terms.json';
-import { X } from 'lucide-react';
 
 export const AgreementActionSheet = ({
   visible,
@@ -42,8 +44,8 @@ export const AgreementActionSheet = ({
           <Text className="text-sm">
             Phần Điều khoản dịch vụ này đưa ra các điều khoản điều chỉnh dịch vụ giữa IRIS và khách
             hàng. Bằng việc đăng ký mua SIM du lịch tại IRIS, Quý khách đồng ý rằng các Điều khoản
-            dịch vụ này cấu thành hợp đồng hoàn chỉnh giữa Quý khách hàng và IRIS (sau đây gọi
-            chung là “Chúng tôi”, “Công ty”).
+            dịch vụ này cấu thành hợp đồng hoàn chỉnh giữa Quý khách hàng và IRIS (sau đây gọi chung
+            là “Chúng tôi”, “Công ty”).
           </Text>
 
           <Text className="text-sm font-bold uppercase">

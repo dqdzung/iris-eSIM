@@ -1,7 +1,8 @@
 import { Stack } from 'expo-router';
 import { useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { ScrollView, Text, View } from 'react-native';
+
 import { CollapsibleCard } from '@/components/CollapsibleCard';
 
 type Platform = 'ios' | 'android';

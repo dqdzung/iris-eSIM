@@ -1,12 +1,13 @@
-import { authenticate, verifySession, fetchRegions, onAuthLost } from '@/api';
-import { allDevices } from '@/constants/devices';
-import { ErrorScreen } from '@/components/ErrorScreen';
-import { useToast } from '@/components/Toast';
-import { Country } from '@/types';
 import { orderBy } from 'lodash';
-import { createContext, ReactNode, useEffect, useMemo, useState } from 'react';
+import { createContext, type ReactNode, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+import { authenticate, fetchRegions, onAuthLost, verifySession } from '@/api';
+import { ErrorScreen } from '@/components/ErrorScreen';
+import { useToast } from '@/components/Toast';
+import { allDevices } from '@/constants/devices';
+import type { Country } from '@/types';
 
 export const GlobalDataContext = createContext<GlobalData>({
   regions: [],

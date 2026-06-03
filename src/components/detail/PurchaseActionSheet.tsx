@@ -1,20 +1,22 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'expo-router';
+import { capitalize } from 'lodash';
+import { Info, Megaphone, Minus, Plus } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { type SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Pressable, Text, View } from 'react-native';
-import { capitalize } from 'lodash';
-import { Package } from '@/types';
-import { formatVnd } from '@/utils';
-import { useRouter } from 'expo-router';
-import FormCheckbox from '../checkout/FormCheckbox';
-import { CompatibilityActionSheet } from '../CompatibilityActionSheet';
-import { ActionSheet } from '../ActionSheet';
-import PrimaryButton from '../PrimaryButton';
-import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import FormInput from '../checkout/FormInput';
-import { Info, Megaphone, Minus, Plus } from 'lucide-react';
+
 import { preparePayment } from '@/api';
+import type { Package } from '@/types';
+import { formatVnd } from '@/utils';
+
+import { ActionSheet } from '../ActionSheet';
+import FormCheckbox from '../checkout/FormCheckbox';
+import FormInput from '../checkout/FormInput';
+import { CompatibilityActionSheet } from '../CompatibilityActionSheet';
+import PrimaryButton from '../PrimaryButton';
 
 const MIN_QUANTITY = 1;
 const MAX_QUANTITY = 10;

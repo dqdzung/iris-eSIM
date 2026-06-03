@@ -1,8 +1,9 @@
-import { Pressable, Text, View } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import { capitalize } from 'lodash';
-import { EsimInfo } from '@/types';
 import { Eye } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { Pressable, Text, View } from 'react-native';
+
+import type { EsimInfo } from '@/types';
 
 type Props = {
   esim: EsimInfo;
@@ -25,17 +26,13 @@ export const EsimItemCard = ({ esim, productName, simIdx, dateLabel, onOpenQr }:
           onPress={() => onOpenQr(esim)}
           className="flex-row items-center gap-1">
           <Eye className="h-4 w-4 stroke-2 text-primary" />
-          <Text className="text-xs text-primary">
-            {capitalize(t('esim_info_sheet.view_qr'))}
-          </Text>
+          <Text className="text-xs text-primary">{capitalize(t('esim_info_sheet.view_qr'))}</Text>
         </Pressable>
       </View>
 
       <View className="flex-row items-start justify-between">
         <View className="gap-0.5">
-          <Text className="text-sm">
-            {t('esim_info_sheet.sim_label', { index: simIdx + 1 })}
-          </Text>
+          <Text className="text-sm">{t('esim_info_sheet.sim_label', { index: simIdx + 1 })}</Text>
           {dateLabel ? <Text className="text-xs text-gray-400">{dateLabel}</Text> : null}
         </View>
 
@@ -45,4 +42,3 @@ export const EsimItemCard = ({ esim, productName, simIdx, dateLabel, onOpenQr }:
     </View>
   );
 };
-

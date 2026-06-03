@@ -1,27 +1,29 @@
 import { Stack, useRouter } from 'expo-router';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { capitalize } from 'lodash';
 import { Funnel } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
   Pressable,
   ScrollView,
   Text,
   View,
 } from 'react-native';
-import { capitalize } from 'lodash';
-import { useTranslation } from 'react-i18next';
+
 import { fetchTransactions } from '@/api';
-import { Country, Transaction } from '@/types';
-import { useToast } from '@/components/Toast';
-import { useGlobalDataContext } from '@/hooks/useGlobalDataContext';
-import { formatDateTime, formatVnd } from '@/utils';
+import type { TransactionsFilter } from '@/api/type';
+import { HistoryFilterSheet } from '@/components/HistoryFilterSheet';
 import LoadingOverlay from '@/components/LoadingOverlay';
 import NavHeader from '@/components/NavHeader';
 import PrimaryButton from '@/components/PrimaryButton';
-import { HistoryFilterSheet } from '@/components/HistoryFilterSheet';
-import { TransactionsFilter } from '@/api/type';
+import { useToast } from '@/components/Toast';
+import { Colors } from '@/constants/theme';
+import { useGlobalDataContext } from '@/hooks/useGlobalDataContext';
+import type { Country, Transaction } from '@/types';
+import { formatDateTime, formatVnd } from '@/utils';
 
 type Section = { title: string; sortKey: number; data: Transaction[] };
 
@@ -223,7 +225,7 @@ export default function HistoryScreen() {
 
           {hasHistory && loadingMore && (
             <View className="items-center py-4">
-              <ActivityIndicator color="#5850e8" />
+              <ActivityIndicator color={Colors.primary} />
             </View>
           )}
         </ScrollView>

@@ -1,7 +1,8 @@
-import { View, Text } from 'react-native';
+import { Image } from 'expo-image';
 import { capitalize } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { Image } from 'expo-image';
+import { Text, View } from 'react-native';
+
 import IosSwitch from '../IosSwitch';
 import SelectableChip from './SelectableChip';
 

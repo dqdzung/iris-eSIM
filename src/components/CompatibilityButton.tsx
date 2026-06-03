@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { View, Pressable, Text } from 'react-native';
-import { CompatibilityActionSheet } from './CompatibilityActionSheet';
 import { LinearGradient } from 'expo-linear-gradient';
 import { capitalize } from 'lodash';
-import { useTranslation } from 'react-i18next';
 import { Info } from 'lucide-react';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Pressable, Text, View } from 'react-native';
+
+import { CompatibilityActionSheet } from './CompatibilityActionSheet';
 
 const CompatibilityButton = () => {
   const { t } = useTranslation();

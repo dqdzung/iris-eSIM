@@ -1,13 +1,14 @@
+import failureImg from '@assets/failure.png';
+import successImg from '@assets/success.png';
 import { Image } from 'expo-image';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { Pressable, Text, View } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import { capitalize } from 'lodash';
-import successImg from '@assets/success.png';
-import failureImg from '@assets/failure.png';
+import { BookMarked, ChevronRight, CircleHelp } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { Pressable, Text, View } from 'react-native';
+
 import NavHeader from '@/components/NavHeader';
 import PrimaryButton from '@/components/PrimaryButton';
-import { BookMarked, ChevronRight, CircleHelp } from 'lucide-react';
 
 const ResultScreen = () => {
   const router = useRouter();

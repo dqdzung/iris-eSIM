@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
 import { Image } from 'expo-image';
-import { Country } from '@/types';
+import { useEffect, useState } from 'react';
+
+import type { Country } from '@/types';
 import { getGlobalFallback, tryGetBannerSource } from '@/utils/banner';
 
 type Props = {
@@ -28,8 +29,7 @@ export const FlagImage = ({ country, className }: Props) => {
     return <Image source={bundled} className={className} />;
   }
 
-  const canUseCdn =
-    country?.code && country.typeLocation === 'COUNTRY' && !cdnFailed;
+  const canUseCdn = country?.code && country.typeLocation === 'COUNTRY' && !cdnFailed;
 
   if (canUseCdn) {
     return (

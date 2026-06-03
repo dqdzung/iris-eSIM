@@ -1,6 +1,7 @@
-import { use as i18nUse, changeLanguage as i18nChangeLang } from 'i18next';
-import { initReactI18next } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { changeLanguage as i18nChangeLang, use as i18nUse } from 'i18next';
+import { initReactI18next } from 'react-i18next';
+
 import translationEn from './locales/en-US.json';
 import translationVi from './locales/vi-VN.json';
 

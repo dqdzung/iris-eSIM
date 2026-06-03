@@ -1,5 +1,6 @@
-import { GlobalDataContext } from '@/contexts/GlobalDataContext';
 import { useContext } from 'react';
+
+import { GlobalDataContext } from '@/contexts/GlobalDataContext';
 
 export const useGlobalDataContext = () => {
   const context = useContext(GlobalDataContext);

@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
 import { Modal, TouchableOpacity, View } from 'react-native';
 
 type ActionSheetProps = {

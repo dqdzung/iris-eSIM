@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react';
-import { ActivityIndicator, Modal, Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { Image } from 'expo-image';
-import { useTranslation } from 'react-i18next';
 import { capitalize } from 'lodash';
-import { useToast } from './Toast';
 import { Copy, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { ActivityIndicator, Modal, Pressable, Text, TouchableOpacity, View } from 'react-native';
+
+import { Colors } from '@/constants/theme';
+
+import { useToast } from './Toast';
 
 type Props = {
   visible: boolean;
@@ -51,15 +54,13 @@ export const QrOverlay = ({ visible, qrCode, iccid, onClose }: Props) => {
             />
             {qrLoading ? (
               <View className="absolute inset-0 items-center justify-center">
-                <ActivityIndicator size="large" color="#5850e8" />
+                <ActivityIndicator size="large" color={Colors.primary} />
               </View>
             ) : null}
           </View>
 
           <View className="relative">
-            <Pressable
-              onPress={handleCopyIccid}
-              className="flex-row items-center gap-2 px-3 py-1">
+            <Pressable onPress={handleCopyIccid} className="flex-row items-center gap-2 px-3 py-1">
               <Text className="text-xs text-primary">ICCID{iccid}</Text>
               <Copy className="h-4 w-4 stroke-2 text-primary" />
             </Pressable>

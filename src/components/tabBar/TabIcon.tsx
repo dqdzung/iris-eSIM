@@ -1,4 +1,4 @@
-import React, { ForwardRefExoticComponent, RefAttributes, SVGProps } from 'react';
+import type { ForwardRefExoticComponent, RefAttributes, SVGProps } from 'react';
 import { View } from 'react-native';
 
 const TabBarIcon = ({

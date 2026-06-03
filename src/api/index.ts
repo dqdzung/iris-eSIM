@@ -1,7 +1,10 @@
-import { Country, Package, Transaction, TransactionResult } from '@/types';
 import { PARTNER } from '@/constants';
+import type { Country, Package, Transaction, TransactionResult } from '@/types';
+
+import { API_PATH } from './apiPath';
 import ApiService from './apiService';
-import {
+import { readCustomerCredsFromUrl, TEST_CREDS } from './helper';
+import type {
   ApiResponse,
   AuthenticateResponse,
   HttpError,
@@ -10,7 +13,6 @@ import {
   TypeLocation,
   VerifySessionResponse,
 } from './type';
-import { API_PATH } from './apiPath';
 
 const apiService = new ApiService();
 
@@ -26,18 +28,13 @@ async function toApiResponse<T>(apiCall: () => Promise<T>, fallback: T): Promise
   }
 }
 
-export const authenticate = (): Promise<ApiResponse<AuthenticateResponse | null>> =>
-  toApiResponse<AuthenticateResponse | null>(
-    () =>
-      // TODO: Replace with real authentication data from url params
-      apiService.post<AuthenticateResponse>(API_PATH.login, {
-        customerId: 'TEST_CUST_001',
-        name: 'Test User',
-        mobile: '0901234567',
-        email: 'test@example.com',
-      }),
+export const authenticate = (): Promise<ApiResponse<AuthenticateResponse | null>> => {
+  const creds = readCustomerCredsFromUrl() ?? TEST_CREDS;
+  return toApiResponse<AuthenticateResponse | null>(
+    () => apiService.post<AuthenticateResponse>(API_PATH.login, creds),
     null
   );
+};
 
 export const verifySession = (
   loginToken: string

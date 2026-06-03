@@ -1,6 +1,8 @@
-import { Country } from '@/types';
-import React, { useCallback, useMemo } from 'react';
-import { DimensionValue, FlatList, useWindowDimensions } from 'react-native';
+import { useCallback, useMemo } from 'react';
+import { type DimensionValue, FlatList, useWindowDimensions } from 'react-native';
+
+import type { Country } from '@/types';
+
 import CountryCard from './CountryCard';
 
 const ListCountryRegion = ({

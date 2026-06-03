@@ -1,5 +1,5 @@
-import { Text, View } from 'react-native';
 import { ChevronDown } from 'lucide-react';
+import { Text, View } from 'react-native';
 
 type Props = {
   value: string;

@@ -1,6 +1,7 @@
-import { Pressable } from 'react-native';
-import { SUPPORT_PHONE } from '@/constants';
 import { Headset } from 'lucide-react';
+import { Pressable } from 'react-native';
+
+import { SUPPORT_PHONE } from '@/constants';
 
 const CallButton = () => {
   const handlePress = () => {

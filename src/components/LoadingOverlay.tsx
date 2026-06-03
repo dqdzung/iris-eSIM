@@ -1,5 +1,6 @@
-import { ActivityIndicator, View } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, View } from 'react-native';
+
 import { Colors } from '@/constants/theme';
 
 type Props = {

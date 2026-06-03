@@ -1,6 +1,6 @@
 import { Stack, useLocalSearchParams } from 'expo-router';
-import { useTranslation } from 'react-i18next';
 import { capitalize } from 'lodash';
+import { useTranslation } from 'react-i18next';
 import { ScrollView, Text, View } from 'react-native';
 
 // Map of topic slug → i18n key bases. Each topic must have two i18n keys:
