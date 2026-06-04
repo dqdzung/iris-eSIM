@@ -7,7 +7,7 @@ import { authenticate, fetchRegions, onAuthLost, verifySession } from '@/api';
 import { ErrorScreen } from '@/components/ErrorScreen';
 import { useToast } from '@/components/Toast';
 import { allDevices } from '@/constants/devices';
-import type { Country } from '@/types';
+import type { Country, GlobalData, GlobalDataResult } from '@/types';
 
 export const GlobalDataContext = createContext<GlobalData>({
   regions: [],
@@ -68,6 +68,16 @@ export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
+    // In production we require runtime config from /apiEndpoint.js. If the
+    // script failed to load (404, blocked, misdeploy), refuse to boot and
+    // show ErrorScreen instead of silently falling back to the page origin
+    // and watching every API call 404.
+    if (process.env.NODE_ENV === 'production' && !window.apiEndpoint) {
+      setHasFatalError(true);
+      setLoading(false);
+      return;
+    }
+
     // flag to prevent phantom loading state
     let cancelled = false;
     fetchGlobalData()
@@ -100,12 +110,6 @@ export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-type GlobalDataResult = {
-  result: 'ok' | 'auth_failed' | 'load_failed';
-  countries?: Country[];
-  regions?: Country[];
-};
-
 const fetchGlobalData = async (): Promise<GlobalDataResult> => {
   const auth = await authenticate();
   if (!auth.success || !auth.data?.loginToken) return { result: 'auth_failed' };
@@ -123,14 +127,4 @@ const fetchGlobalData = async (): Promise<GlobalDataResult> => {
     countries,
     regions,
   };
-};
-
-type GlobalData = {
-  regions: Country[];
-  uniqueCountries: Country[];
-  countryAndRegion: Country[];
-  popularCountries: Country[];
-  popularRegions: Country[];
-  listDevice: typeof allDevices;
-  loading: boolean;
 };

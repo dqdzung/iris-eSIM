@@ -1,3 +1,5 @@
+import { type allDevices } from '@/constants/devices';
+
 export type Country = {
   locationId: number;
   code: string;
@@ -76,4 +78,20 @@ export type TransactionResult = {
   transactionId: string;
   createDate: string;
   items: TransactionResultItem[];
+};
+
+export type GlobalDataResult = {
+  result: 'ok' | 'auth_failed' | 'load_failed';
+  countries?: Country[];
+  regions?: Country[];
+};
+
+export type GlobalData = {
+  regions: Country[];
+  uniqueCountries: Country[];
+  countryAndRegion: Country[];
+  popularCountries: Country[];
+  popularRegions: Country[];
+  listDevice: typeof allDevices;
+  loading: boolean;
 };

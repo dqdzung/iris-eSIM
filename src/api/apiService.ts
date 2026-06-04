@@ -7,13 +7,11 @@ import { HttpError } from './type';
 //      production build target different backends without rebuilding.
 //   2. window.location.origin — dev fallback: PC hits localhost:8443
 //      and phone hits the LAN IP, both routed through the same Caddy proxy.
-const baseUrl =
-  typeof window === 'undefined' ? '' : window.apiEndpoint || window.location.origin;
+const baseUrl = typeof window === 'undefined' ? '' : window.apiEndpoint || window.location.origin;
 
 if (!baseUrl) throw new Error('Could not resolve API base URL');
 
 const buildUrl = (endpoint: string) => `${baseUrl}/api/v1/${endpoint}`;
-
 const isAuthEndpoint = (url: string) => url === API_PATH.login || url === API_PATH.verify;
 
 class ApiService {
