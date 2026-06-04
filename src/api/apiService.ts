@@ -2,19 +2,15 @@ import { API_PATH } from './apiPath';
 import { HttpError } from './type';
 
 // Resolution order (first match wins):
-//   1. EXPO_PUBLIC_API_URL — build-time env, set explicitly when a build
-//      needs to target a specific backend regardless of where it runs.
-//   2. window.apiEndpoint — runtime config injected by /apiEndpoint.js at
+//   1. window.apiEndpoint — runtime config injected by /apiEndpoint.js at
 //      the top of index.html (see scripts/inject-script.js). Lets a single
 //      production build target different backends without rebuilding.
-//   3. window.location.origin — dev fallback: laptop hits localhost:8443
+//   2. window.location.origin — dev fallback: PC hits localhost:8443
 //      and phone hits the LAN IP, both routed through the same Caddy proxy.
 const baseUrl =
-  process.env.EXPO_PUBLIC_API_URL ||
-  (typeof window !== 'undefined' && window.apiEndpoint) ||
-  (typeof window !== 'undefined' ? window.location.origin : '');
+  typeof window === 'undefined' ? '' : window.apiEndpoint || window.location.origin;
 
-if (!baseUrl) throw new Error('EXPO_PUBLIC_API_URL environment variable is not set');
+if (!baseUrl) throw new Error('Could not resolve API base URL');
 
 const buildUrl = (endpoint: string) => `${baseUrl}/api/v1/${endpoint}`;
 
