@@ -6,7 +6,7 @@
     "web": "BROWSER=none expo start --web",
     "proxy": "caddy run",
     "dev": "concurrently --kill-others-on-fail -n expo,proxy,open -c blue,magenta,green \"pnpm web\" \"pnpm proxy\" \"wait-on -t 60000 tcp:8081 tcp:8443 && open https://localhost:8443\"",
-    "predeploy": "expo export -p web",
+    "predeploy": "expo export -p web && node scripts/inject-script.js",
     "deploy": "netlify deploy --dir dist",
     "lint": "eslint \"**/*.{js,jsx,ts,tsx}\" && prettier -c \"**/*.{js,jsx,ts,tsx,json}\"",
     "format": "eslint \"**/*.{js,jsx,ts,tsx}\" --fix && prettier \"**/*.{js,jsx,ts,tsx,json}\" --write"

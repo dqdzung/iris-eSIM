@@ -1,12 +1,18 @@
 import { API_PATH } from './apiPath';
 import { HttpError } from './type';
 
-// Production sets EXPO_PUBLIC_API_URL explicitly (page and API on different
-// origins). In dev the var is left unset so we fall back to the current page
-// origin — this lets the same build work from laptop (localhost:8443) and
-// phone (LAN IP) hitting the same Caddy proxy, no env swap needed.
+// Resolution order (first match wins):
+//   1. EXPO_PUBLIC_API_URL — build-time env, set explicitly when a build
+//      needs to target a specific backend regardless of where it runs.
+//   2. window.apiEndpoint — runtime config injected by /apiEndpoint.js at
+//      the top of index.html (see scripts/inject-script.js). Lets a single
+//      production build target different backends without rebuilding.
+//   3. window.location.origin — dev fallback: laptop hits localhost:8443
+//      and phone hits the LAN IP, both routed through the same Caddy proxy.
 const baseUrl =
-  process.env.EXPO_PUBLIC_API_URL || (typeof window !== 'undefined' ? window.location.origin : '');
+  process.env.EXPO_PUBLIC_API_URL ||
+  (typeof window !== 'undefined' && window.apiEndpoint) ||
+  (typeof window !== 'undefined' ? window.location.origin : '');
 
 if (!baseUrl) throw new Error('EXPO_PUBLIC_API_URL environment variable is not set');
 

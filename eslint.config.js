@@ -21,9 +21,9 @@ module.exports = defineConfig([
     ignores: ['dist/*'],
   },
 
-  // Node-context files (eslint config, caddy scripts, etc.) need Node globals.
+  // Node-context files (eslint config, build scripts, etc.) need Node globals.
   {
-    files: ['eslint.config.js'],
+    files: ['eslint.config.js', 'scripts/**/*.js'],
     languageOptions: { globals: globals.node },
   },
 
