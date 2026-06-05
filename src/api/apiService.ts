@@ -15,11 +15,39 @@ const buildUrl = (endpoint: string) => `${baseUrl}/api/v1/${endpoint}`;
 const isAuthEndpoint = (url: string) => url === API_PATH.login || url === API_PATH.verify;
 
 class ApiService {
+  /**
+   * Maps `requestId` → AbortController so a new request with the same id
+   * cancels the previous one. Used for last-write-wins behaviour on things
+   * like search-on-keystroke.
+   */
   private controllers: Map<string, AbortController> = new Map();
-  private authRefreshHandler: (() => Promise<boolean>) | null = null;
-  private authRefreshInFlight: Promise<boolean> | null = null;
-  private authLostHandler: (() => void) | null = null;
+
+  /**
+   * Latch ensuring `authLostHandler` fires at most once per ApiService
+   * lifetime, even if many in-flight requests hit the auth-lost condition
+   * simultaneously.
+   */
   private authLost = false;
+
+  /**
+   * Holds the in-flight refresh promise so concurrent 401s share one refresh
+   * call instead of triggering a stampede. Cleared once the refresh settles.
+   */
+  private authRefreshInFlight: Promise<boolean> | null = null;
+
+  /**
+   * Called when a non-auth request gets a 401. Returns `true` on successful
+   * re-auth, `false` otherwise. `null` when no handler is registered, in
+   * which case the 401 propagates without a refresh attempt.
+   */
+  private authRefreshHandler: (() => Promise<boolean>) | null = null;
+
+  /**
+   * Called once when the session is unrecoverable — either the refresh
+   * handler fails, or the post-refresh retry still 401s. Consumer typically
+   * uses it to surface ErrorScreen.
+   */
+  private authLostHandler: (() => void) | null = null;
 
   /**
    * Registers a handler that re-establishes the session after a 401. When a
@@ -60,7 +88,7 @@ class ApiService {
       return await this.doFetch<T>(url, options);
     } catch (error: any) {
       const status = error?.cause?.status;
-      if (status !== 401 || isAuthEndpoint(url) || !this.authRefreshHandler) {
+      if (status !== 401 || isAuthEndpoint(url) || !this.authRefreshHandler) { 
         throw error;
       }
 
