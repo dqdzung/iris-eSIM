@@ -3,6 +3,8 @@
 // `jsx: "react-native"` setting otherwise restricts intrinsics to RN components.
 // This project ships only to web (Expo Router web export), so falling through
 // to DOM elements is fine.
+// Currently only `<input>` is actually used (src/components/NativeDatePicker.tsx,
+// for the browser's native date picker); div/span/button/a are declared ahead of need.
 import type {
   AnchorHTMLAttributes,
   ButtonHTMLAttributes,
