@@ -121,24 +121,32 @@ In production, if `apiEndpoint.js` fails to load, the app refuses to boot rather
 | `pnpm web` | Expo web dev server only (port 8081) |
 | `pnpm bundle` | `expo export -p web` → `dist/`, then inject `apiEndpoint.js` |
 | `pnpm copy-dist <target>` | Mirror `dist/*` into a target folder (wipe + copy; preserves `.svn`/`.git`/`apiEndpoint.js`) |
-| `pnpm svn-sync <target>` | Stage an SVN deploy working copy (`svn rm` removed files, `svn add` new ones); does **not** commit |
+| `pnpm svn-sync <target>` | Stage an SVN working copy (`svn rm` removed files, `svn add` new ones); does **not** commit |
+| `pnpm stage-svn` | One-shot: `bundle` → `copy-dist` → `svn-sync` against `../Applications/eSIM`. Leaves the working copy staged for a manual `svn commit` |
 | `pnpm lint` | ESLint + Prettier check |
 | `pnpm format` | ESLint `--fix` + Prettier `--write` |
 
-## Building & deploying (web)
+## Building & pushing to SVN (web)
 
-Deployment is a **manual SVN push** (not CI):
+Getting a build into the SVN repo is a **manual flow** (not CI). The actual deployment is done separately on the server (`svn update` + whatever the server needs) — the steps below only stage and commit the build.
+
+```bash
+pnpm stage-svn                       # bundle → copy-dist → svn-sync (all against ../Applications/eSIM)
+# then commit yourself:
+svn commit ../Applications/eSIM -m "update web build"
+```
+
+`stage-svn` is just the three steps below chained together; run them individually if you need to:
 
 ```bash
 pnpm bundle                          # build → dist/
 pnpm copy-dist ../Applications/eSIM  # mirror dist/* into the SVN working copy
 pnpm svn-sync ../Applications/eSIM   # stage adds/removes
-# then commit yourself:
-svn commit ../Applications/eSIM -m "deploy"
 ```
 
 Notes:
-- The deploy repo uses a **root layout** — build files land directly in `Applications/eSIM/` (no `dist/` subfolder).
+- The combined `stage-svn` script has the target path (`../Applications/eSIM`) baked in; the individual `copy-dist`/`svn-sync` scripts take it as an argument.
+- The SVN repo uses a **root layout** — build files land directly in `Applications/eSIM/` (no `dist/` subfolder).
 - Any static host works; the app is an SPA so unknown paths must rewrite to `/index.html` (200). Per-host config (Netlify, Vercel, nginx, Caddy, S3/CloudFront, …) is required. The Netlify-style `public/_redirects` ships in the build by default.
 
 ## Known pre-production gaps

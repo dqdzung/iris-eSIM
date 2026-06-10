@@ -1,11 +1,15 @@
-// Mirrors dist/ into a target folder so the target ends up identical to dist/.
+// Mirrors dist/ into a target SVN working copy so it ends up identical to dist/.
 //   node scripts/copy-dist.js <target-folder>
+// The target MUST already exist and be inside an SVN working copy — we refuse
+// otherwise rather than create a stray folder, since this only ever feeds the
+// SVN deploy (see svn-sync.sh). Requires the `svn` CLI on PATH.
 // Wipes the target first (removing stale files), then copies dist/* in.
 // Two things are left untouched in the target:
 //   - .svn / .git metadata — wiping it would break the working copy.
 //   - apiEndpoint.js — the runtime API config is set per-server, so the
 //     target's existing copy must survive (not be overwritten or deleted).
 
+const { execFileSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
@@ -24,7 +28,19 @@ if (!fs.existsSync(distDir)) {
 }
 
 const destDir = path.resolve(dest);
-fs.mkdirSync(destDir, { recursive: true });
+
+// Refuse anything that isn't an existing SVN working copy, so a typo'd path
+// can't silently spawn a stray folder full of build output. `svn info` exits
+// non-zero for a missing path or a non-versioned one (it walks up to find .svn,
+// so a versioned subfolder is fine).
+try {
+  execFileSync('svn', ['info', destDir], { stdio: 'ignore' });
+} catch {
+  console.error(
+    `copy-dist: ${destDir} is not inside an SVN working copy (or doesn't exist) — refusing to copy`
+  );
+  process.exit(1);
+}
 
 // Entries left untouched: VCS metadata, plus the per-server API config which
 // must not be overwritten or deleted.
